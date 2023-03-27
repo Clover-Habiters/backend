@@ -39,7 +39,7 @@ public class SecurityConfig {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 			.authorizeHttpRequests()
-			.requestMatchers("/test").authenticated()
+			.requestMatchers("/users/**").authenticated()
 			.anyRequest().permitAll()
 			.and()
 			.oauth2Login()
