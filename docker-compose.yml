@@ -1,0 +1,22 @@
+version: '3'
+services:
+  web:
+    container_name: habbitters-app
+    image: hantaehee/habbitters
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      DB_USER_NAME: ${DB_USER_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_URL: ${DB_URL}
+      KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}
+      KAKAO_URI: ${KAKAO_URI}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_URI: ${GOOGLE_URI}
+      NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
+      NAVER_CLIENT_SECRET: ${NAVER_CLIENT_SECRET}
+      NAVER_URI: ${NAVER_URI}
