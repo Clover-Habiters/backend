@@ -18,4 +18,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	Optional<Member> findByProviderAndOauthId(
 		@Param("provider") String provider,
 		@Param("oauthId") String oauthId);
+
+	Optional<Member> findByNickName(String nickName);
 }
