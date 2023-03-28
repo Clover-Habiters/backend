@@ -31,4 +31,12 @@ public class Member extends BaseEntity {
 	private String provider;
 
 	private String oauthId;
+
+	public void setProfileImgUrl(String profileImgUrl) {
+		this.profileImgUrl = profileImgUrl;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 }
