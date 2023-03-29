@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.oauth.dto;
+package com.clover.habbittracker.global.security.oauth.dto;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import lombok.Builder;
 
 @Builder
-public class NaverUser implements SocialUser {
+public class KakaoUser implements SocialUser{
 	String email;
 	String nickName;
 	String provider;
@@ -40,15 +40,16 @@ public class NaverUser implements SocialUser {
 	}
 
 	public static SocialUser info(OAuth2User oAuth2User) {
-		Map<String, Object> response = oAuth2User.getAttribute("response");
+		Map<String, Object> response = oAuth2User.getAttributes();
+		Map<String, Object> properties = oAuth2User.getAttribute("properties");
+		Map<String, Object> account = oAuth2User.getAttribute("kakao_account");
 
-		return NaverUser.builder()
-			.email(String.valueOf(response.get("email")))
-			.nickName(String.valueOf(response.get("name")))
+		return KakaoUser.builder()
+			.email(String.valueOf(account.get("email")))
+			.nickName(String.valueOf(properties.get("nickname")))
 			.oauthId(String.valueOf(response.get("id")))
-			.provider("naver")
-			.profileImgUrl(String.valueOf(response.get("profile_image")))
+			.provider("kakao")
+			.profileImgUrl(String.valueOf(properties.get("profile_image")))
 			.build();
-
 	}
 }

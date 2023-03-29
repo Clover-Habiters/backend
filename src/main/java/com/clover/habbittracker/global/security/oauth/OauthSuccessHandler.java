@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.oauth;
+package com.clover.habbittracker.global.security.oauth;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.clover.habbittracker.global.oauth.dto.SocialUser;
+import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.ServletException;
