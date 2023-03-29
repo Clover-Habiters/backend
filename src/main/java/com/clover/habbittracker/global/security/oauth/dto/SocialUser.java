@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.oauth.dto;
+package com.clover.habbittracker.global.security.oauth.dto;
 
 
 

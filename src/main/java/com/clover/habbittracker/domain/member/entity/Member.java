@@ -2,6 +2,8 @@ package com.clover.habbittracker.domain.member.entity;
 
 import static jakarta.persistence.GenerationType.*;
 
+import com.clover.habbittracker.global.entity.BaseEntity;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.jwt;
+package com.clover.habbittracker.global.security.jwt;
 
 public class JwtException extends RuntimeException{
 

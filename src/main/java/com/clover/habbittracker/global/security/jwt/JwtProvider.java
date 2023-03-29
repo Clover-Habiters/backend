@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.jwt;
+package com.clover.habbittracker.global.security.jwt;
 
 import java.util.Date;
 import java.util.UUID;

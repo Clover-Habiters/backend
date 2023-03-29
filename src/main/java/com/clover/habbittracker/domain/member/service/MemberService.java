@@ -2,7 +2,7 @@ package com.clover.habbittracker.domain.member.service;
 
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
-import com.clover.habbittracker.global.oauth.dto.SocialUser;
+import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 
 public interface MemberService {
 	Long join(SocialUser socialUser);

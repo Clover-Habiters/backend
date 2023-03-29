@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
 import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.global.oauth.dto.SocialUser;
+import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;

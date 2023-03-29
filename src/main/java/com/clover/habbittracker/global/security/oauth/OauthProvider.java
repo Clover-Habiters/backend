@@ -1,11 +1,11 @@
-package com.clover.habbittracker.global.oauth;
+package com.clover.habbittracker.global.security.oauth;
 
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import com.clover.habbittracker.global.oauth.dto.GoogleUser;
-import com.clover.habbittracker.global.oauth.dto.KakaoUser;
-import com.clover.habbittracker.global.oauth.dto.NaverUser;
-import com.clover.habbittracker.global.oauth.dto.SocialUser;
+import com.clover.habbittracker.global.security.oauth.dto.GoogleUser;
+import com.clover.habbittracker.global.security.oauth.dto.KakaoUser;
+import com.clover.habbittracker.global.security.oauth.dto.NaverUser;
+import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 
 public class OauthProvider {
 

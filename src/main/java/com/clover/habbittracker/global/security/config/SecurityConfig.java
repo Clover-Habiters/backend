@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.config;
+package com.clover.habbittracker.global.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,9 +11,9 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.web.SecurityFilterChain;
 
 
-import com.clover.habbittracker.global.jwt.JwtAuthenticationEntryPoint;
-import com.clover.habbittracker.global.jwt.JwtFilter;
-import com.clover.habbittracker.global.oauth.OauthSuccessHandler;
+import com.clover.habbittracker.global.security.jwt.JwtAuthenticationEntryPoint;
+import com.clover.habbittracker.global.security.jwt.JwtFilter;
+import com.clover.habbittracker.global.security.oauth.OauthSuccessHandler;
 
 
 import lombok.RequiredArgsConstructor;
