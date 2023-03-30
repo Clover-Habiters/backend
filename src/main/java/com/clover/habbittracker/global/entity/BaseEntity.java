@@ -28,4 +28,8 @@ public abstract class BaseEntity {
 	private LocalDateTime updatedAt;
 
 	private boolean deleted;
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
 }

@@ -11,5 +11,7 @@ public interface HabitService {
 
 	List<MyHabitResponse> getMyList(Long memberId,String date);
 
-	HabitResponse updateMyHabit(Long memberId, Long habitId, HabitRequest request);
+	HabitResponse updateMyHabit(Long habitId, HabitRequest request);
+
+	void habitCheck(Long habitId);
 }

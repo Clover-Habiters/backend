@@ -44,8 +44,14 @@ public class HabitController {
 	}
 
 	@PutMapping("{habitId}")
-	ResponseEntity<HabitResponse> updateHabit(Authentication authentication,@PathVariable Long habitId,@RequestBody HabitRequest request) {
-		Long memberId = (Long)authentication.getPrincipal();
-		return new ResponseEntity<>(habitService.updateMyHabit(memberId,habitId,request),HttpStatus.OK);
+	ResponseEntity<HabitResponse> updateHabit(@PathVariable Long habitId,@RequestBody HabitRequest request) {
+		return new ResponseEntity<>(habitService.updateMyHabit(habitId,request),HttpStatus.OK);
+	}
+
+
+	@PostMapping("{habitId}/check")
+	ResponseEntity<Void> HabitCheck(@PathVariable Long habitId) {
+		habitService.habitCheck(habitId);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
