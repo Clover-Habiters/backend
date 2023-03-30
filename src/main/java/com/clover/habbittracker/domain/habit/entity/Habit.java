@@ -1,6 +1,5 @@
 package com.clover.habbittracker.domain.habit.entity;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +31,6 @@ public class Habit extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 	private String content;
 
 	@ManyToOne(fetch = FetchType.LAZY)
