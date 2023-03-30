@@ -2,7 +2,6 @@ package com.clover.habbittracker.domain.habit.service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +17,7 @@ import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
 import com.clover.habbittracker.domain.habitcheck.repository.HabitCheckRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
+import com.clover.habbittracker.global.util.DateCalculate;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,7 +43,7 @@ public class HabitServiceImpl implements HabitService {
 
 	@Override
 	public List<MyHabitResponse> getMyList(Long memberId,String date) {
-		Map<String, LocalDateTime> dateMap = DateCalc.startEnd(date);
+		Map<String, LocalDateTime> dateMap = DateCalculate.startEnd(date);
 		return
 			habitRepository.joinHabitCheckFindByMemberId(memberId,dateMap.get("start"),dateMap.get("end"))
 				.stream().map(MyHabitResponse::from)
@@ -79,20 +79,5 @@ public class HabitServiceImpl implements HabitService {
 		LocalDateTime now = LocalDateTime.now();
 		Duration duration = Duration.between(updateDate,now);
 		return duration.toDays() == 0;
-	}
-
-	private static class DateCalc {
-		private static final String FORMAT = "-01T00:00:00.000000";
-
-		private static Map<String,LocalDateTime> startEnd(String date) {
-			Map<String, LocalDateTime> result = new HashMap<>();
-			if (date == null) {
-				date = LocalDateTime.now().toString().substring(0,7);
-			}
-			LocalDateTime parse = LocalDateTime.parse(date + FORMAT);
-			result.put("start", parse.withDayOfMonth(1));
-			result.put("end", parse.plusMonths(1));
-			return result;
-		}
 	}
 }
