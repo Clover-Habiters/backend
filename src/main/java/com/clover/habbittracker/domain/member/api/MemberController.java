@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +30,7 @@ public class MemberController {
 	}
 
 	@PutMapping("/me")
-	ResponseEntity<MemberResponse> updateMyProfile(Authentication authentication, MemberRequest request) {
+	ResponseEntity<MemberResponse> updateMyProfile(Authentication authentication, @RequestBody MemberRequest request) {
 		Long memberId = (Long)authentication.getPrincipal();
 		return new ResponseEntity<>(memberService.updateProfile(memberId, request), HttpStatus.OK);
 	}

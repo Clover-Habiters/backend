@@ -3,6 +3,7 @@ package com.clover.habbittracker.domain.member.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
@@ -32,6 +33,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
 	public MemberResponse updateProfile(Long memberId, MemberRequest request) {
 		return memberRepository.findById(memberId)
 			.map(member -> update(member, request))
@@ -59,8 +61,8 @@ public class MemberServiceImpl implements MemberService {
 	private Member update(Member member, MemberRequest request) {
 		Optional<Member> byNickName = memberRepository.findByNickName(request.getNickName());
 		if(byNickName.isEmpty()) {
-			member.setProfileImgUrl(request.getProfileImgUrl());
-			member.setNickName(request.getNickName());
+			Optional.ofNullable(request.getProfileImgUrl()).ifPresent(member::setProfileImgUrl);
+			Optional.ofNullable(request.getNickName()).ifPresent(member::setNickName);
 			return member;
 		}
 		else {
