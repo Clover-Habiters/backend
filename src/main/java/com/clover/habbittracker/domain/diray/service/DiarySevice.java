@@ -11,4 +11,6 @@ public interface DiarySevice {
 	List<DiaryResponse> getMyList(Long memberId, String date);
 
 	DiaryResponse updateDiary(Long diaryId, DiaryRequest request);
+
+	void delete(Long diaryId);
 }

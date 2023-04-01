@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.clover.habbittracker.domain.diray.dto.DiaryRequest;
 import com.clover.habbittracker.domain.diray.dto.DiaryResponse;
 import com.clover.habbittracker.domain.diray.entity.Diary;
+import com.clover.habbittracker.domain.diray.exception.DiaryException;
 import com.clover.habbittracker.domain.diray.repository.DiaryRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
@@ -56,10 +57,15 @@ public class DiaryServiceImpl implements DiarySevice {
 	public DiaryResponse updateDiary(Long diaryId, DiaryRequest request) {
 		Diary diary = diaryRepository.findById(diaryId).orElseThrow();
 		if (diary.getEndUpdateDate().isBefore(LocalDateTime.now())) {
-			throw new RuntimeException("마감 날짜 지남");
+			throw new DiaryException("마감 날짜 지남");
 		}
 		Optional.ofNullable(request.getContent()).ifPresent(diary::setContent);
 
 		return DiaryResponse.from(diary);
+	}
+
+	@Override
+	public void delete(Long diaryId) {
+		diaryRepository.deleteById(diaryId);
 	}
 }
