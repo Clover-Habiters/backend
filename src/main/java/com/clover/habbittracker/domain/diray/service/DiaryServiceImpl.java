@@ -62,4 +62,9 @@ public class DiaryServiceImpl implements DiarySevice {
 
 		return DiaryResponse.from(diary);
 	}
+
+	@Override
+	public void delete(Long diaryId) {
+		diaryRepository.deleteById(diaryId);
+	}
 }
