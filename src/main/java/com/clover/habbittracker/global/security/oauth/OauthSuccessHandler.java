@@ -40,7 +40,6 @@ public class OauthSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			SocialUser userInfo = OauthProvider.getProfile(user, provider);
 			String accessToken = oauthService.login(userInfo);
 			String targetUrl = determineTargetUrl(request, accessToken);
-			System.out.println(request.getRequestURI());
 			getRedirectStrategy().sendRedirect(request, response, targetUrl);
 			// response.setStatus(HttpStatus.OK.value());
 			// response.setContentType("application/json");
@@ -57,7 +56,7 @@ public class OauthSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			.map(Cookie::getValue)
 			.orElse(getDefaultTargetUrl());
 
-		return UriComponentsBuilder.fromUriString(targetUrl)
+		return UriComponentsBuilder.fromUriString("https://clover-beta.vercel.app/myhabit")
 			.queryParam("accessToken", accessToken) // url에도 실어 보내기
 			.build().toUriString();
 	}
