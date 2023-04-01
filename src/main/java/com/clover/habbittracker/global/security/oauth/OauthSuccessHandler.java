@@ -56,7 +56,7 @@ public class OauthSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 			.map(Cookie::getValue)
 			.orElse(getDefaultTargetUrl());
 
-		return UriComponentsBuilder.fromUriString("https://localhost:3000/myhabit")
+		return UriComponentsBuilder.fromUriString("http://localhost:3000/myhabit")
 			.queryParam("accessToken", accessToken) // url에도 실어 보내기
 			.build().toUriString();
 	}
