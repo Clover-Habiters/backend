@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.habit.service;
 
-import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +12,7 @@ import com.clover.habbittracker.domain.habit.dto.HabitRequest;
 import com.clover.habbittracker.domain.habit.dto.HabitResponse;
 import com.clover.habbittracker.domain.habit.dto.MyHabitResponse;
 import com.clover.habbittracker.domain.habit.entity.Habit;
+import com.clover.habbittracker.domain.habit.exception.HabitException;
 import com.clover.habbittracker.domain.habit.repository.HabitRepository;
 import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
 import com.clover.habbittracker.domain.habitcheck.repository.HabitCheckRepository;
@@ -62,22 +63,37 @@ public class HabitServiceImpl implements HabitService {
 	@Transactional
 	public void habitCheck(Long habitId) {
 		Habit habit = habitRepository.findById(habitId).orElseThrow(IllegalArgumentException::new);
-		if (!vaildDate(habit.getUpdatedAt())) {
-			throw new RuntimeException("에러"); // 전체 예외 적용 시 커스텀 예외로 변경 예정.
+		if (!validDate(habit.getUpdatedAt())) {
+			throw new HabitException("습관체크는 오늘만 가능합니다.");
 		}
+
 		habitCheckRepository.findByHabitOrderByUpdatedAtDesc(habit)
-			.ifPresent(habitCheck -> {
-				if (vaildDate(habitCheck.getUpdatedAt())) {
-					throw new RuntimeException("같은 체크 두번 반복"); // 전체 예외 적용 시 커스텀 예외로 변경 예정.
+			.ifPresent(lastHabitCheck -> {
+				if (validDate(lastHabitCheck.getUpdatedAt())) {
+					throw new HabitException("같은 날 두번 체크는 불가능합니다.");
 				}
 			});
 		habitCheckRepository.save(HabitCheck.builder().checked(true).habit(habit).build());
 		habit.setUpdatedAt(LocalDateTime.now());
 	}
 
-	private boolean vaildDate(LocalDateTime updateDate) {
-		LocalDateTime now = LocalDateTime.now();
-		Duration duration = Duration.between(updateDate,now);
-		return duration.toDays() == 0;
+	@Override
+	public void deleteHabit(Long habitId) {
+		habitRepository.deleteById(habitId);
+	}
+
+	@Override
+	public void HabitUnCheck(Long habitId) {
+		Habit habit = habitRepository.findById(habitId).orElseThrow(IllegalArgumentException::new);
+		habitCheckRepository.findByHabitOrderByUpdatedAtDesc(habit)
+			.ifPresent(lastHabitCheck -> {
+				if (validDate(lastHabitCheck.getUpdatedAt())) {
+					throw new HabitException("같은 날 두번 체크는 불가능합니다.");
+				}
+			});
+	}
+
+	private boolean validDate(LocalDateTime updateDate) {
+		return updateDate.toLocalDate().isEqual(LocalDate.now());
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,10 +49,21 @@ public class HabitController {
 		return new ResponseEntity<>(habitService.updateMyHabit(habitId,request),HttpStatus.OK);
 	}
 
+	@DeleteMapping("{habitId}")
+	ResponseEntity<Void> deleteHabit(@PathVariable Long habitId) {
+		habitService.deleteHabit(habitId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 	@PostMapping("{habitId}/check")
 	ResponseEntity<Void> HabitCheck(@PathVariable Long habitId) {
 		habitService.habitCheck(habitId);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@DeleteMapping("{habitId}/check")
+	ResponseEntity<Void> HabitUnCheck(@PathVariable Long habitId) {
+		habitService.HabitUnCheck(habitId);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

@@ -13,9 +13,9 @@ public interface HabitRepository extends JpaRepository<Habit, Long> {
 	@Query("""
 		SELECT h
 		FROM Habit h
-		LEFT JOIN FETCH h.habitChecks
+		LEFT JOIN FETCH h.habitChecks hc
 		WHERE h.member.id = :memberId
-		AND h.createdAt BETWEEN :start AND :end
+		AND hc.createdAt BETWEEN :start AND :end
 		""")
 	List<Habit> joinHabitCheckFindByMemberId(@Param("memberId") Long memberId,@Param("start") LocalDateTime start,@Param("end") LocalDateTime end);
 }

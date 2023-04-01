@@ -9,14 +9,19 @@ import org.springframework.data.repository.query.Param;
 import com.clover.habbittracker.domain.habit.entity.Habit;
 import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
 
-public interface HabitCheckRepository extends JpaRepository<HabitCheck,Long> {
+public interface HabitCheckRepository extends JpaRepository<HabitCheck, Long> {
 
 	@Query("""
 		SELECT hc
 		FROM HabitCheck hc
-		WHERE hc.updatedAt = (SELECT MAX(hc.updatedAt) FROM HabitCheck hc)
+		WHERE hc.updatedAt = (
+		 	SELECT MAX(subHc.updatedAt)
+		  	FROM HabitCheck subHc
+		  	WHERE subHc.habit = :habit
+		)
 		AND hc.habit = :habit
-""")
+		""")
 	Optional<HabitCheck> findByHabitOrderByUpdatedAtDesc(@Param("habit") Habit habit);
+
 
 }
