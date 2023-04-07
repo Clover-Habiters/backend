@@ -13,6 +13,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.clover.habbittracker.global.security.jwt.JwtAuthenticationEntryPoint;
 import com.clover.habbittracker.global.security.jwt.JwtFilter;
+import com.clover.habbittracker.global.security.oauth.HttpCookieOAuthAuthorizationRequestRepository;
+import com.clover.habbittracker.global.security.oauth.OAuthFailureHandler;
 import com.clover.habbittracker.global.security.oauth.OauthSuccessHandler;
 
 
@@ -26,6 +28,10 @@ public class SecurityConfig {
 	private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 	private final OauthSuccessHandler oauthSuccessHandler;
+
+	private final HttpCookieOAuthAuthorizationRequestRepository httpCookieOAuthAuthorizationRequestRepository;
+
+	private final OAuthFailureHandler oAuthFailureHandler;
 
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -47,7 +53,12 @@ public class SecurityConfig {
 			.anyRequest().permitAll()
 			.and()
 			.oauth2Login()
+			.authorizationEndpoint()
+			.baseUri("/oauth2/authorization")
+			.authorizationRequestRepository(httpCookieOAuthAuthorizationRequestRepository)
+			.and()
 			.successHandler(oauthSuccessHandler)
+			.failureHandler(oAuthFailureHandler)
 			.and()
 			.addFilterBefore(jwtFilter, OAuth2AuthorizationRequestRedirectFilter.class)
 			.exceptionHandling()
