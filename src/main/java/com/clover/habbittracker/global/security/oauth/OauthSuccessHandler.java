@@ -4,8 +4,6 @@ import static com.clover.habbittracker.global.security.oauth.HttpCookieOAuthAuth
 
 import java.io.IOException;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
@@ -14,7 +12,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 import com.clover.habbittracker.global.util.CookieUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -27,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class OauthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 	private final OauthService oauthService;
 
+	// private final CustomRedirectStrategy customRedirectStrategy;
 	// private final ObjectMapper objectMapper;
 
 	@Override
@@ -39,7 +37,8 @@ public class OauthSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		if (principal instanceof OAuth2User user) {
 			SocialUser userInfo = OauthProvider.getProfile(user, provider);
 			String accessToken = oauthService.login(userInfo);
-			String targetUrl = determineTargetUrl(request, accessToken);
+			String targetUrl = determineTargetUrl(request,accessToken);
+			// setRedirectStrategy(customRedirectStrategy);
 			getRedirectStrategy().sendRedirect(request, response, targetUrl);
 			// response.setStatus(HttpStatus.OK.value());
 			// response.setContentType("application/json");
@@ -51,12 +50,12 @@ public class OauthSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
 	}
 
-	private String determineTargetUrl(HttpServletRequest request, String accessToken) {
+	private String determineTargetUrl(HttpServletRequest request,String accessToken) {
 		String targetUrl = CookieUtil.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
 			.map(Cookie::getValue)
 			.orElse(getDefaultTargetUrl());
 
-		return UriComponentsBuilder.fromUriString("https://clover-beta.vercel.app/myhabit")
+		return UriComponentsBuilder.fromUriString(targetUrl)
 			.queryParam("accessToken", accessToken) // url에도 실어 보내기
 			.build().toUriString();
 	}
