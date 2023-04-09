@@ -5,7 +5,7 @@ import static jakarta.persistence.GenerationType.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.clover.habbittracker.domain.diray.entity.Diary;
+import com.clover.habbittracker.domain.diary.entity.Diary;
 import com.clover.habbittracker.domain.habit.entity.Habit;
 import com.clover.habbittracker.global.entity.BaseEntity;
 
@@ -47,14 +47,14 @@ public class Member extends BaseEntity {
 		cascade = CascadeType.REMOVE,
 		orphanRemoval = true,
 		fetch = FetchType.LAZY)
-	private List<Diary> diaries = new ArrayList<>();
+	private final List<Diary> diaries = new ArrayList<>();
 
 	@OneToMany(
 		mappedBy = "member",
 		cascade = CascadeType.REMOVE,
 		orphanRemoval = true,
 		fetch = FetchType.LAZY)
-	private List<Habit> habits = new ArrayList<>();
+	private final List<Habit> habits = new ArrayList<>();
 
 	public void setProfileImgUrl(String profileImgUrl) {
 		this.profileImgUrl = profileImgUrl;

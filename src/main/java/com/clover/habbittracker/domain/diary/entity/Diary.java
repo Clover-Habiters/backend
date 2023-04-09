@@ -1,4 +1,4 @@
-package com.clover.habbittracker.domain.diray.entity;
+package com.clover.habbittracker.domain.diary.entity;
 
 import java.time.LocalDateTime;
 

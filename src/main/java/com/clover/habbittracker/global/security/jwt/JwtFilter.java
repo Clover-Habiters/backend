@@ -52,7 +52,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
 		// 토큰 구조를 확인 후 잘못된 구조라면 null 반환.
 		if (authorization == null || !authorization.startsWith("Bearer ")) {
-			return null;
+			throw new JwtException("잘못된 토큰 구조입니다.");
 		}
 		String token = authorization.split(" ")[1];
 
