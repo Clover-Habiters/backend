@@ -1,8 +1,8 @@
-package com.clover.habbittracker.domain.diray.dto;
+package com.clover.habbittracker.domain.diary.dto;
 
 import java.time.LocalDateTime;
 
-import com.clover.habbittracker.domain.diray.entity.Diary;
+import com.clover.habbittracker.domain.diary.entity.Diary;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.clover.habbittracker.domain.diray.dto;
+package com.clover.habbittracker.domain.diary.dto;
 
 import lombok.Getter;
 
