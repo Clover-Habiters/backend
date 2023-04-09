@@ -43,7 +43,7 @@ public class Habit extends BaseEntity {
 		fetch = FetchType.LAZY,
 		cascade = CascadeType.REMOVE,
 		orphanRemoval = true)
-	private List<HabitCheck> habitChecks = new ArrayList<>();
+	private final List<HabitCheck> habitChecks = new ArrayList<>();
 
 	public void setContent(String content) {
 		this.content = content;

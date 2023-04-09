@@ -1,4 +1,4 @@
-package com.clover.habbittracker.domain.diray.service;
+package com.clover.habbittracker.domain.diary.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,11 +8,11 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.clover.habbittracker.domain.diray.dto.DiaryRequest;
-import com.clover.habbittracker.domain.diray.dto.DiaryResponse;
-import com.clover.habbittracker.domain.diray.entity.Diary;
-import com.clover.habbittracker.domain.diray.exception.DiaryException;
-import com.clover.habbittracker.domain.diray.repository.DiaryRepository;
+import com.clover.habbittracker.domain.diary.dto.DiaryRequest;
+import com.clover.habbittracker.domain.diary.dto.DiaryResponse;
+import com.clover.habbittracker.domain.diary.entity.Diary;
+import com.clover.habbittracker.domain.diary.exception.DiaryException;
+import com.clover.habbittracker.domain.diary.repository.DiaryRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.util.DateCalculate;
