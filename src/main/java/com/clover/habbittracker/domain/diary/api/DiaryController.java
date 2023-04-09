@@ -1,4 +1,4 @@
-package com.clover.habbittracker.domain.diray.api;
+package com.clover.habbittracker.domain.diary.api;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.clover.habbittracker.domain.diray.dto.DiaryRequest;
-import com.clover.habbittracker.domain.diray.dto.DiaryResponse;
-import com.clover.habbittracker.domain.diray.service.DiarySevice;
+import com.clover.habbittracker.domain.diary.dto.DiaryRequest;
+import com.clover.habbittracker.domain.diary.dto.DiaryResponse;
+import com.clover.habbittracker.domain.diary.service.DiarySevice;
 
 import lombok.RequiredArgsConstructor;
 

@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.clover.habbittracker.domain.diray.exception.DiaryException;
+import com.clover.habbittracker.domain.diary.exception.DiaryException;
 import com.clover.habbittracker.domain.habit.exception.HabitException;
 import com.clover.habbittracker.global.dto.ErrorResponse;
 
