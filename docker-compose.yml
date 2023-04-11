@@ -1,8 +1,10 @@
 version: '3'
 services:
   web:
-    container_name: habbitters-app
-    image: hantaehee/habbitters
+    container_name: habiters-app
+    image: hantaehee/habiters
+    depends_on:
+      - db
     expose:
       - 8080
     ports:
@@ -20,3 +22,18 @@ services:
       NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
       NAVER_CLIENT_SECRET: ${NAVER_CLIENT_SECRET}
       NAVER_URI: ${NAVER_URI}
+
+  db:
+    container_name: habiters-db
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: habiters-db
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysqldata:/var/lib/mysql
+
