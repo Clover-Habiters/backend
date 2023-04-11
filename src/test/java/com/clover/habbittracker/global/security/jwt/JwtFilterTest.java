@@ -65,4 +65,14 @@ public class JwtFilterTest {
 		assertThrows(JwtException.class,
 			() -> jwtFilter.doFilterInternal(httpServletRequest, httpServletResponse, filterChain));
 	}
+
+	@Test
+	@DisplayName("인증이 필요하지 않다면, 필터에 걸리지않게 한다.")
+	void noAuthorizationFiler() {
+		//when
+		boolean shouldNotFilter = jwtFilter.shouldNotFilter(httpServletRequest);
+		//then
+		assertThat(shouldNotFilter).isTrue();
+
+	}
 }

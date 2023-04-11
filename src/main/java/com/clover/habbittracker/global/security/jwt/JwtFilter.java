@@ -27,7 +27,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) {
-		return request.getRequestURI().endsWith("token") && request.getMethod().equalsIgnoreCase("POST");
+		return request.getRequestURI().endsWith("token") || request.getHeader(HttpHeaders.AUTHORIZATION) == null;
 	}
 
 	@Override
@@ -37,28 +37,25 @@ public class JwtFilter extends OncePerRequestFilter {
 		// request Header에서 토큰 값 가져오기.
 		String token = getAccessToken(request);
 
-		if(token != null) {
-			// 권한 부여
-			UsernamePasswordAuthenticationToken authenticationToken = createAuthentication(token);
-			// userDetail 작성
-			authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-			SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-		}
+		// 권한 부여
+		UsernamePasswordAuthenticationToken authenticationToken = createAuthentication(token);
+		// userDetail 작성
+		authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+		SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
 		filterChain.doFilter(request, response);
 	}
 
 	public String getAccessToken(HttpServletRequest request) {
-		String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String[] authorization = request.getHeader(HttpHeaders.AUTHORIZATION).split(" ");
+		String tokenType = authorization[0];
 
-		// 토큰 구조를 확인 후 잘못된 구조라면 null 반환.
-		if (authorization == null || !authorization.startsWith("Bearer ")) {
+		if(!tokenType.startsWith("Bearer") || authorization.length < 2){
 			throw new JwtException("잘못된 토큰 구조입니다.");
 		}
-		String token = authorization.split(" ")[1];
 
-		// 가져온 토큰값이 널이 아니라면 유효성 검증. 유효성 문제가 있을 경우 예외처리.
-		if (token != null)
-			jwtProvider.validOf(token);
+		String token = authorization[1];
+		jwtProvider.validOf(token);
 
 		return token;
 	}
