@@ -35,8 +35,8 @@ jobs:
       - name: Docker Build & Push to Hub
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/habbitters .
-          docker push ${{ secrets.DOCKER_USERNAME }}/habbitters:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/habiters .
+          docker push ${{ secrets.DOCKER_USERNAME }}/habiters:latest
       # 환경 변수 파일 서버로 전달하기(복사 후 붙여넣기)
       - name: Send to Environment
         uses: appleboy/scp-action@master
@@ -72,6 +72,6 @@ jobs:
           port: 22
           script: |
             sudo docker rm -f $(docker ps -qa)
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/habbitters:latest
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/habiters:latest
             docker-compose up -d
             docker image prune -f
