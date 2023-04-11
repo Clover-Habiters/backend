@@ -73,5 +73,6 @@ jobs:
           script: |
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/habiters:latest
+            cd /home/clover
             docker-compose up -d
             docker image prune -f
