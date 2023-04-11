@@ -3,6 +3,8 @@ package com.clover.habbittracker.domain.member.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,7 +57,7 @@ public class MemberServiceTest {
 	@Test
 	@DisplayName("잘못된 사용자 ID로 사용자 프로필을 조회 할 경우 예외가 터진다.")
 	void failedGetProfileTest() {
-		assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(NoSuchElementException.class, () -> {
 			memberService.getProfile(2L);
 		});
 	}
