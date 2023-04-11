@@ -1,5 +1,6 @@
 package com.clover.habbittracker.domain.member.service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class MemberServiceImpl implements MemberService {
 	public MemberResponse getProfile(Long memberId) {
 		return memberRepository.findById(memberId)
 			.map(MemberResponse::from)
-			.orElseThrow(() -> new IllegalArgumentException("회원 정보가 존재하지않습니다."));
+			.orElseThrow(() -> new NoSuchElementException("회원 정보가 존재하지않습니다."));
 	}
 
 	@Override
