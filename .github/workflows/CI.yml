@@ -36,7 +36,7 @@ jobs:
         run: chmod +x gradlew
       ## Gradle 빌드 실행
       - name: run gradle build
-        run: ./gradlew build
+        run: ./gradlew build --debug
 #      ## Test 실행
 #      - name: Test with Gradle
 #        run: ./gradlew test
