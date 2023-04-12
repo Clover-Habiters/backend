@@ -31,19 +31,14 @@ jobs:
           mysql database: 'habiters-db'
           mysql user: 'root'
           mysql password: '1234'
-      ## TEST DB 설치 및 설정
-      - name: SetUp H2 Test Database
-        uses: xt0rted/h2-mem-action@v1.2
-        with:
-          url: 'jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL'
-          username: 'sa'
-          password: ''
       ## Gradle 빌드를 위한 실행 권한 부여
       - name: grant permission to execute gradle command
         run: chmod +x gradlew
       ## Gradle 빌드 실행
       - name: run gradle build
-        run: ./gradlew build
+        run: ./gradlew build -x test
+      - name: Test with Gradle
+        run: ./gradlew test
       ## 오타 검사를 위해 typos-action 추가
       - name: add typos-action as check spell
         uses: crate-ci/typos@v1.0.4
