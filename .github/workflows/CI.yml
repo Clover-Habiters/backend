@@ -39,7 +39,7 @@ jobs:
         run: ./gradlew build -x test
       ## Test 실행
       - name: Test with Gradle
-        run: ./gradlew test -Dspring.config.name=application-test
+        run: ./gradlew test
       ## 오타 검사를 위해 typos-action 추가
       - name: add typos-action as check spell
         uses: crate-ci/typos@v1.0.4
@@ -52,7 +52,7 @@ jobs:
         if: always()
         with:
           title: 테스트 커버리지 리포트입니다
-          paths: ${{ github.workspace }}/build/reports/jacoco/test/index.html
+          paths: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 80
