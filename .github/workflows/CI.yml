@@ -36,10 +36,10 @@ jobs:
         run: chmod +x gradlew
       ## Gradle 빌드 실행
       - name: run gradle build
-        run: ./gradlew build -x test
-      ## Test 실행
-      - name: Test with Gradle
-        run: ./gradlew test
+        run: ./gradlew build
+#      ## Test 실행
+#      - name: Test with Gradle
+#        run: ./gradlew test
       ## 오타 검사를 위해 typos-action 추가
       - name: add typos-action as check spell
         uses: crate-ci/typos@v1.0.4
