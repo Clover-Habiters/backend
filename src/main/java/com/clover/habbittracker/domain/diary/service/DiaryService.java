@@ -5,7 +5,7 @@ import java.util.List;
 import com.clover.habbittracker.domain.diary.dto.DiaryRequest;
 import com.clover.habbittracker.domain.diary.dto.DiaryResponse;
 
-public interface DiarySevice {
+public interface DiaryService {
 	Long register(Long memberId, DiaryRequest request);
 
 	List<DiaryResponse> getMyList(Long memberId, String date);
