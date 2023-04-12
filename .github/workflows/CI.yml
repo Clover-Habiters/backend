@@ -31,6 +31,9 @@ jobs:
           mysql database: 'habiters-db'
           mysql user: 'root'
           mysql password: '1234'
+      # 환경 변수 설정
+      - name: Set up Environment
+        run: echo "${{ secrets.ENV }}" > ./.env # GitHub SecretKey 에서 설정한 내용으로 .env 파일 생성
       ## Gradle 빌드를 위한 실행 권한 부여
       - name: grant permission to execute gradle command
         run: chmod +x gradlew
