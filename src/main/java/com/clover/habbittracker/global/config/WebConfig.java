@@ -12,8 +12,8 @@ public class WebConfig{
 	WebMvcConfigurer webMvcConfigurer(){
 
 		return new WebMvcConfigurer() {
-			public void addCorsMappings(CorsRegistry registery){
-				registery.addMapping("/**")
+			public void addCorsMappings(CorsRegistry registry){
+				registry.addMapping("/**")
 					.allowedOrigins("*")
 					.allowedMethods(
 						HttpMethod.GET.name(),
