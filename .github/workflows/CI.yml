@@ -31,6 +31,13 @@ jobs:
           mysql database: 'habiters-db'
           mysql user: 'root'
           mysql password: '1234'
+      ## TEST DB 설치 및 설정
+      - name: SetUp H2 Test Database
+        uses: xt0rted/h2-mem-action@v1.2
+        with:
+          url: 'jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL'
+          username: 'sa'
+          password: ''
       ## Gradle 빌드를 위한 실행 권한 부여
       - name: grant permission to execute gradle command
         run: chmod +x gradlew
@@ -50,7 +57,7 @@ jobs:
         with:
           title: 테스트 커버리지 리포트입니다
           paths: ${{ github.workspace }}/build/reports/jacoco/test/index.html
-          token: ${{ secrets.CI_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 80
       ## 테스트 실패시 코드 라인에 대한 체크 추가
