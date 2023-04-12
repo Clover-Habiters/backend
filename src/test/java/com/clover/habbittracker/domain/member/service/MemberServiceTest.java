@@ -3,6 +3,8 @@ package com.clover.habbittracker.domain.member.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.NoSuchElementException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,7 @@ import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.security.oauth.dto.GoogleUser;
 import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 
-@SpringBootTest
+@SpringBootTest(properties = { "spring.datasource.url=jdbc:h2:mem:testdb", "spring.datasource.driver-class-name=org.h2.Driver", "spring.datasource.username=sa", "spring.datasource.password=" })
 public class MemberServiceTest {
 
 	@Autowired
@@ -55,7 +57,7 @@ public class MemberServiceTest {
 	@Test
 	@DisplayName("잘못된 사용자 ID로 사용자 프로필을 조회 할 경우 예외가 터진다.")
 	void failedGetProfileTest() {
-		assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(NoSuchElementException.class, () -> {
 			memberService.getProfile(2L);
 		});
 	}

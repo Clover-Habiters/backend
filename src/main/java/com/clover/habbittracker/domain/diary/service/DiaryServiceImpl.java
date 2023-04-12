@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class DiaryServiceImpl implements DiarySevice {
+public class DiaryServiceImpl implements DiaryService {
 
 	private final DiaryRepository diaryRepository;
 

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import io.jsonwebtoken.Claims;
 
 class JwtProviderTest {
-	JwtProvider jwtProvider = new JwtProvider("jwt.secret.test.createToken", 10000L, 60000L);
+	JwtProvider jwtProvider = new JwtProvider("jwt.secret.test.createToken", 1000L, 60000L);
 
 	@Test
 	@DisplayName("UserID를 이용하여 JWT 토큰을 만든다.")
@@ -45,7 +45,7 @@ class JwtProviderTest {
 	void tokenExpiredException() throws InterruptedException {
 		String accessJwt = jwtProvider.createAccessJwt(1L);
 
-		Thread.sleep(20000L);
+		Thread.sleep(1100L);
 
 		assertThrows(JwtException.class , () -> jwtProvider.validOf(accessJwt));
 

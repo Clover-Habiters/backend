@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.global.config.JpaConfig;
 
-@DataJpaTest
+@DataJpaTest(properties = { "spring.datasource.url=jdbc:h2:mem:testdb", "spring.datasource.driver-class-name=org.h2.Driver", "spring.datasource.username=sa", "spring.datasource.password=" })
 @Import(JpaConfig.class)
 public class MemberRepositoryTest {
 
