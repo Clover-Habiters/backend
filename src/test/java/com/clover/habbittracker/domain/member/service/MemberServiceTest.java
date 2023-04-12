@@ -18,7 +18,7 @@ import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.security.oauth.dto.GoogleUser;
 import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 
-@SpringBootTest
+@SpringBootTest(properties = { "spring.datasource.url=jdbc:h2:mem:testdb", "spring.datasource.driver-class-name=org.h2.Driver", "spring.datasource.username=sa", "spring.datasource.password=" })
 public class MemberServiceTest {
 
 	@Autowired
