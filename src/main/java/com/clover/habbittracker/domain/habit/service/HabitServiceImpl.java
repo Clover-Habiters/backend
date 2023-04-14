@@ -31,7 +31,6 @@ public class HabitServiceImpl implements HabitService {
 	private final HabitCheckRepository habitCheckRepository;
 	private final MemberRepository memberRepository;
 
-
 	@Override
 	public Long register(Long memberId, HabitRequest request) {
 		Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
@@ -43,12 +42,13 @@ public class HabitServiceImpl implements HabitService {
 	}
 
 	@Override
-	public List<MyHabitResponse> getMyList(Long memberId,String date) {
+	public List<MyHabitResponse> getMyList(Long memberId, String date) {
 		Map<String, LocalDateTime> dateMap = DateCalculate.startEnd(date);
-		return
-			habitRepository.joinHabitCheckFindByMemberId(memberId,dateMap.get("start"),dateMap.get("end"))
-				.stream().map(MyHabitResponse::from)
+		return habitRepository.joinHabitCheckFindByMemberId(memberId)
+			.stream()
+			.map(habit -> MyHabitResponse.from(habit, dateMap))
 			.toList();
+
 	}
 
 	@Override
