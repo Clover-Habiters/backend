@@ -1,5 +1,6 @@
 package com.clover.habbittracker.domain.member.repository;
 
+import static com.clover.habbittracker.global.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.Optional;
@@ -20,8 +21,6 @@ public class MemberRepositoryTest {
 
 	private final MemberRepository memberRepository;
 
-	private Member testMember;
-
 	@Autowired
 	public MemberRepositoryTest(MemberRepository memberRepository) {
 		this.memberRepository = memberRepository;
@@ -29,40 +28,31 @@ public class MemberRepositoryTest {
 
 	@BeforeEach
 	void setMemberData() {
-		// ID 자동 증가를 확인 하기 위해 ID는 제외하고 멤버 객체 생성
-		testMember = Member.builder()
-			.email("test@email.com")
-			.profileImgUrl("testImgUrl")
-			.nickName("testNickName")
-			.oauthId("testOauthId")
-			.provider("testProvider")
-			.build();
+		memberRepository.save(createTestMember());
 	}
 
 
 	@Test
-	@DisplayName("사용자를 저장 할 수 있으며, ID는 DBMS가 관리한다.")
+	@DisplayName("사용자를 저장 할 수 있다.")
 	void saveMember() {
 		//given
 		//when
-		Member saveMember = memberRepository.save(testMember);
 		//then
-		assertThat(saveMember.getId()).isNotNull();
+		assertThat(getId()).isNotNull();
 	}
 
 	@Test
 	@DisplayName("사용자의 id로 저장된 사용자 정보를 조회할 수 있다.")
 	void MemberFindById() {
 		//given
-		Member saveMember = memberRepository.save(testMember);
-
+		Member testMember2 = memberRepository.save(createTestMember(2L));
 		//when
-		Optional<Member> memberFromFindById = memberRepository.findById(saveMember.getId());
+		Optional<Member> savedMember = memberRepository.findById(testMember2.getId());
 
 		//then
-		assertThat(memberFromFindById).isPresent();
-		assertThat(memberFromFindById.get()).usingRecursiveComparison().isEqualTo(saveMember);
-		assertThat(memberFromFindById.get()).isEqualTo(saveMember);
+		assertThat(savedMember).isPresent();
+		assertThat(savedMember.get()).usingRecursiveComparison().isEqualTo(testMember2);
+		assertThat(savedMember.get()).isEqualTo(testMember2);
 	}
 
 	@Test
@@ -79,12 +69,9 @@ public class MemberRepositoryTest {
 	@Test
 	@DisplayName("사용자 ID로 저장된 사용자 정보를 삭제할 수 있다.")
 	void deleteMember() {
-		//given
-		Member saveMember = memberRepository.save(testMember);
-		Long id = saveMember.getId();
 		//when
-		memberRepository.deleteById(id);
-		Optional<Member> deleteMember = memberRepository.findById(id);
+		memberRepository.deleteById(getId());
+		Optional<Member> deleteMember = memberRepository.findById(getId());
 		//then
 		assertThat(deleteMember).isEmpty();
 	}

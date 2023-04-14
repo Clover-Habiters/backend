@@ -1,5 +1,6 @@
 package com.clover.habbittracker.domain.member.api;
 
+import static com.clover.habbittracker.global.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.core.Is.*;
 import static org.springframework.http.MediaType.*;
@@ -38,16 +39,7 @@ public class MemberControllerTest {
 	@BeforeEach
 	@Transactional
 	void setUp() {
-
-		Member testMember = Member.builder()
-			.id(1L)
-			.email("test@email.com")
-			.profileImgUrl("testImgUrl")
-			.nickName("testNickName")
-			.oauthId("testOauthId")
-			.provider("testProvider")
-			.build();
-		memberRepository.save(testMember);
+		memberRepository.save(createTestMember());
 		accessJwt = jwtProvider.createAccessJwt(1L);
 	}
 
