@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,7 @@ public class HabitServiceImpl implements HabitService {
 
 	@Override
 	public Long register(Long memberId, HabitRequest request) {
-		Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementException("회원 정보가 존재하지 않습니다."));
 		Habit habit = Habit.builder()
 			.content(request.getContent())
 			.member(member).build();
