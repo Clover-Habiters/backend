@@ -5,8 +5,10 @@ import java.util.Optional;
 import com.clover.habbittracker.domain.habit.exception.HabitException;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 public class HabitRequest {
 	String content;
 
