@@ -1,5 +1,6 @@
 package com.clover.habbittracker.domain.member.service;
 
+import static com.clover.habbittracker.global.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
-import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.security.oauth.dto.GoogleUser;
 import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
@@ -27,21 +27,9 @@ public class MemberServiceTest {
 	@Autowired
 	private MemberRepository memberRepository;
 
-	private final Long SAVED_ID = 1L;
-
-	private final String SAVED_NICK_NAME ="testNickName";
-
 	@BeforeEach
 	void setUp() {
-		Member testMember = Member.builder()
-			.id(SAVED_ID)
-			.email("test@email.com")
-			.profileImgUrl("testImgUrl")
-			.nickName("testNickName")
-			.oauthId("testOauthId")
-			.provider("testProvider")
-			.build();
-		memberRepository.save(testMember);
+		memberRepository.save(createTestMember());
 	}
 
 
@@ -49,9 +37,9 @@ public class MemberServiceTest {
 	@DisplayName("사용자 ID로 사용자 프로필 정보를 얻어 올 수 있다.")
 	void successGetProfileTest() {
 		//when
-		MemberResponse memberResponse = memberService.getProfile(SAVED_ID);
+		MemberResponse memberResponse = memberService.getProfile(getId());
 		//then
-		assertThat(memberResponse.getNickName()).isEqualTo(SAVED_NICK_NAME);
+		assertThat(memberResponse.getNickName()).isEqualTo(getNickName());
 	}
 
 	@Test
@@ -73,7 +61,7 @@ public class MemberServiceTest {
 			.build();
 
 		//when
-		MemberResponse memberResponse = memberService.updateProfile(SAVED_ID, memberRequest);
+		MemberResponse memberResponse = memberService.updateProfile(getId(), memberRequest);
 
 		//then
 		assertThat(memberResponse)
@@ -94,7 +82,7 @@ public class MemberServiceTest {
 		// 닉네임은 변경되고, 그 외의는 이전의 데이터와 같은지 비교
 		assertThat(memberResponse)
 			.hasFieldOrPropertyWithValue("profileImgUrl", memberRequest.getProfileImgUrl())
-			.hasFieldOrPropertyWithValue("nickName",SAVED_NICK_NAME);
+			.hasFieldOrPropertyWithValue("nickName",getNickName());
 	}
 
 	@Test
@@ -113,8 +101,8 @@ public class MemberServiceTest {
 		Long newMemberID = memberService.join(newUser);
 		Long savedUserId = memberService.join(savedUser);
 		//then
-		assertThat(newMemberID).isNotSameAs(SAVED_ID);
-		assertThat(savedUserId).isEqualTo(SAVED_ID);
+		assertThat(newMemberID).isNotSameAs(getId());
+		assertThat(savedUserId).isEqualTo(getId());
 	}
 
 

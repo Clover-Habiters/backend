@@ -23,5 +23,5 @@ public interface HabitCheckRepository extends JpaRepository<HabitCheck, Long> {
 		""")
 	Optional<HabitCheck> findByHabitOrderByUpdatedAtDesc(@Param("habit") Habit habit);
 
-
+	Optional<HabitCheck> findByHabit(Habit habit);
 }

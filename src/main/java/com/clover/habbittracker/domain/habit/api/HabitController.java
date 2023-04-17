@@ -52,7 +52,7 @@ public class HabitController {
 	@DeleteMapping("{habitId}")
 	ResponseEntity<Void> deleteHabit(@PathVariable Long habitId) {
 		habitService.deleteHabit(habitId);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@PostMapping("{habitId}/check")
@@ -63,7 +63,7 @@ public class HabitController {
 
 	@DeleteMapping("{habitId}/check")
 	ResponseEntity<Void> HabitUnCheck(@PathVariable Long habitId) {
-		habitService.HabitUnCheck(habitId);
+		habitService.habitUnCheck(habitId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

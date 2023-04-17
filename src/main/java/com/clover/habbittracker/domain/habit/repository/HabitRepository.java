@@ -1,6 +1,5 @@
 package com.clover.habbittracker.domain.habit.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +14,6 @@ public interface HabitRepository extends JpaRepository<Habit, Long> {
 		FROM Habit h
 		LEFT JOIN FETCH h.habitChecks hc
 		WHERE h.member.id = :memberId
-		AND hc.createdAt BETWEEN :start AND :end
 		""")
-	List<Habit> joinHabitCheckFindByMemberId(@Param("memberId") Long memberId,@Param("start") LocalDateTime start,@Param("end") LocalDateTime end);
+	List<Habit> joinHabitCheckFindByMemberId(@Param("memberId") Long memberId);
 }
