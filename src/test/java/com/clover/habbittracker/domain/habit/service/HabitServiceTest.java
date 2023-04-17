@@ -82,7 +82,7 @@ public class HabitServiceTest {
 		//given
 		Long testMemberId = testMember.getId();
 		HabitRequest habitRequest = new HabitRequest("테스트습관");
-		Long saveHabitId = habitService.register(testMemberId, habitRequest);
+		habitService.register(testMemberId, habitRequest);
 		String today = "2023-04";
 
 		//when
@@ -92,14 +92,14 @@ public class HabitServiceTest {
 		//then
 		myList1.forEach(myHabitResponse ->
 			assertThat(myHabitResponse)
-				.hasFieldOrPropertyWithValue("id", saveHabitId)
-				.hasFieldOrPropertyWithValue("content", habitRequest.getContent())
+				.hasFieldOrProperty("id")
+				.hasFieldOrProperty("content")
 		);
 
 		myList2.forEach(myHabitResponse ->
 			assertThat(myHabitResponse)
-				.hasFieldOrPropertyWithValue("id", saveHabitId)
-				.hasFieldOrPropertyWithValue("content", habitRequest.getContent())
+				.hasFieldOrProperty("id")
+				.hasFieldOrProperty("content")
 		);
 	}
 

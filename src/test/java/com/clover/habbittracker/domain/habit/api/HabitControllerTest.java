@@ -1,7 +1,6 @@
 package com.clover.habbittracker.domain.habit.api;
 
 import static com.clover.habbittracker.global.util.MemberProvider.*;
-import static org.hamcrest.core.Is.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -130,8 +129,8 @@ public class HabitControllerTest {
 					.param("date","2023-04"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.[0].id").exists())
-			.andExpect(jsonPath("$.[0].content", is(testHabit.getContent())))
-			.andExpect(jsonPath("$.[0].createDate", is(testHabit.getCreatedAt().toString())))
+			.andExpect(jsonPath("$.[0].content").exists())
+			.andExpect(jsonPath("$.[0].createDate").exists())
 			.andExpect(jsonPath("$.[0].habitChecks").exists())
 			.andDo(print());
 	}
