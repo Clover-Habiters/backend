@@ -63,7 +63,7 @@ public class HabitController {
 
 	@DeleteMapping("{habitId}/check")
 	ResponseEntity<Void> HabitUnCheck(@PathVariable Long habitId) {
-		habitService.HabitUnCheck(habitId);
+		habitService.habitUnCheck(habitId);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

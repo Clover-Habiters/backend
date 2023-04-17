@@ -17,5 +17,5 @@ public interface HabitService {
 
 	void deleteHabit(Long habitId);
 
-	void HabitUnCheck(Long habitId);
+	void habitUnCheck(Long habitId);
 }
