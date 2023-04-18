@@ -38,13 +38,31 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-    finalizedBy jacocoTestReport
+    finalizedBy 'jacocoTestReport'
 }
 
 jacocoTestReport {
     dependsOn test
+    finalizedBy 'jacocoTestCoverageVerification'
     reports {
         html.enabled true
         xml.enabled true
     }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            excludes = [
+                    '*.global.security.oauth*',
+                    '*.global.util*',
+                    '*.global.dto*',
+                    '*.global.exception*'
+            ]
+
+        }
+
+    }
+
 }
