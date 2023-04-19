@@ -3,6 +3,7 @@ package com.clover.habbittracker.domain.diary.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	public Long register(Long memberId, DiaryRequest request) {
-		Member member = memberRepository.findById(memberId).orElseThrow(IllegalArgumentException::new);
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementException("회원 정보가 존재하지 않습니다."));
 
 		Diary diary = Diary.builder()
 			.content(request.getContent())
@@ -44,7 +45,6 @@ public class DiaryServiceImpl implements DiaryService {
 	@Override
 	public List<DiaryResponse> getMyList(Long memberId, String date) {
 		Map<String, LocalDateTime> dateMap = DateCalculate.startEnd(date);
-
 		return diaryRepository.findByMemberId(memberId, dateMap.get("start"), dateMap.get("end"))
 			.stream()
 			.map(DiaryResponse::from)
@@ -55,7 +55,7 @@ public class DiaryServiceImpl implements DiaryService {
 	@Override
 	@Transactional
 	public DiaryResponse updateDiary(Long diaryId, DiaryRequest request) {
-		Diary diary = diaryRepository.findById(diaryId).orElseThrow();
+		Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new NoSuchElementException("회고록 정보가 존재하지 않습니다."));
 		if (diary.getEndUpdateDate().isBefore(LocalDateTime.now())) {
 			throw new DiaryException("마감 날짜 지남");
 		}
