@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.clover.habbittracker.domain.diary.dto.DiaryRequest;
 import com.clover.habbittracker.domain.diary.dto.DiaryResponse;
 import com.clover.habbittracker.domain.diary.entity.Diary;
-import com.clover.habbittracker.domain.diary.exception.DiaryException;
+import com.clover.habbittracker.domain.diary.exception.DiaryExpiredException;
+import com.clover.habbittracker.domain.diary.exception.DiaryNotFoundException;
 import com.clover.habbittracker.domain.diary.repository.DiaryRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 
 @SpringBootTest
@@ -86,7 +87,7 @@ public class DiaryServiceTest {
 		Diary saveDiary = diaryRepository.save(diary);
 		DiaryRequest updateRequest = new DiaryRequest("회고록 수정내용입니다.");
 		//when 	then
-		assertThrows(DiaryException.class,() -> diaryService.updateDiary(saveDiary.getId(), updateRequest));
+		assertThrows(DiaryExpiredException.class, () -> diaryService.updateDiary(saveDiary.getId(), updateRequest));
 
 	}
 
@@ -96,7 +97,7 @@ public class DiaryServiceTest {
 	void getMyDiaryList() {
 		//given
 		for (int i = 0; i < 10; i++) {
-			diaryService.register(testMember.getId(),new DiaryRequest("테스트 회고록입니다." + i));
+			diaryService.register(testMember.getId(), new DiaryRequest("테스트 회고록입니다." + i));
 		}
 
 		//when
@@ -120,7 +121,7 @@ public class DiaryServiceTest {
 		DiaryRequest diaryRequest = new DiaryRequest(null);
 
 		//when then
-		assertThrows(DiaryException.class, () -> diaryService.register(testMemberId, diaryRequest));
+		assertThrows(IllegalArgumentException.class, () -> diaryService.register(testMemberId, diaryRequest));
 	}
 
 	@Test
@@ -132,8 +133,8 @@ public class DiaryServiceTest {
 
 		//when then
 		assertAll(
-			() -> assertThrows(NoSuchElementException.class, () -> diaryService.register(wrongDiaryId,diaryRequest)),
-			() -> assertThrows(NoSuchElementException.class, () -> diaryService.updateDiary(wrongDiaryId,diaryRequest))
+			() -> assertThrows(MemberNotFoundException.class, () -> diaryService.register(wrongDiaryId, diaryRequest)),
+			() -> assertThrows(DiaryNotFoundException.class, () -> diaryService.updateDiary(wrongDiaryId, diaryRequest))
 		);
 	}
 

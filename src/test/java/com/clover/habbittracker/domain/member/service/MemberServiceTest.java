@@ -4,8 +4,6 @@ import static com.clover.habbittracker.global.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.NoSuchElementException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
+import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.security.oauth.dto.GoogleUser;
 import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
@@ -45,7 +44,7 @@ public class MemberServiceTest {
 	@Test
 	@DisplayName("잘못된 사용자 ID로 사용자 프로필을 조회 할 경우 예외가 터진다.")
 	void failedGetProfileTest() {
-		assertThrows(NoSuchElementException.class, () -> {
+		assertThrows(MemberNotFoundException.class, () -> {
 			memberService.getProfile(2L);
 		});
 	}
