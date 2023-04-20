@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +12,14 @@ import com.clover.habbittracker.domain.habit.dto.HabitRequest;
 import com.clover.habbittracker.domain.habit.dto.HabitResponse;
 import com.clover.habbittracker.domain.habit.dto.MyHabitResponse;
 import com.clover.habbittracker.domain.habit.entity.Habit;
-import com.clover.habbittracker.domain.habit.exception.HabitException;
+import com.clover.habbittracker.domain.habit.exception.HabitNotFoundException;
 import com.clover.habbittracker.domain.habit.repository.HabitRepository;
 import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
+import com.clover.habbittracker.domain.habitcheck.exception.HabitCheckDuplicateException;
+import com.clover.habbittracker.domain.habitcheck.exception.HabitCheckExpiredException;
 import com.clover.habbittracker.domain.habitcheck.repository.HabitCheckRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.util.DateCalculate;
 
@@ -35,7 +37,7 @@ public class HabitServiceImpl implements HabitService {
 	@Override
 	public Long register(Long memberId, HabitRequest request) {
 		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new NoSuchElementException("회원 정보가 존재하지 않습니다."));
+			.orElseThrow(MemberNotFoundException::new);
 		Habit habit = Habit.builder()
 			.content(request.getContent())
 			.member(member).build();
@@ -57,7 +59,7 @@ public class HabitServiceImpl implements HabitService {
 	@Transactional
 	public HabitResponse updateMyHabit(Long habitId, HabitRequest request) {
 		Habit habit = habitRepository.findById(habitId)
-			.orElseThrow(() -> new NoSuchElementException("습관 정보가 존재하지 않습니다."));
+			.orElseThrow(HabitNotFoundException::new);
 		habit.setContent(request.getContent());
 		return HabitResponse.from(habit);
 	}
@@ -66,15 +68,15 @@ public class HabitServiceImpl implements HabitService {
 	@Transactional
 	public void habitCheck(Long habitId) {
 		Habit habit = habitRepository.findById(habitId)
-			.orElseThrow(() -> new NoSuchElementException("습관 정보가 존재하지 않습니다."));
+			.orElseThrow(HabitNotFoundException::new);
 		if (!validDate(habit.getUpdatedAt())) {
-			throw new HabitException("습관체크는 오늘만 가능합니다.");
+			throw new HabitCheckExpiredException();
 		}
 
 		habitCheckRepository.findByHabitOrderByUpdatedAtDesc(habit)
 			.ifPresent(lastHabitCheck -> {
 				if (validDate(lastHabitCheck.getUpdatedAt())) {
-					throw new HabitException("같은 날 두번 체크는 불가능합니다.");
+					throw new HabitCheckDuplicateException();
 				}
 			});
 		habitCheckRepository.save(HabitCheck.builder().checked(true).habit(habit).build());
@@ -89,7 +91,7 @@ public class HabitServiceImpl implements HabitService {
 	@Override
 	public void habitUnCheck(Long habitId) {
 		Habit habit = habitRepository.findById(habitId)
-			.orElseThrow(() -> new NoSuchElementException("습관 정보가 존재하지 않습니다."));
+			.orElseThrow(HabitNotFoundException::new);
 
 		habitCheckRepository.findByHabit(habit)
 			.ifPresent(habitCheck -> habitCheckRepository.deleteById(habitCheck.getId()));

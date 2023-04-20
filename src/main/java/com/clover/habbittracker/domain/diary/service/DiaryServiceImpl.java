@@ -3,7 +3,6 @@ package com.clover.habbittracker.domain.diary.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -12,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.clover.habbittracker.domain.diary.dto.DiaryRequest;
 import com.clover.habbittracker.domain.diary.dto.DiaryResponse;
 import com.clover.habbittracker.domain.diary.entity.Diary;
-import com.clover.habbittracker.domain.diary.exception.DiaryException;
+import com.clover.habbittracker.domain.diary.exception.DiaryExpiredException;
+import com.clover.habbittracker.domain.diary.exception.DiaryNotFoundException;
 import com.clover.habbittracker.domain.diary.repository.DiaryRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.util.DateCalculate;
 
@@ -30,7 +31,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	public Long register(Long memberId, DiaryRequest request) {
-		Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchElementException("회원 정보가 존재하지 않습니다."));
+		Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
 
 		Diary diary = Diary.builder()
 			.content(request.getContent())
@@ -51,13 +52,12 @@ public class DiaryServiceImpl implements DiaryService {
 			.toList();
 	}
 
-
 	@Override
 	@Transactional
 	public DiaryResponse updateDiary(Long diaryId, DiaryRequest request) {
-		Diary diary = diaryRepository.findById(diaryId).orElseThrow(() -> new NoSuchElementException("회고록 정보가 존재하지 않습니다."));
+		Diary diary = diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new);
 		if (diary.getEndUpdateDate().isBefore(LocalDateTime.now())) {
-			throw new DiaryException("마감 날짜 지남");
+			throw new DiaryExpiredException();
 		}
 		Optional.ofNullable(request.getContent()).ifPresent(diary::setContent);
 
