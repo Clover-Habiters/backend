@@ -22,6 +22,7 @@ import com.clover.habbittracker.domain.diary.entity.Diary;
 import com.clover.habbittracker.domain.diary.repository.DiaryRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
+import com.clover.habbittracker.global.exception.ErrorType;
 import com.clover.habbittracker.global.security.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -111,6 +112,29 @@ public class DiaryControllerTest {
 				delete("/diaries/" + saveDiary.getId())
 					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isNoContent())
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("24시간이 지난 회고록은 수정 할 수 없다.")
+	void updateDiaryWithExpiredDateTest() throws Exception {
+		//given
+		DiaryRequest diaryRequest = new DiaryRequest("회고록 수정내용 입니다.");
+		String request = new ObjectMapper().writeValueAsString(diaryRequest);
+		Diary expiredDiary = Diary.builder()
+			.endUpdateDate(LocalDateTime.now().minusDays(24))
+			.content("마감시간이 지난 회고록")
+			.build();
+		diaryRepository.save(expiredDiary);
+		//when then
+		mockMvc.perform(
+				put("/diaries/"+ expiredDiary.getId())
+					.header("Authorization","Bearer " + accessJwt)
+					.contentType(APPLICATION_JSON)
+					.content(request))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.errorName", is(ErrorType.DIARY_EXPIRED.name())))
+			.andExpect(jsonPath("$.msg", is(ErrorType.DIARY_EXPIRED.getErrorMsg())))
 			.andDo(print());
 	}
 

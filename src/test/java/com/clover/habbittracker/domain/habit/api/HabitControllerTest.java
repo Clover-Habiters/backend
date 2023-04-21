@@ -1,6 +1,7 @@
 package com.clover.habbittracker.domain.habit.api;
 
 import static com.clover.habbittracker.global.util.MemberProvider.*;
+import static org.hamcrest.core.Is.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -19,6 +20,7 @@ import com.clover.habbittracker.domain.habit.entity.Habit;
 import com.clover.habbittracker.domain.habit.repository.HabitRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
+import com.clover.habbittracker.global.exception.ErrorType;
 import com.clover.habbittracker.global.security.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -122,17 +124,49 @@ public class HabitControllerTest {
 	@DisplayName("사용자는 나의 습관 리스트와 습관 수행 여부를 조회 할 수 있다.")
 	void myHabitListTest() throws Exception {
 
-
 		mockMvc.perform(
 				get("/habits")
 					.header("Authorization", "Bearer " + accessJwt)
-					.param("date","2023-04"))
+					.param("date", "2023-04"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.[0].id").exists())
 			.andExpect(jsonPath("$.[0].content").exists())
 			.andExpect(jsonPath("$.[0].createDate").exists())
 			.andExpect(jsonPath("$.[0].habitChecks").exists())
 			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("잘못된 습관 아이디를 보낼 경우 HabitNotFound 예외가 터진다.")
+	void habitCheckTestWithWrongId() throws Exception {
+		long wrongId = 0L;
+		mockMvc.perform(
+				post("/habits/" + wrongId + "/check")
+					.header("Authorization", "Bearer " + accessJwt))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$.errorName", is(ErrorType.HABIT_NOT_FOUND.name())))
+			.andExpect(jsonPath("$.msg", is(ErrorType.HABIT_NOT_FOUND.getErrorMsg())))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("습관 수행 여부를 중복 체크 하면 HabitCheckDuplicate 예외가 터진다.")
+	void habitCheckTestWithExpiredDate() throws Exception {
+		//given
+
+		//when then
+		mockMvc.perform(
+			post("/habits/" + testHabit.getId() + "/check")
+				.header("Authorization", "Bearer " + accessJwt));
+
+		mockMvc.perform(
+			post("/habits/" + testHabit.getId() + "/check")
+				.header("Authorization", "Bearer " + accessJwt))
+			.andExpect(status().isConflict())
+			.andExpect(jsonPath("$.errorName", is(ErrorType.HABIT_CHECK_DUPLICATE.name())))
+			.andExpect(jsonPath("$.msg", is(ErrorType.HABIT_CHECK_DUPLICATE.getErrorMsg())))
+			.andDo(print());
+
 	}
 
 }
