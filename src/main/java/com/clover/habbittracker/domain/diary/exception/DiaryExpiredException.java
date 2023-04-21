@@ -1,10 +1,11 @@
 package com.clover.habbittracker.domain.diary.exception;
 
+import com.clover.habbittracker.global.exception.BaseException;
 import com.clover.habbittracker.global.exception.ErrorType;
 
-public class DiaryExpiredException extends DiaryException{
+public class DiaryExpiredException extends BaseException {
 
-	public DiaryExpiredException() {
-		super(ErrorType.DIARY_EXPIRED,"");
+	public DiaryExpiredException(Long diaryId) {
+		super(diaryId, ErrorType.DIARY_EXPIRED);
 	}
 }
