@@ -30,7 +30,7 @@ public class MemberServiceImpl implements MemberService {
 	public MemberResponse getProfile(Long memberId) {
 		return memberRepository.findById(memberId)
 			.map(MemberResponse::from)
-			.orElseThrow(MemberNotFoundException::new);
+			.orElseThrow(() -> new MemberNotFoundException(memberId));
 	}
 
 	@Override

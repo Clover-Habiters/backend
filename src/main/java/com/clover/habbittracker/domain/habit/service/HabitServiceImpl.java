@@ -37,7 +37,7 @@ public class HabitServiceImpl implements HabitService {
 	@Override
 	public Long register(Long memberId, HabitRequest request) {
 		Member member = memberRepository.findById(memberId)
-			.orElseThrow(MemberNotFoundException::new);
+			.orElseThrow(() -> new MemberNotFoundException(memberId));
 		Habit habit = Habit.builder()
 			.content(request.getContent())
 			.member(member).build();
@@ -59,7 +59,7 @@ public class HabitServiceImpl implements HabitService {
 	@Transactional
 	public HabitResponse updateMyHabit(Long habitId, HabitRequest request) {
 		Habit habit = habitRepository.findById(habitId)
-			.orElseThrow(HabitNotFoundException::new);
+			.orElseThrow(()-> new HabitNotFoundException(habitId));
 		habit.setContent(request.getContent());
 		return HabitResponse.from(habit);
 	}
@@ -68,15 +68,15 @@ public class HabitServiceImpl implements HabitService {
 	@Transactional
 	public void habitCheck(Long habitId) {
 		Habit habit = habitRepository.findById(habitId)
-			.orElseThrow(HabitNotFoundException::new);
+			.orElseThrow(()-> new HabitNotFoundException(habitId));
 		if (!validDate(habit.getUpdatedAt())) {
-			throw new HabitCheckExpiredException();
+			throw new HabitCheckExpiredException(habitId);
 		}
 
 		habitCheckRepository.findByHabitOrderByUpdatedAtDesc(habit)
 			.ifPresent(lastHabitCheck -> {
 				if (validDate(lastHabitCheck.getUpdatedAt())) {
-					throw new HabitCheckDuplicateException();
+					throw new HabitCheckDuplicateException(habitId);
 				}
 			});
 		habitCheckRepository.save(HabitCheck.builder().checked(true).habit(habit).build());
@@ -91,7 +91,7 @@ public class HabitServiceImpl implements HabitService {
 	@Override
 	public void habitUnCheck(Long habitId) {
 		Habit habit = habitRepository.findById(habitId)
-			.orElseThrow(HabitNotFoundException::new);
+			.orElseThrow(()-> new HabitNotFoundException(habitId));
 
 		habitCheckRepository.findByHabit(habit)
 			.ifPresent(habitCheck -> habitCheckRepository.deleteById(habitCheck.getId()));
