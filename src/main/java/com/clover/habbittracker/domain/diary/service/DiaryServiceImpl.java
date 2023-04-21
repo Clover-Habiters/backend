@@ -31,7 +31,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	public Long register(Long memberId, DiaryRequest request) {
-		Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+		Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
 
 		Diary diary = Diary.builder()
 			.content(request.getContent())
@@ -55,9 +55,10 @@ public class DiaryServiceImpl implements DiaryService {
 	@Override
 	@Transactional
 	public DiaryResponse updateDiary(Long diaryId, DiaryRequest request) {
-		Diary diary = diaryRepository.findById(diaryId).orElseThrow(DiaryNotFoundException::new);
+		Diary diary = diaryRepository.findById(diaryId)
+			.orElseThrow(() -> new DiaryNotFoundException(diaryId));
 		if (diary.getEndUpdateDate().isBefore(LocalDateTime.now())) {
-			throw new DiaryExpiredException();
+			throw new DiaryExpiredException(diaryId);
 		}
 		Optional.ofNullable(request.getContent()).ifPresent(diary::setContent);
 
