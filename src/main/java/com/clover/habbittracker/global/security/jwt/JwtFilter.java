@@ -11,6 +11,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.clover.habbittracker.global.security.exception.JwtStructureException;
+
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -51,13 +53,12 @@ public class JwtFilter extends OncePerRequestFilter {
 		String tokenType = authorization[0];
 
 		if(!tokenType.startsWith("Bearer") || authorization.length < 2){
-			throw new JwtException("잘못된 토큰 구조입니다.");
+			throw new JwtStructureException(tokenType);
 		}
 
-		String token = authorization[1];
-		jwtProvider.validOf(token);
+		// jwtProvider.validOf(token);
 
-		return token;
+		return authorization[1];
 	}
 
 	public UsernamePasswordAuthenticationToken createAuthentication(String token) {
