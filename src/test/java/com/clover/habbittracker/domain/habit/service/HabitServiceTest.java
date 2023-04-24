@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,11 +18,13 @@ import com.clover.habbittracker.domain.habit.dto.HabitRequest;
 import com.clover.habbittracker.domain.habit.dto.HabitResponse;
 import com.clover.habbittracker.domain.habit.dto.MyHabitResponse;
 import com.clover.habbittracker.domain.habit.entity.Habit;
-import com.clover.habbittracker.domain.habit.exception.HabitException;
+import com.clover.habbittracker.domain.habit.exception.HabitNotFoundException;
 import com.clover.habbittracker.domain.habit.repository.HabitRepository;
 import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
+import com.clover.habbittracker.domain.habitcheck.exception.HabitCheckDuplicateException;
 import com.clover.habbittracker.domain.habitcheck.repository.HabitCheckRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 
 @SpringBootTest
@@ -72,8 +73,8 @@ public class HabitServiceTest {
 		HabitRequest habitRequest = new HabitRequest(null);
 
 		//when then
-		assertThrows(HabitException.class, () -> habitService.register(testMemberId, habitRequest));
-		assertThrows(NoSuchElementException.class, () -> habitService.register(wrongMemberId, habitRequest));
+		assertThrows(IllegalArgumentException.class, () -> habitService.register(testMemberId, habitRequest));
+		assertThrows(MemberNotFoundException.class, () -> habitService.register(wrongMemberId, habitRequest));
 	}
 
 	@Test
@@ -148,7 +149,8 @@ public class HabitServiceTest {
 
 		//when
 		habitService.habitCheck(saveHabitId);
-		assertThrows(HabitException.class, () -> habitService.habitCheck(saveHabitId)); // 같은 날 두번 연속 체크는 불가능.
+		assertThrows(HabitCheckDuplicateException.class,
+			() -> habitService.habitCheck(saveHabitId)); // 같은 날 두번 연속 체크는 불가능.
 	}
 
 	@Test
@@ -178,9 +180,10 @@ public class HabitServiceTest {
 
 		//when then
 		assertAll(
-			() -> assertThrows(NoSuchElementException.class, () -> habitService.habitCheck(wrongHabitId)),
-			() -> assertThrows(NoSuchElementException.class, () -> habitService.habitUnCheck(wrongHabitId)),
-			() -> assertThrows(NoSuchElementException.class, () -> habitService.updateMyHabit(wrongHabitId,habitRequest))
+			() -> assertThrows(HabitNotFoundException.class, () -> habitService.habitCheck(wrongHabitId)),
+			() -> assertThrows(HabitNotFoundException.class, () -> habitService.habitUnCheck(wrongHabitId)),
+			() -> assertThrows(HabitNotFoundException.class,
+				() -> habitService.updateMyHabit(wrongHabitId, habitRequest))
 		);
 	}
 }

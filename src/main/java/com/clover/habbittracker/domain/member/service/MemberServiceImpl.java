@@ -1,6 +1,5 @@
 package com.clover.habbittracker.domain.member.service;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -9,8 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
 import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
+import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
+import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +30,7 @@ public class MemberServiceImpl implements MemberService {
 	public MemberResponse getProfile(Long memberId) {
 		return memberRepository.findById(memberId)
 			.map(MemberResponse::from)
-			.orElseThrow(() -> new NoSuchElementException("회원 정보가 존재하지않습니다."));
+			.orElseThrow(() -> new MemberNotFoundException(memberId));
 	}
 
 	@Override
@@ -61,12 +61,11 @@ public class MemberServiceImpl implements MemberService {
 
 	private Member update(Member member, MemberRequest request) {
 		Optional<Member> byNickName = memberRepository.findByNickName(request.getNickName());
-		if(byNickName.isEmpty()) {
+		if (byNickName.isEmpty()) {
 			Optional.ofNullable(request.getProfileImgUrl()).ifPresent(member::setProfileImgUrl);
 			Optional.ofNullable(request.getNickName()).ifPresent(member::setNickName);
 			return member;
-		}
-		else {
+		} else {
 			throw new IllegalArgumentException();
 		}
 	}

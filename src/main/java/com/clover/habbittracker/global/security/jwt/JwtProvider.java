@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.clover.habbittracker.global.security.exception.JwtExpiredException;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -18,7 +20,8 @@ public class JwtProvider {
 
 	private final Long REFRESH_EXPIRED_MS;
 
-	public JwtProvider(@Value("${jwt.secret}") String secretKey, @Value("${jwt.expiredMs}") Long expiredMs,@Value("${jwt.refreshExpiredMs}") Long refreshExpiredMs) {
+	public JwtProvider(@Value("${jwt.secret}") String secretKey, @Value("${jwt.expiredMs}") Long expiredMs,
+		@Value("${jwt.refreshExpiredMs}") Long refreshExpiredMs) {
 		this.SECRET_KEY = secretKey;
 		this.ACCESS_EXPIRED_MS = expiredMs;
 		this.REFRESH_EXPIRED_MS = refreshExpiredMs;
@@ -36,18 +39,26 @@ public class JwtProvider {
 	}
 
 	public Claims getClaims(String token) {
-		return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+		try {
+			return Jwts.parser()
+				.setSigningKey(SECRET_KEY)
+				.parseClaimsJws(token)
+				.getBody();
+		} catch (ExpiredJwtException e) {
+			throw new JwtExpiredException(token);
+		}
+
 	}
 
-	public void validOf(String token) {
-		try{
-			Jwts.parser()
-				.setSigningKey(SECRET_KEY)
-				.parseClaimsJws(token);
-  		}catch (ExpiredJwtException e){
-			throw new JwtException("유효시간이 만료된 토큰입니다.");
-  		}
-	}
+	// public void validOf(String token) {
+	// 	try {
+	// 		Jwts.parser()
+	// 			.setSigningKey(SECRET_KEY)
+	// 			.parseClaimsJws(token);
+	// 	} catch (ExpiredJwtException e) {
+	// 		throw new JwtStructureException();
+	// 	}
+	// }
 
 	public String createRefreshJwt() {
 		Claims claims = Jwts.claims();
