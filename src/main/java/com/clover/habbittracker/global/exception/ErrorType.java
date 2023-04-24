@@ -10,6 +10,9 @@ public enum ErrorType {
 	INVALID_ARGUMENTS(HttpStatus.BAD_REQUEST, "내용이 없습니다."),
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러 입니다."),
 
+	INVALID_JWT_STRUCTURE(HttpStatus.BAD_REQUEST,"잘못된 토큰 구조입니다."),
+	EXPIRED_JWT(HttpStatus.BAD_REQUEST,"유효시간이 만료된 토큰입니다."),
+
 	MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원 정보가 존재하지 않습니다."),
 
 	HABIT_NOT_FOUND(HttpStatus.NOT_FOUND, "습관 정보가 존재하지 않습니다."),
