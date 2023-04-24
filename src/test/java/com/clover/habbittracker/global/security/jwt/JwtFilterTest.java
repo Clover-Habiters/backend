@@ -14,6 +14,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.clover.habbittracker.global.security.exception.JwtStructureException;
+
 import jakarta.servlet.ServletException;
 
 public class JwtFilterTest {
@@ -57,12 +59,12 @@ public class JwtFilterTest {
 		String accessJwt = jwtProvider.createAccessJwt(memberId);
 		//Bearer가 없다면 예외 처리.
 		httpServletRequest.addHeader("Authorization", accessJwt);
-		assertThrows(JwtException.class,
+		assertThrows(JwtStructureException.class,
 			() -> jwtFilter.doFilterInternal(httpServletRequest, httpServletResponse, filterChain));
 
 		//AccessToken이 없다면 예외 처리.
 		httpServletRequest.addHeader("Authorization", "Bearer ");
-		assertThrows(JwtException.class,
+		assertThrows(JwtStructureException.class,
 			() -> jwtFilter.doFilterInternal(httpServletRequest, httpServletResponse, filterChain));
 	}
 
