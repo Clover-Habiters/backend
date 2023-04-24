@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.clover.habbittracker.global.security.exception.JwtExpiredException;
+
 import io.jsonwebtoken.Claims;
 
 class JwtProviderTest {
@@ -32,22 +34,22 @@ class JwtProviderTest {
 		Long userId = claims.get("userId", Long.class);
 		assertThat(memberId).isEqualTo(userId);
 	}
+	// @Test
+	// @DisplayName("토큰의 유효시간을 검증 할 수 있다.")
+	// void tokenValidOfExpired() {
+	// 	Long memberId = 1L;
+	// 	String accessJwt = jwtProvider.createAccessJwt(memberId);
+	//
+	// 	assertDoesNotThrow(() -> jwtProvider.getClaims(accessJwt));
+	// }
 	@Test
-	@DisplayName("토큰의 유효시간을 검증 할 수 있다.")
-	void tokenValidOfExpired() {
-		Long memberId = 1L;
-		String accessJwt = jwtProvider.createAccessJwt(memberId);
-
-		assertDoesNotThrow(() -> jwtProvider.validOf(accessJwt));
-	}
-	@Test
-	@DisplayName("토큰의 유효시간이 지나가면 예외가 터진다.")
+	@DisplayName("토큰을 이용하여 userId를 찾으려 할 때, 유효시간이 지나가면 예외가 터진다.")
 	void tokenExpiredException() throws InterruptedException {
 		String accessJwt = jwtProvider.createAccessJwt(1L);
 
 		Thread.sleep(1100L);
 
-		assertThrows(JwtException.class , () -> jwtProvider.validOf(accessJwt));
+		assertThrows(JwtExpiredException.class , () -> jwtProvider.getClaims(accessJwt));
 
 	}
 }
