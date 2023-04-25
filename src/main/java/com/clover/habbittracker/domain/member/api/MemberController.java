@@ -1,5 +1,7 @@
 package com.clover.habbittracker.domain.member.api;
 
+import static com.clover.habbittracker.global.dto.ResponseType.*;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
 import com.clover.habbittracker.domain.member.service.MemberService;
+import com.clover.habbittracker.global.dto.BaseResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,20 +27,23 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@GetMapping("/me")
-	ResponseEntity<MemberResponse> getMyProfile(Authentication authentication) {
+	ResponseEntity<BaseResponse<MemberResponse>> getMyProfile(Authentication authentication) {
 		Long memberId = (Long)authentication.getPrincipal();
-		return new ResponseEntity<>(memberService.getProfile(memberId), HttpStatus.OK);
+		MemberResponse data = memberService.getProfile(memberId);
+		return new ResponseEntity<>(BaseResponse.of(data, MEMBER_READ), HttpStatus.OK);
 	}
 
 	@PutMapping("/me")
-	ResponseEntity<MemberResponse> updateMyProfile(Authentication authentication, @RequestBody MemberRequest request) {
+	ResponseEntity<BaseResponse<MemberResponse>> updateMyProfile(Authentication authentication,
+		@RequestBody MemberRequest request) {
 		Long memberId = (Long)authentication.getPrincipal();
-		return new ResponseEntity<>(memberService.updateProfile(memberId, request), HttpStatus.OK);
+		MemberResponse data = memberService.updateProfile(memberId, request);
+		return new ResponseEntity<>(BaseResponse.of(data, MEMBER_UPDATE), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/me")
-	ResponseEntity<Void> deleteMember(Authentication authentication) {
-		memberService.deleteProfile((Long) authentication.getPrincipal());
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	ResponseEntity<BaseResponse<Void>> deleteMember(Authentication authentication) {
+		memberService.deleteProfile((Long)authentication.getPrincipal());
+		return new ResponseEntity<>(BaseResponse.of(null, MEMBER_DELETE), HttpStatus.NO_CONTENT);
 	}
 }

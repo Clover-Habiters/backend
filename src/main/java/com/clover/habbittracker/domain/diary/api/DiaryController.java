@@ -1,5 +1,7 @@
 package com.clover.habbittracker.domain.diary.api;
 
+import static com.clover.habbittracker.global.dto.ResponseType.*;
+
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.clover.habbittracker.domain.diary.dto.DiaryRequest;
 import com.clover.habbittracker.domain.diary.dto.DiaryResponse;
 import com.clover.habbittracker.domain.diary.service.DiaryService;
+import com.clover.habbittracker.global.dto.BaseResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,25 +32,30 @@ public class DiaryController {
 	private final DiaryService diaryService;
 
 	@PostMapping
-	ResponseEntity<Long> createDiary(Authentication authentication,@RequestBody DiaryRequest request) {
+	ResponseEntity<BaseResponse<Long>> createDiary(Authentication authentication, @RequestBody DiaryRequest request) {
 		Long memberId = (Long)authentication.getPrincipal();
-		return new ResponseEntity<>(diaryService.register(memberId,request), HttpStatus.OK);
+		Long data = diaryService.register(memberId, request);
+		return new ResponseEntity<>(BaseResponse.of(data, DIARY_CREATE), HttpStatus.CREATED);
 	}
 
 	@GetMapping
-	ResponseEntity<List<DiaryResponse>> getMyDiaryList(Authentication authentication, @RequestParam(required = false) String date) {
-		Long memberId = (Long) authentication.getPrincipal();
-		return new ResponseEntity<>(diaryService.getMyList(memberId,date),HttpStatus.OK);
+	ResponseEntity<BaseResponse<List<DiaryResponse>>> getMyDiaryList(Authentication authentication,
+		@RequestParam(required = false) String date) {
+		Long memberId = (Long)authentication.getPrincipal();
+		List<DiaryResponse> data = diaryService.getMyList(memberId, date);
+		return new ResponseEntity<>(BaseResponse.of(data, DIARY_READ), HttpStatus.OK);
 	}
 
 	@PutMapping("/{diaryId}")
-	ResponseEntity<DiaryResponse> updateDiary(@PathVariable Long diaryId, @RequestBody DiaryRequest request) {
-		return new ResponseEntity<>(diaryService.updateDiary(diaryId, request),HttpStatus.OK);
+	ResponseEntity<BaseResponse<DiaryResponse>> updateDiary(@PathVariable Long diaryId,
+		@RequestBody DiaryRequest request) {
+		DiaryResponse data = diaryService.updateDiary(diaryId, request);
+		return new ResponseEntity<>(BaseResponse.of(data, DIARY_UPDATE), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{diaryId}")
-	ResponseEntity<Void> deleteDiary(@PathVariable Long diaryId) {
+	ResponseEntity<BaseResponse<Void>> deleteDiary(@PathVariable Long diaryId) {
 		diaryService.delete(diaryId);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(BaseResponse.of(null, DIARY_DELETE), HttpStatus.NO_CONTENT);
 	}
 }
