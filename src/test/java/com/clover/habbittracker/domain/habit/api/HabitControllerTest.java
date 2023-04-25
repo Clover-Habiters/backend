@@ -63,7 +63,7 @@ public class HabitControllerTest {
 					.header("Authorization", "Bearer " + accessJwt)
 					.contentType(APPLICATION_JSON)
 					.content(request))
-			.andExpect(status().isOk())
+			.andExpect(status().isCreated())
 			.andDo(print());
 	}
 
@@ -81,9 +81,9 @@ public class HabitControllerTest {
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id").exists())
-			.andExpect(jsonPath("$.content").exists())
-			.andExpect(jsonPath("$.createDate").exists())
+			.andExpect(jsonPath("$.data.id").exists())
+			.andExpect(jsonPath("$.data.content").exists())
+			.andExpect(jsonPath("$.data.createDate").exists())
 			.andDo(print());
 	}
 
@@ -105,7 +105,7 @@ public class HabitControllerTest {
 		mockMvc.perform(
 				post("/habits/" + testHabit.getId() + "/check")
 					.header("Authorization", "Bearer " + accessJwt))
-			.andExpect(status().isOk())
+			.andExpect(status().isCreated())
 			.andDo(print());
 	}
 
@@ -129,10 +129,10 @@ public class HabitControllerTest {
 					.header("Authorization", "Bearer " + accessJwt)
 					.param("date", "2023-04"))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.[0].id").exists())
-			.andExpect(jsonPath("$.[0].content").exists())
-			.andExpect(jsonPath("$.[0].createDate").exists())
-			.andExpect(jsonPath("$.[0].habitChecks").exists())
+			.andExpect(jsonPath("$.data.[0].id").exists())
+			.andExpect(jsonPath("$.data.[0].content").exists())
+			.andExpect(jsonPath("$.data.[0].createDate").exists())
+			.andExpect(jsonPath("$.data.[0].habitChecks").exists())
 			.andDo(print());
 	}
 
