@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,28 +33,26 @@ public class HabitController {
 	private final HabitService habitService;
 
 	@GetMapping
-	ResponseEntity<BaseResponse<List<MyHabitResponse>>> getMyHabitList(Authentication authentication,
+	ResponseEntity<BaseResponse<List<MyHabitResponse>>> getMyHabitList(@AuthenticationPrincipal Long memberId,
 		@RequestParam(required = false) String date) {
-		Long memberId = (Long)authentication.getPrincipal();
-		List<MyHabitResponse> data = habitService.getMyList(memberId, date);
-		return new ResponseEntity<>(BaseResponse.of(data, HABIT_READ), HttpStatus.OK);
+		List<MyHabitResponse> myHabitList = habitService.getMyList(memberId, date);
+		return new ResponseEntity<>(BaseResponse.of(myHabitList, HABIT_READ), HttpStatus.OK);
 	}
 
 	@PostMapping
 	ResponseEntity<BaseResponse<Long>> createHabit(
-		Authentication authentication,
+		@AuthenticationPrincipal Long memberId,
 		@RequestBody HabitRequest request) {
 
-		Long memberId = (Long)authentication.getPrincipal();
-		Long data = habitService.register(memberId, request);
-		return new ResponseEntity<>(BaseResponse.of(data, HABIT_CREATE), HttpStatus.CREATED);
+		Long registerId = habitService.register(memberId, request);
+		return new ResponseEntity<>(BaseResponse.of(registerId, HABIT_CREATE), HttpStatus.CREATED);
 	}
 
 	@PutMapping("{habitId}")
 	ResponseEntity<BaseResponse<HabitResponse>> updateHabit(@PathVariable Long habitId,
 		@RequestBody HabitRequest request) {
-		HabitResponse data = habitService.updateMyHabit(habitId, request);
-		return new ResponseEntity<>(BaseResponse.of(data, HABIT_UPDATE), HttpStatus.OK);
+		HabitResponse updateHabit = habitService.updateMyHabit(habitId, request);
+		return new ResponseEntity<>(BaseResponse.of(updateHabit, HABIT_UPDATE), HttpStatus.OK);
 	}
 
 	@DeleteMapping("{habitId}")
