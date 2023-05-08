@@ -70,7 +70,7 @@ public class DiaryControllerTest {
 				.header("Authorization","Bearer " + accessJwt)
 				.contentType(APPLICATION_JSON)
 				.content(request))
-			.andExpect(status().isOk())
+			.andExpect(status().isCreated())
 			.andDo(print());
 	}
 
@@ -88,8 +88,8 @@ public class DiaryControllerTest {
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id", is(saveDiary.getId().intValue())))
-			.andExpect(jsonPath("$.content", is(diaryRequest.getContent())))
+			.andExpect(jsonPath("$.data.id", is(saveDiary.getId().intValue())))
+			.andExpect(jsonPath("$.data.content", is(diaryRequest.getContent())))
 			.andDo(print());
 	}
 

@@ -50,10 +50,10 @@ public class MemberControllerTest {
 		//when then
 		mockMvc.perform(get("/users/me").header("Authorization","Bearer " + accessJwt))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.id").exists())
-			.andExpect(jsonPath("$.email").exists())
-			.andExpect(jsonPath("$.nickName").exists())
-			.andExpect(jsonPath("$.profileImgUrl").exists())
+			.andExpect(jsonPath("$.data.id").exists())
+			.andExpect(jsonPath("$.data.email").exists())
+			.andExpect(jsonPath("$.data.nickName").exists())
+			.andExpect(jsonPath("$.data.profileImgUrl").exists())
 			.andDo(print());
 	}
 
@@ -73,8 +73,8 @@ public class MemberControllerTest {
 				.contentType(APPLICATION_JSON)
 				.content(request))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.nickName",is("updateNickName")))
-			.andExpect(jsonPath("$.profileImgUrl",is("updateProfileImgUrl")))
+			.andExpect(jsonPath("$.data.nickName",is("updateNickName")))
+			.andExpect(jsonPath("$.data.profileImgUrl",is("updateProfileImgUrl")))
 			.andDo(print());
 	}
 	@Test
