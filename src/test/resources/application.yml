@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    ## 테스트 db는 h2 메모리로 실행.
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+#  sql:
+#    init:
+#      mode: always
+#      schema-locations: classpath:schema.sql
+#      data-locations: classpath:data.sql
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+#    defer-datasource-initialization: true
+  config:
+    import: application-token.yml, application-security.yml
+

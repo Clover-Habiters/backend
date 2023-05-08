@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      ## 리포지토리 체크아웃 및 submodule 업데이트
+      - name: get repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{secrets.CI_TOKEN}}
+          submodules: recursive
+
+      ## JDK 17 설치
+      - name: install JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      ## MySQL 설치 및 데이터베이스 설정
+      - name: SetUp MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql version: '8.0.32'
+          mysql database: 'habiters-db'
+          mysql user: 'root'
+          mysql password: '1234'
+
+      # 환경 변수 설정
+      - name: Set up Environment
+        run: echo "${{ secrets.ENV }}" > ./.env # GitHub SecretKey 에서 설정한 내용으로 .env 파일 생성
+
+      ## Gradle 빌드를 위한 실행 권한 부여
+      - name: grant permission to execute gradle command
+        run: chmod +x gradlew
+
+      ## Gradle 빌드 실행
+      - name: run gradle build
+        run: ./gradlew build
+
+      ## 오타 검사를 위해 typos-action 추가
+      - name: add typos-action as check spell
+        uses: crate-ci/typos@v1.0.4
+        with:
+          files: 'src/**'
+      ## 테스트 커버리지 리포트 작성
+      - name: register test coverage as a comment in PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.2
+        if: always()
+        with:
+          title: 테스트 커버리지 리포트입니다
+          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{secrets.CI_TOKEN}}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+
+      ## 테스트 실패시 코드 라인에 대한 체크 추가
+      - name: if test fail, add check comment on failed code line
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.html'
+          token: ${{ github.token }}
