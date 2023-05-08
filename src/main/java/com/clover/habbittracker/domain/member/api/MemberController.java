@@ -29,19 +29,23 @@ public class MemberController {
 	@GetMapping("/me")
 	ResponseEntity<BaseResponse<MemberResponse>> getMyProfile(@AuthenticationPrincipal Long memberId) {
 		MemberResponse profile = memberService.getProfile(memberId);
-		return new ResponseEntity<>(BaseResponse.of(profile, MEMBER_READ), HttpStatus.OK);
+		BaseResponse<MemberResponse> response = BaseResponse.of(profile, MEMBER_READ);
+		return ResponseEntity.ok().body(response);
 	}
 
 	@PutMapping("/me")
 	ResponseEntity<BaseResponse<MemberResponse>> updateMyProfile(@AuthenticationPrincipal Long memberId,
-		@RequestBody MemberRequest request) {
+																 @RequestBody MemberRequest request) {
 		MemberResponse updateProfile = memberService.updateProfile(memberId, request);
-		return new ResponseEntity<>(BaseResponse.of(updateProfile, MEMBER_UPDATE), HttpStatus.OK);
+		BaseResponse<MemberResponse> response = BaseResponse.of(updateProfile, MEMBER_UPDATE);
+		return ResponseEntity.ok().body(response);
 	}
 
 	@DeleteMapping("/me")
 	ResponseEntity<BaseResponse<Void>> deleteMember(@AuthenticationPrincipal Long memberId) {
 		memberService.deleteProfile(memberId);
-		return new ResponseEntity<>(BaseResponse.of(null, MEMBER_DELETE), HttpStatus.NO_CONTENT);
+		BaseResponse<Void> response = BaseResponse.of(null, MEMBER_DELETE);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 	}
+
 }

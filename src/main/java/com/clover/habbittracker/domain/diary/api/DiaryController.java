@@ -34,26 +34,30 @@ public class DiaryController {
 	@PostMapping
 	ResponseEntity<BaseResponse<Long>> createDiary(@AuthenticationPrincipal Long memberId, @RequestBody DiaryRequest request) {
 		Long registerId = diaryService.register(memberId, request);
-		return new ResponseEntity<>(BaseResponse.of(registerId, DIARY_CREATE), HttpStatus.CREATED);
+		BaseResponse<Long> response = BaseResponse.of(registerId, DIARY_CREATE);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@GetMapping
 	ResponseEntity<BaseResponse<List<DiaryResponse>>> getMyDiaryList(@AuthenticationPrincipal Long memberId,
 		@RequestParam(required = false) String date) {
 		List<DiaryResponse> myDiaryList = diaryService.getMyList(memberId, date);
-		return new ResponseEntity<>(BaseResponse.of(myDiaryList, DIARY_READ), HttpStatus.OK);
+		BaseResponse<List<DiaryResponse>> response = BaseResponse.of(myDiaryList, DIARY_READ);
+		return ResponseEntity.ok().body(response);
 	}
 
 	@PutMapping("/{diaryId}")
 	ResponseEntity<BaseResponse<DiaryResponse>> updateDiary(@PathVariable Long diaryId,
 		@RequestBody DiaryRequest request) {
 		DiaryResponse updateDiary = diaryService.updateDiary(diaryId, request);
-		return new ResponseEntity<>(BaseResponse.of(updateDiary, DIARY_UPDATE), HttpStatus.OK);
+		BaseResponse<DiaryResponse> response = BaseResponse.of(updateDiary, DIARY_UPDATE);
+		return ResponseEntity.ok().body(response);
 	}
 
 	@DeleteMapping("/{diaryId}")
 	ResponseEntity<BaseResponse<Void>> deleteDiary(@PathVariable Long diaryId) {
 		diaryService.delete(diaryId);
-		return new ResponseEntity<>(BaseResponse.of(null, DIARY_DELETE), HttpStatus.NO_CONTENT);
+		BaseResponse<Void> response = BaseResponse.of(null, HABIT_DELETE);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 	}
 }
