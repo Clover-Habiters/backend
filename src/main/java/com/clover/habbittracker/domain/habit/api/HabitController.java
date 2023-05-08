@@ -33,43 +33,51 @@ public class HabitController {
 	private final HabitService habitService;
 
 	@GetMapping
-	ResponseEntity<BaseResponse<List<MyHabitResponse>>> getMyHabitList(@AuthenticationPrincipal Long memberId,
-		@RequestParam(required = false) String date) {
+	public ResponseEntity<BaseResponse<List<MyHabitResponse>>> getMyHabitList(
+			@AuthenticationPrincipal Long memberId,
+			@RequestParam(required = false) String date) {
 		List<MyHabitResponse> myHabitList = habitService.getMyList(memberId, date);
-		return new ResponseEntity<>(BaseResponse.of(myHabitList, HABIT_READ), HttpStatus.OK);
+		BaseResponse<List<MyHabitResponse>> response = BaseResponse.of(myHabitList, HABIT_READ);
+		return ResponseEntity.ok().body(response);
 	}
 
 	@PostMapping
-	ResponseEntity<BaseResponse<Long>> createHabit(
-		@AuthenticationPrincipal Long memberId,
-		@RequestBody HabitRequest request) {
-
+	public ResponseEntity<BaseResponse<Long>> createHabit(
+			@AuthenticationPrincipal Long memberId,
+			@RequestBody HabitRequest request) {
 		Long registerId = habitService.register(memberId, request);
-		return new ResponseEntity<>(BaseResponse.of(registerId, HABIT_CREATE), HttpStatus.CREATED);
+		BaseResponse<Long> response = BaseResponse.of(registerId, HABIT_CREATE);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@PutMapping("{habitId}")
-	ResponseEntity<BaseResponse<HabitResponse>> updateHabit(@PathVariable Long habitId,
-		@RequestBody HabitRequest request) {
+	public ResponseEntity<BaseResponse<HabitResponse>> updateHabit(
+			@PathVariable Long habitId,
+			@RequestBody HabitRequest request) {
 		HabitResponse updateHabit = habitService.updateMyHabit(habitId, request);
-		return new ResponseEntity<>(BaseResponse.of(updateHabit, HABIT_UPDATE), HttpStatus.OK);
+		BaseResponse<HabitResponse> response = BaseResponse.of(updateHabit, HABIT_UPDATE);
+		return ResponseEntity.ok().body(response);
 	}
 
 	@DeleteMapping("{habitId}")
-	ResponseEntity<BaseResponse<Void>> deleteHabit(@PathVariable Long habitId) {
+	public ResponseEntity<BaseResponse<Void>> deleteHabit(@PathVariable Long habitId) {
 		habitService.deleteHabit(habitId);
-		return new ResponseEntity<>(BaseResponse.of(null, HABIT_DELETE), HttpStatus.NO_CONTENT);
+		BaseResponse<Void> response = BaseResponse.of(null, HABIT_DELETE);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 	}
 
 	@PostMapping("{habitId}/check")
-	ResponseEntity<BaseResponse<Void>> HabitCheck(@PathVariable Long habitId) {
+	public ResponseEntity<BaseResponse<Void>> HabitCheck(@PathVariable Long habitId) {
 		habitService.habitCheck(habitId);
-		return new ResponseEntity<>(BaseResponse.of(null, HABIT_CHECK_CREATE), HttpStatus.CREATED);
+		BaseResponse<Void> response = BaseResponse.of(null, HABIT_CHECK_CREATE);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@DeleteMapping("{habitId}/check")
-	ResponseEntity<BaseResponse<Void>> HabitUnCheck(@PathVariable Long habitId) {
+	public ResponseEntity<BaseResponse<Void>> HabitUnCheck(@PathVariable Long habitId) {
 		habitService.habitUnCheck(habitId);
-		return new ResponseEntity<>(BaseResponse.of(null, HABIT_CHECK_DELETE), HttpStatus.NO_CONTENT);
+		BaseResponse<Void> response = BaseResponse.of(null, HABIT_CHECK_DELETE);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 	}
+
 }
