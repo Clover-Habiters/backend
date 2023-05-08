@@ -88,7 +88,7 @@ public class DiaryRepositoryTest {
 		for (int i = 0; i < 10; i++) {
 			diaryRepository.save(Diary.builder().content("테스트회고입니다." + i).member(testMember).build());
 		}
-		Map<String, LocalDateTime> dateTimeMap1 = DateCalculate.startEnd("2023-04");
+		Map<String, LocalDateTime> dateTimeMap1 = DateCalculate.startEnd(null);
 		Map<String, LocalDateTime> dateTimeMap2 = DateCalculate.startEnd("2023-03");
 
 		//when
