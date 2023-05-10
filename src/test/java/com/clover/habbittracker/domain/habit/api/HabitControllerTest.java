@@ -230,6 +230,7 @@ public class HabitControllerTest {
 					fieldWithPath("data[].id").type(NUMBER).description("습관 아이디"),
 					fieldWithPath("data[].content").type(STRING).description("습관 내용"),
 					fieldWithPath("data[].createDate").type(STRING).description("습관 등록 날짜"),
+					fieldWithPath("data[].habitChecks[]").type(ARRAY).description("습관 체크 여부"),
 					fieldWithPath("data[].habitChecks[].id").type(NUMBER).description("습관 체크 여부 id"),
 					fieldWithPath("data[].habitChecks[].updatedAt").type(STRING).description("습관 수행 날짜")
 				)
@@ -265,6 +266,7 @@ public class HabitControllerTest {
 					fieldWithPath("data[].id").type(NUMBER).description("습관 아이디"),
 					fieldWithPath("data[].content").type(STRING).description("습관 내용"),
 					fieldWithPath("data[].createDate").type(STRING).description("습관 등록 날짜"),
+					fieldWithPath("data[].habitChecks[]").type(ARRAY).description("습관 체크 여부"),
 					fieldWithPath("data[].habitChecks[].id").type(NUMBER).description("습관 체크 여부 id"),
 					fieldWithPath("data[].habitChecks[].updatedAt").type(STRING).description("습관 수행 날짜")
 				)
