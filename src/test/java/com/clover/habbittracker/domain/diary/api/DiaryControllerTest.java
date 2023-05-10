@@ -8,6 +8,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.clover.habbittracker.domain.diary.dto.DiaryRequest;
@@ -102,7 +104,7 @@ public class DiaryControllerTest {
 		Long id = saveDiary.getId();
 		//when then
 		mockMvc.perform(
-				put("/diaries/{diaryId}", id)
+				RestDocumentationRequestBuilders.put("/diaries/{diaryId}", id)
 					.header("Authorization", "Bearer " + accessJwt)
 					.contentType(APPLICATION_JSON)
 					.content(request))
@@ -116,6 +118,9 @@ public class DiaryControllerTest {
 				getDocumentResponse(),
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				pathParameters(
+					parameterWithName("diaryId").description("수정할 회고 id")
 				),
 				requestFields(
 					fieldWithPath("content").type(STRING).description("수정할 회고 내용")
@@ -168,6 +173,9 @@ public class DiaryControllerTest {
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
+				queryParameters(
+					parameterWithName("date").description("조회하고 싶은 연 월")
+				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
 					fieldWithPath("message").type(STRING).description("결과 메시지"),
@@ -183,12 +191,15 @@ public class DiaryControllerTest {
 		Long id = saveDiary.getId();
 		//when then
 		mockMvc.perform(
-				delete("/diaries/{diaryId}" , id)
+				RestDocumentationRequestBuilders.delete("/diaries/{diaryId}" , id)
 					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isNoContent())
 			.andDo(document("diary-delete",
 				getDocumentRequest(),
 				getDocumentResponse(),
+				pathParameters(
+					parameterWithName("diaryId").description("삭제할 회고 아이디")
+				),
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -212,7 +223,7 @@ public class DiaryControllerTest {
 		Long expiredDiaryId = expiredDiary.getId();
 		//when then
 		mockMvc.perform(
-				put("/diaries/{diaryId}", expiredDiaryId)
+				RestDocumentationRequestBuilders.put("/diaries/{diaryId}", expiredDiaryId)
 					.header("Authorization", "Bearer " + accessJwt)
 					.contentType(APPLICATION_JSON)
 					.content(request))
@@ -222,6 +233,9 @@ public class DiaryControllerTest {
 			.andDo(document("expired-diary",
 				getDocumentRequest(),
 				getDocumentResponse(),
+				pathParameters(
+					parameterWithName("diaryId").description("수정할 회고 아이디")
+				),
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
