@@ -47,7 +47,17 @@ jobs:
 #          key: ${{ secrets.EC2_PRIVATE_KEY }}
           source: "./.env"
           target: "/home/clover/"
-
+      # nginx 설정 파일 서버로 전달하기 (복사 후 붙여넣기)
+      - name: Send to nginx configuration
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USERNAME }}
+          password: ${{ secrets.DEV_PASSWORD }}
+          #          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: 22
+          source: "./.docker/nginx/nginx.conf"
+          target: "/home/clover/nginx/nginx.conf"
       # 도커 컴포즈 설정 파일 서버로 전달하기(복사 후 붙여넣기)
       - name: Send to Docker-Compose
         uses: appleboy/scp-action@master
@@ -58,7 +68,7 @@ jobs:
 #          key: ${{ secrets.EC2_PRIVATE_KEY }}
           port: 22
           source: "./.docker/docker-compose.yml"
-          target: "/home/clover/"
+          target: "/home/clover/docker-compose.yml"
 
       # 도커 컴포즈 실행하기
       # 도커 허브에서 jar파일 및 pull후에 컴포즈 up
