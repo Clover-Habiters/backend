@@ -67,7 +67,7 @@ jobs:
           password: ${{ secrets.DEV_PASSWORD }}
           #          key: ${{ secrets.EC2_PRIVATE_KEY }}
           port: 22
-          source: "./nginx/nginx.conf"
+          source: "./nginx.conf"
           target: "/home/clover/"
 
       # 도커 컴포즈 실행하기

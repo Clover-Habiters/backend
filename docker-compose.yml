@@ -10,7 +10,7 @@ services:
     depends_on:
       - web
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - 80:80
     networks:
