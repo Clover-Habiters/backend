@@ -4,6 +4,17 @@ networks:
     driver: bridge
 
 services:
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    depends_on:
+      - nginx
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email xogmlwkdi77@gmail.com --agree-tos --no-eff-email --force-renewal -d api.habiters.store
+    networks:
+      - habiters-network
   nginx:
     container_name: habiters-nginx
     image: nginx
@@ -11,8 +22,11 @@ services:
       - web
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     ports:
-      - 80:80
+      - "80:80"
+      - "443:443"
     networks:
       - habiters-network
 
