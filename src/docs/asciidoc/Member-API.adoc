@@ -1,0 +1,75 @@
+[[Member-API]]
+== 유저 API
+
+=== 공통
+
+==== 로그인을 제외한 모든 요청은 *Authorization* 헤더가 필요합니다.
+
+include::{snippets}/member-update/request-headers.adoc[]
+
+---
+
+=== 내 정보 조회
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/member-read/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/member-read/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/member-read/http-response.adoc[]
+
+=== 유저 정보 수정
+
+==== Request
+
+include::{snippets}/member-update/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/member-update/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/member-update/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/member-update/http-response.adoc[]
+
+=== 유저 삭제
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/member-delete/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/member-delete/http-response.adoc[]
+
+
+=== 에러
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/duplicate-member/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/duplicate-member/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/duplicate-member/http-response.adoc[]

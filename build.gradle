@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.0.5'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'jacoco'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
 
@@ -11,6 +12,7 @@ version = '1.0.0'
 sourceCompatibility = '17'
 
 configurations {
+    asciidoctorExtensions
     compileOnly {
         extendsFrom annotationProcessor
     }
@@ -34,13 +36,11 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-    finalizedBy 'jacocoTestReport'
-}
-
+/*jacoco 설정*/
 jacocoTestReport {
     dependsOn test
     finalizedBy 'jacocoTestCoverageVerification'
@@ -66,3 +66,46 @@ jacocoTestCoverageVerification {
     }
 
 }
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
+}
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+asciidoctor {
+    attributes 'snippets' : snippetsDir
+    configurations 'asciidoctorExtensions'
+    forkOptions {
+        jvmArgs('--add-opens', 'java.base/sun.nio.ch=ALL-UNNAMED','--add-opens','java.base/java.io=ALL-UNNAMED')
+    }
+    dependsOn test
+    inputs.dir snippetsDir
+    baseDirFollowsSourceFile()
+}
+
+asciidoctor.doFirst {
+    delete file('src/main/resources/static/docs')
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument
+}
+
+

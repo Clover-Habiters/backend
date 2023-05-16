@@ -1,23 +1,32 @@
 package com.clover.habbittracker.domain.habit.api;
 
+import static com.clover.habbittracker.global.util.ApiDocumentUtils.*;
 import static com.clover.habbittracker.global.util.MemberProvider.*;
 import static org.hamcrest.core.Is.*;
 import static org.springframework.http.MediaType.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.clover.habbittracker.domain.habit.dto.HabitRequest;
 import com.clover.habbittracker.domain.habit.entity.Habit;
 import com.clover.habbittracker.domain.habit.repository.HabitRepository;
+import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
+import com.clover.habbittracker.domain.habitcheck.repository.HabitCheckRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.exception.ErrorType;
@@ -26,6 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "habiters.api.com")
 public class HabitControllerTest {
 
 	@Autowired
@@ -36,6 +46,8 @@ public class HabitControllerTest {
 	private HabitRepository habitRepository;
 	@Autowired
 	private JwtProvider jwtProvider;
+	@Autowired
+	private HabitCheckRepository habitCheckRepository;
 
 	private String accessJwt;
 
@@ -64,7 +76,20 @@ public class HabitControllerTest {
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isCreated())
-			.andDo(print());
+			.andDo(document("habit-created",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				requestFields(
+					fieldWithPath("content").type(STRING).description("등록할 습관 내용")
+				),
+				responseFields(
+					fieldWithPath("code").type(STRING).description("결과 코드"),
+					fieldWithPath("message").type(STRING).description("결과 메시지"),
+					fieldWithPath("data").type(NUMBER).description("등록된 습관 아이디")
+				)));
 	}
 
 	@Test
@@ -76,7 +101,7 @@ public class HabitControllerTest {
 
 		//when
 		mockMvc.perform(
-				put("/habits/" + testHabit.getId())
+				RestDocumentationRequestBuilders.put("/habits/{habitId}", testHabit.getId())
 					.header("Authorization", "Bearer " + accessJwt)
 					.contentType(APPLICATION_JSON)
 					.content(request))
@@ -84,7 +109,26 @@ public class HabitControllerTest {
 			.andExpect(jsonPath("$.data.id").exists())
 			.andExpect(jsonPath("$.data.content").exists())
 			.andExpect(jsonPath("$.data.createDate").exists())
-			.andDo(print());
+			.andDo(document("habit-update",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				pathParameters(
+					parameterWithName("habitId").description("수정할 습관 아이디")
+				),
+				requestFields(
+					fieldWithPath("content").description("수정할 습관 내용")
+				),
+				responseFields(
+					fieldWithPath("code").type(STRING).description("결과 코드"),
+					fieldWithPath("message").type(STRING).description("결과 메시지"),
+					fieldWithPath("data.id").type(NUMBER).description("습관 아이디"),
+					fieldWithPath("data.content").type(STRING).description("습관 내용"),
+					fieldWithPath("data.createDate").type(STRING).description("습관 등록 날짜")
+				)
+			));
 	}
 
 	@Test
@@ -92,10 +136,23 @@ public class HabitControllerTest {
 	void deleteHabitTest() throws Exception {
 		//when then
 		mockMvc.perform(
-				delete("/habits/" + testHabit.getId())
+				RestDocumentationRequestBuilders.delete("/habits/{habitId}" , testHabit.getId())
 					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isNoContent())
-			.andDo(print());
+			.andDo(document("habit-delete",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				pathParameters(
+					parameterWithName("habitId").description("삭제할 습관 아이디")
+				),
+				responseFields(
+					fieldWithPath("code").type(STRING).description("결과 코드"),
+					fieldWithPath("message").type(STRING).description("결과 메시지")
+				)
+				));
 	}
 
 	@Test
@@ -103,10 +160,23 @@ public class HabitControllerTest {
 	void habitCheckTest() throws Exception {
 		//when then
 		mockMvc.perform(
-				post("/habits/" + testHabit.getId() + "/check")
+				RestDocumentationRequestBuilders.post("/habits/{habitId}/check"  ,testHabit.getId())
 					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isCreated())
-			.andDo(print());
+			.andDo(document("habitCheck-create",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				pathParameters(
+					parameterWithName("habitId").description("습관 아이디")
+				),
+				responseFields(
+					fieldWithPath("code").type(STRING).description("결과 코드"),
+					fieldWithPath("message").type(STRING).description("결과 메시지")
+				)
+			));
 	}
 
 	@Test
@@ -114,26 +184,93 @@ public class HabitControllerTest {
 	void habitUnCheckTest() throws Exception {
 		//when then
 		mockMvc.perform(
-				delete("/habits/" + testHabit.getId() + "/check")
+				RestDocumentationRequestBuilders.delete("/habits/{habitId}", testHabit.getId())
 					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isNoContent())
-			.andDo(print());
+			.andDo(document("habitCheck-delete",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				pathParameters(
+					parameterWithName("habitId").description("습관 아이디")
+				),
+				responseFields(
+					fieldWithPath("code").type(STRING).description("결과 코드"),
+					fieldWithPath("message").type(STRING).description("결과 메시지")
+				)
+			));
 	}
 
 	@Test
 	@DisplayName("사용자는 나의 습관 리스트와 습관 수행 여부를 조회 할 수 있다.")
 	void myHabitListTest() throws Exception {
+		//given
+		HabitCheck testHabitCheck = HabitCheck.builder().habit(testHabit).checked(true).build();
+		habitCheckRepository.save(testHabitCheck);
 
 		mockMvc.perform(
 				get("/habits")
-					.header("Authorization", "Bearer " + accessJwt)
-					.param("date", "2023-04"))
+					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data.[0].id").exists())
 			.andExpect(jsonPath("$.data.[0].content").exists())
 			.andExpect(jsonPath("$.data.[0].createDate").exists())
 			.andExpect(jsonPath("$.data.[0].habitChecks").exists())
-			.andDo(print());
+			.andDo(document("habit-read",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				responseFields(
+					fieldWithPath("code").type(STRING).description("결과 코드"),
+					fieldWithPath("message").type(STRING).description("결과 메시지"),
+					fieldWithPath("data[].id").type(NUMBER).description("습관 아이디"),
+					fieldWithPath("data[].content").type(STRING).description("습관 내용"),
+					fieldWithPath("data[].createDate").type(STRING).description("습관 등록 날짜"),
+					fieldWithPath("data[].habitChecks[]").type(ARRAY).description("습관 체크 여부"),
+					fieldWithPath("data[].habitChecks[].id").type(NUMBER).description("습관 체크 여부 id"),
+					fieldWithPath("data[].habitChecks[].updatedAt").type(STRING).description("습관 수행 날짜")
+				)
+			));
+	}
+	@Test
+	@DisplayName("사용자는 나의 습관 리스트와 습관 수행 여부를 월 별로 조회 할 수 있다.")
+	void monthlyMyHabitListTest() throws Exception {
+		//given
+		HabitCheck testHabitCheck = HabitCheck.builder().habit(testHabit).checked(true).build();
+		habitCheckRepository.save(testHabitCheck);
+
+		mockMvc.perform(
+				get("/habits")
+					.header("Authorization", "Bearer " + accessJwt).param("date","2023-05"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.data.[0].id").exists())
+			.andExpect(jsonPath("$.data.[0].content").exists())
+			.andExpect(jsonPath("$.data.[0].createDate").exists())
+			.andExpect(jsonPath("$.data.[0].habitChecks").exists())
+			.andDo(document("monthly-habit-read",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				queryParameters(
+					parameterWithName("date").description("조회 하고 싶은 연 월")
+				),
+				responseFields(
+					fieldWithPath("code").type(STRING).description("결과 코드"),
+					fieldWithPath("message").type(STRING).description("결과 메시지"),
+					fieldWithPath("data[].id").type(NUMBER).description("습관 아이디"),
+					fieldWithPath("data[].content").type(STRING).description("습관 내용"),
+					fieldWithPath("data[].createDate").type(STRING).description("습관 등록 날짜"),
+					fieldWithPath("data[].habitChecks[]").type(ARRAY).description("습관 체크 여부"),
+					fieldWithPath("data[].habitChecks[].id").type(NUMBER).description("습관 체크 여부 id"),
+					fieldWithPath("data[].habitChecks[].updatedAt").type(STRING).description("습관 수행 날짜")
+				)
+			));
 	}
 
 	@Test
@@ -141,12 +278,24 @@ public class HabitControllerTest {
 	void habitCheckTestWithWrongId() throws Exception {
 		long wrongId = 0L;
 		mockMvc.perform(
-				post("/habits/" + wrongId + "/check")
+				RestDocumentationRequestBuilders.post("/habits/{habitId}/check", wrongId)
 					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.errorName", is(ErrorType.HABIT_NOT_FOUND.name())))
 			.andExpect(jsonPath("$.msg", is(ErrorType.HABIT_NOT_FOUND.getErrorMsg())))
-			.andDo(print());
+			.andDo(document("notfound-Habit",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				pathParameters(
+					parameterWithName("habitId").description("잘못된 습관 아이디")
+				),
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				responseFields(
+					fieldWithPath("errorName").type(STRING).description("결과 코드"),
+					fieldWithPath("msg").type(STRING).description("결과 메시지")
+				)));
 	}
 
 	@Test
@@ -156,16 +305,28 @@ public class HabitControllerTest {
 
 		//when then
 		mockMvc.perform(
-			post("/habits/" + testHabit.getId() + "/check")
+			post("/habits/{habitId}/check" , testHabit.getId())
 				.header("Authorization", "Bearer " + accessJwt));
 
 		mockMvc.perform(
-			post("/habits/" + testHabit.getId() + "/check")
-				.header("Authorization", "Bearer " + accessJwt))
+				RestDocumentationRequestBuilders.post("/habits/{habitId}/check" , testHabit.getId())
+					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isConflict())
 			.andExpect(jsonPath("$.errorName", is(ErrorType.HABIT_CHECK_DUPLICATE.name())))
 			.andExpect(jsonPath("$.msg", is(ErrorType.HABIT_CHECK_DUPLICATE.getErrorMsg())))
-			.andDo(print());
+			.andDo(document("Duplicate-HabitCheck",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				pathParameters(
+					parameterWithName("habitId").description("습관 아이디")
+				),
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				responseFields(
+					fieldWithPath("errorName").type(STRING).description("결과 코드"),
+					fieldWithPath("msg").type(STRING).description("결과 메시지")
+				)));
 
 	}
 
