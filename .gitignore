@@ -4,6 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+/BOOT-INF
 
 ### STS ###
 .apt_generated
@@ -28,7 +29,6 @@ out/
 /log
 # Restdocs html -> 자동 생성
 **/src/main/**/docs/
-
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
