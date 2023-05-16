@@ -170,7 +170,7 @@ public class HabitControllerTest {
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				pathParameters(
-					parameterWithName("habitId").description("습관 수행 여부를 체크할 아이디")
+					parameterWithName("habitId").description("습관 아이디")
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
@@ -187,14 +187,14 @@ public class HabitControllerTest {
 				RestDocumentationRequestBuilders.delete("/habits/{habitId}", testHabit.getId())
 					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isNoContent())
-			.andDo(document("habitCheck-create",
+			.andDo(document("habitCheck-delete",
 				getDocumentRequest(),
 				getDocumentResponse(),
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				pathParameters(
-					parameterWithName("habitId").description("습관 수행 여부를 체크할 아이디")
+					parameterWithName("habitId").description("습관 아이디")
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
