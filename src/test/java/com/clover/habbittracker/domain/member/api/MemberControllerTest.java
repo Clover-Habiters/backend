@@ -165,7 +165,7 @@ public class MemberControllerTest {
 		//when then
 		mockMvc.perform(delete("/users/me").header("Authorization", "Bearer " + deleteMemberToken))
 			.andExpect(status().isNoContent())
-			.andDo(document("member-update",
+			.andDo(document("member-delete",
 				getDocumentRequest(),
 				getDocumentResponse(),
 				requestHeaders(
