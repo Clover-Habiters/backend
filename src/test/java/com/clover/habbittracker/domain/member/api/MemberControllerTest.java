@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 	"spring.datasource.driver-class-name=org.h2.Driver", "spring.datasource.username=sa",
 	"spring.datasource.password="})
 @AutoConfigureMockMvc
-@AutoConfigureRestDocs(uriScheme = "https", uriHost = "habiters.api.com")
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.habiters.store")
 public class MemberControllerTest {
 
 	@Autowired
