@@ -19,7 +19,7 @@ import com.clover.habbittracker.domain.diary.entity.Diary;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.config.JpaConfig;
-import com.clover.habbittracker.global.util.DateCalculate;
+import com.clover.habbittracker.global.util.DateUtil;
 
 @DataJpaTest
 @Import(JpaConfig.class)
@@ -88,8 +88,8 @@ public class DiaryRepositoryTest {
 		for (int i = 0; i < 10; i++) {
 			diaryRepository.save(Diary.builder().content("테스트회고입니다." + i).member(testMember).build());
 		}
-		Map<String, LocalDateTime> dateTimeMap1 = DateCalculate.startEnd(null);
-		Map<String, LocalDateTime> dateTimeMap2 = DateCalculate.startEnd("2023-03");
+		Map<String, LocalDateTime> dateTimeMap1 = DateUtil.getMonthStartAndEndDate(null);
+		Map<String, LocalDateTime> dateTimeMap2 = DateUtil.getMonthStartAndEndDate("2023-03");
 
 		//when
 		List<Diary> diaryList1 = diaryRepository.findByMemberId(testMember.getId(), dateTimeMap1.get("start"),
