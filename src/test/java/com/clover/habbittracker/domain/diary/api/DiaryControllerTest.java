@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureRestDocs(uriScheme = "https", uriHost = "habiters.api.com")
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.habiters.store")
 public class DiaryControllerTest {
 
 	@Autowired
