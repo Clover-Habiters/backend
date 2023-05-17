@@ -21,6 +21,7 @@ import com.clover.habbittracker.domain.habit.dto.HabitRequest;
 import com.clover.habbittracker.domain.habit.dto.HabitResponse;
 import com.clover.habbittracker.domain.habit.dto.MyHabitResponse;
 import com.clover.habbittracker.domain.habit.service.HabitService;
+import com.clover.habbittracker.domain.habitcheck.dto.HabitCheckRequest;
 import com.clover.habbittracker.global.dto.BaseResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -67,8 +68,8 @@ public class HabitController {
 	}
 
 	@PostMapping("{habitId}/check")
-	public ResponseEntity<BaseResponse<Void>> HabitCheck(@PathVariable Long habitId) {
-		habitService.habitCheck(habitId);
+	public ResponseEntity<BaseResponse<Void>> HabitCheck(@PathVariable Long habitId, @RequestBody HabitCheckRequest request) {
+		habitService.habitCheck(habitId, request.getRequestDate());
 		BaseResponse<Void> response = BaseResponse.of(null, HABIT_CHECK_CREATE);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
