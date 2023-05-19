@@ -77,6 +77,7 @@ public class HabitServiceImpl implements HabitService {
 		habitCheckRepository.findByHabitOrderByUpdatedAtDesc(habit)
 			.ifPresent(lastHabitCheck -> {
 				if (isToday(lastHabitCheck.getUpdatedAt().toLocalDate())) {
+					System.out.println(lastHabitCheck.getUpdatedAt());
 					throw new HabitCheckDuplicateException(habitId);
 				}
 			});
@@ -90,18 +91,8 @@ public class HabitServiceImpl implements HabitService {
 	}
 
 	@Override
-	public void habitUnCheck(Long habitId) {
-		Habit habit = habitRepository.findById(habitId)
-			.orElseThrow(()-> new HabitNotFoundException(habitId));
-
-		habitCheckRepository.findByHabit(habit)
-			.ifPresent(habitCheck -> habitCheckRepository.deleteById(habitCheck.getId()));
-		// habitCheckRepository.findByHabitOrderByUpdatedAtDesc(habit)
-		// 	.ifPresent(lastHabitCheck -> {
-		// 		if (validDate(lastHabitCheck.getUpdatedAt())) {
-		// 			throw new HabitException("같은 날 두번 체크는 불가능합니다.");
-		// 		}
-		// 	});
+	public void habitUnCheck(Long habitCheckId) {
+		habitCheckRepository.deleteById(habitCheckId);
 	}
 
 	private boolean isToday(LocalDate dateTime) {
