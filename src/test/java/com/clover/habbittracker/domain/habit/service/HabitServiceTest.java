@@ -184,16 +184,15 @@ public class HabitServiceTest {
 		Long testMemberId = testMember.getId();
 		HabitRequest habitRequest = new HabitRequest("테스트습관");
 		Long saveHabitId = habitService.register(testMemberId, habitRequest);
-		Habit saveHabit = habitRepository.findById(saveHabitId).get();
 		String today = "0" + now.getMonthValue() + "-" + now.getDayOfMonth();
-
+		Long toBeErasedCheckId = 1L;
 		habitService.habitCheck(saveHabitId, today);
 
 		//when
-		habitService.habitUnCheck(saveHabitId);
+		habitService.habitUnCheck(toBeErasedCheckId);
 
 		//then
-		Optional<HabitCheck> unCheckHabit = habitCheckRepository.findByHabit(saveHabit);
+		Optional<HabitCheck> unCheckHabit = habitCheckRepository.findById(toBeErasedCheckId);
 		assertThat(unCheckHabit).isEmpty();
 	}
 
@@ -208,7 +207,6 @@ public class HabitServiceTest {
 		//when then
 		assertAll(
 			() -> assertThrows(HabitNotFoundException.class, () -> habitService.habitCheck(wrongHabitId , today)),
-			() -> assertThrows(HabitNotFoundException.class, () -> habitService.habitUnCheck(wrongHabitId)),
 			() -> assertThrows(HabitNotFoundException.class,
 				() -> habitService.updateMyHabit(wrongHabitId, habitRequest))
 		);

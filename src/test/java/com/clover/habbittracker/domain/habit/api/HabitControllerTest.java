@@ -196,9 +196,11 @@ public class HabitControllerTest {
 	@Test
 	@DisplayName("사용자는 저장된 습관 수행 여부를 취소 할 수 있다.")
 	void habitUnCheckTest() throws Exception {
+		HabitCheck toBeErased = HabitCheck.builder().checked(true).habit(testHabit).build();
+		habitCheckRepository.save(toBeErased);
 		//when then
 		mockMvc.perform(
-				RestDocumentationRequestBuilders.delete("/habits/{habitId}", testHabit.getId())
+				RestDocumentationRequestBuilders.delete("/habits/{habitCheckId}/uncheck", toBeErased.getId())
 					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isNoContent())
 			.andDo(document("habitCheck-delete",
@@ -208,7 +210,7 @@ public class HabitControllerTest {
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				pathParameters(
-					parameterWithName("habitId").description("습관 아이디")
+					parameterWithName("habitCheckId").description("습관체크 아이디")
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
@@ -357,7 +359,7 @@ public class HabitControllerTest {
 
 	}
 	@Test
-	@DisplayName("습관 수행 여부를 중복 체크 하면 HabitCheckDuplicate 예외가 터진다.")
+	@DisplayName("습관 수행 여부를 체크 할 경우 과거 또는 미래를 체크 할 경우 HabitExpiredException 예외가 터진다.")
 	void habitCheckTestWithExpiredDate() throws Exception {
 		//given
 		LocalDate yesterday = LocalDate.now().minusDays(1);
