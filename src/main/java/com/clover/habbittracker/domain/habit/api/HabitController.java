@@ -74,9 +74,9 @@ public class HabitController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	@DeleteMapping("{habitId}/check")
-	public ResponseEntity<BaseResponse<Void>> HabitUnCheck(@PathVariable Long habitId) {
-		habitService.habitUnCheck(habitId);
+	@DeleteMapping("{habitCheckId}/uncheck")
+	public ResponseEntity<BaseResponse<Void>> HabitUnCheck(@PathVariable Long habitCheckId) {
+		habitService.habitUnCheck(habitCheckId);
 		BaseResponse<Void> response = BaseResponse.of(null, HABIT_CHECK_DELETE);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 	}
