@@ -17,7 +17,7 @@ import com.clover.habbittracker.domain.diary.repository.DiaryRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.util.DateCalculate;
+import com.clover.habbittracker.global.util.DateUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,7 +45,7 @@ public class DiaryServiceImpl implements DiaryService {
 
 	@Override
 	public List<DiaryResponse> getMyList(Long memberId, String date) {
-		Map<String, LocalDateTime> dateMap = DateCalculate.startEnd(date);
+		Map<String, LocalDateTime> dateMap = DateUtil.getMonthStartAndEndDate(date);
 		return diaryRepository.findByMemberId(memberId, dateMap.get("start"), dateMap.get("end"))
 			.stream()
 			.map(DiaryResponse::from)
