@@ -50,6 +50,8 @@ services:
       NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
       NAVER_CLIENT_SECRET: ${NAVER_CLIENT_SECRET}
       NAVER_URI: ${NAVER_URI}
+      NCP_API_ACCESS_KEY: ${NCP_API_ACCESS_KEY}
+      NCP_SECRET_KEY: ${NCP_SECRET_KEY}
     networks:
       - habiters-network
 
