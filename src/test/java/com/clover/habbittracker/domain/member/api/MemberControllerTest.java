@@ -163,7 +163,80 @@ public class MemberControllerTest {
 					fieldWithPath("msg").type(STRING).description("결과 메시지")
 				)));
 	}
+	@Test
+	@DisplayName("사용자는 자신의 프로필 닉네임만 변경할 수 있다.")
+	void updateMyProfileNickNameTest() throws Exception {
+		//when then
+		mockMvc.perform(RestDocumentationRequestBuilders.multipart("/users/me")
+				.header("Authorization", "Bearer " + accessJwt)
+				.content(MULTIPART_FORM_DATA_VALUE)
+				.param("nickName","updateNickName")
+				.with(request -> {
+					request.setMethod(HttpMethod.PUT.name());
+					return request;
+				}))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.data.nickName", is("updateNickName")))
+			.andExpect(jsonPath("$.data.profileImgUrl", is("testImgUrl")))
+			.andDo(document("member-update-nickName",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				queryParameters(
+					parameterWithName("nickName").description("수정할 닉네임")
+				),
+				responseFields(
+					fieldWithPath("code").type(STRING).description("결과 코드"),
+					fieldWithPath("message").type(STRING).description("결과 메시지"),
+					fieldWithPath("data.id").type(NUMBER).description("회원 아이디"),
+					fieldWithPath("data.email").type(STRING).description("회원 이메일"),
+					fieldWithPath("data.nickName").type(STRING).description("회원 닉네임"),
+					fieldWithPath("data.profileImgUrl").type(STRING).description("회원 프로필 사진 URL")
+				)
+			));
+	}
+	@Test
+	@DisplayName("사용자는 자신의 프로필 이미지만 변경할 수 있다.")
+	void updateMyProfileImageTest() throws Exception {
+		//given
+		String mockProfileImgUrl = "updateProfileImgUrl";
+		when(objectStorageService.profileImgSave(any())).thenReturn(mockProfileImgUrl);
 
+		MockMultipartFile mockFile = new MockMultipartFile("file", "test.jpg", "image/jpeg", new byte[0]);
+
+		//when then
+		mockMvc.perform(RestDocumentationRequestBuilders.multipart("/users/me")
+				.file(mockFile)
+				.header("Authorization", "Bearer " + accessJwt)
+				.content(MULTIPART_FORM_DATA_VALUE)
+				.with(request -> {
+					request.setMethod(HttpMethod.PUT.name());
+					return request;
+				}))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.data.nickName", is("testNickName")))
+			.andExpect(jsonPath("$.data.profileImgUrl", is(mockProfileImgUrl)))
+			.andDo(document("member-update-Profile",
+				getDocumentRequest(),
+				getDocumentResponse(),
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				requestParts(
+					partWithName("file").description("업데이트할 파일")
+				),
+				responseFields(
+					fieldWithPath("code").type(STRING).description("결과 코드"),
+					fieldWithPath("message").type(STRING).description("결과 메시지"),
+					fieldWithPath("data.id").type(NUMBER).description("회원 아이디"),
+					fieldWithPath("data.email").type(STRING).description("회원 이메일"),
+					fieldWithPath("data.nickName").type(STRING).description("회원 닉네임"),
+					fieldWithPath("data.profileImgUrl").type(STRING).description("회원 프로필 사진 URL")
+				)
+			));
+	}
 	@Test
 	@DisplayName("사용자는 자신의 프로필 정보를 삭제 할 수 있다.")
 	void deleteProfileTest() throws Exception {
