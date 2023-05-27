@@ -15,6 +15,7 @@ public interface DiaryRepository extends JpaRepository<Diary,Long> {
 			FROM Diary d
 			WHERE d.member.id = :memberId
 			AND d.createdAt BETWEEN :start AND :end
+			ORDER BY d.createdAt DESC
 		""")
 	List<Diary> findByMemberId(@Param("memberId") Long memberId, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
