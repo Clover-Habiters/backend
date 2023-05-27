@@ -82,7 +82,7 @@ public class DiaryRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("사용자의 월별 회고록 리스트를 조회 할 수 있다.")
+	@DisplayName("사용자의 월별 회고록 리스트를 최신순으로 조회 할 수 있다.")
 	void findByMemberIdDateBetweenTest() {
 		//given
 		for (int i = 0; i < 10; i++) {
@@ -100,10 +100,16 @@ public class DiaryRepositoryTest {
 		//then
 		assertThat(diaryList1.size()).isEqualTo(10);
 		assertThat(diaryList2.size()).isEqualTo(0);
-		diaryList1.forEach(
-			diary -> assertThat(diary)
+		LocalDateTime previousDate = null;
+		for (Diary diary : diaryList1) {
+			assertThat(diary)
 				.hasFieldOrProperty("id")
-				.hasFieldOrProperty("content"));
+				.hasFieldOrProperty("content");
+			if (previousDate != null) {
+				assertThat(diary.getCreatedAt()).isBeforeOrEqualTo(previousDate);
+			}
+			previousDate = diary.getCreatedAt();
+		}
 	}
 
 }
