@@ -41,7 +41,7 @@ public class MemberController {
 	@PutMapping(path = "/me",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	ResponseEntity<BaseResponse<MemberResponse>> updateMyProfile(@AuthenticationPrincipal Long memberId,
 		MemberRequest request,
-		@RequestPart MultipartFile file) {
+		@RequestPart(required = false) MultipartFile file) {
 		String profileImgUrl = objectStorageService.profileImgSave(file);
 		request.setProfileImgUrl(profileImgUrl);
 		MemberResponse updateProfile = memberService.updateProfile(memberId, request);
