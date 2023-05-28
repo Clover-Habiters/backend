@@ -57,19 +57,3 @@ include::{snippets}/member-delete/http-request.adoc[]
 
 include::{snippets}/member-delete/http-response.adoc[]
 
-
-=== 에러
-
-==== Request
-
-===== Request HTTP Example
-
-include::{snippets}/duplicate-member/http-request.adoc[]
-
-==== Response
-
-include::{snippets}/duplicate-member/response-fields.adoc[]
-
-===== Response HTTP Example
-
-include::{snippets}/duplicate-member/http-response.adoc[]
