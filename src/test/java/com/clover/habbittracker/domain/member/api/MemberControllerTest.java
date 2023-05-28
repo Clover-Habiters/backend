@@ -116,10 +116,10 @@ public class MemberControllerTest {
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				requestParts(
-					partWithName("file").description("업데이트할 파일")
+					partWithName("file").description("업데이트할 파일").optional()
 				),
 				queryParameters(
-					parameterWithName("nickName").description("수정할 닉네임")
+					parameterWithName("nickName").description("수정할 닉네임").optional()
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
@@ -185,7 +185,7 @@ public class MemberControllerTest {
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				queryParameters(
-					parameterWithName("nickName").description("수정할 닉네임")
+					parameterWithName("nickName").description("수정할 닉네임").optional()
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
@@ -225,7 +225,7 @@ public class MemberControllerTest {
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				requestParts(
-					partWithName("file").description("업데이트할 파일")
+					partWithName("file").description("업데이트할 파일").optional()
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),

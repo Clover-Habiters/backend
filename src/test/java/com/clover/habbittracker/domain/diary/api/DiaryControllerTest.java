@@ -174,7 +174,7 @@ public class DiaryControllerTest {
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				queryParameters(
-					parameterWithName("date").description("조회하고 싶은 연 월")
+					parameterWithName("date").description("조회하고 싶은 연 월").optional()
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
