@@ -1,13 +1,12 @@
 package com.clover.habbittracker.domain.member.dto;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-@Builder
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberRequest {
 	String nickName;
-	String profileImgUrl;
 }
