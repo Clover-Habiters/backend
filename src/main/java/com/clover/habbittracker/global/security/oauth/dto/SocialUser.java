@@ -10,6 +10,6 @@ public interface SocialUser {
 	String getProvider();
 
 	String getOauthId();
-
-	String getProfileImgUrl();
+	//
+	// String getProfileImgUrl();
 }
