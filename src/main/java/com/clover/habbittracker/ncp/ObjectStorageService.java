@@ -12,6 +12,9 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import lombok.extern.slf4j.Slf4j;
 
+/* 2023/05/30 프로필 이미지를 사용하지 않기때문에 해당 서비스는 미사용
+** 추후 다시 사용 할 수 있음 **
+*/
 @Service
 @Slf4j
 public class ObjectStorageService {
