@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
+import com.clover.habbittracker.domain.member.dto.ProfileImg;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
@@ -55,14 +56,13 @@ public class MemberServiceImpl implements MemberService {
 				.oauthId(socialUser.getOauthId())
 				.nickName("해빗터_" + socialUser.getNickName())
 				.provider(socialUser.getProvider())
-				.profileImgUrl(socialUser.getProfileImgUrl())
+				.profileImgUrl(ProfileImg.getRandProfileImg().getImgUrl())
 				.build());
 	}
 
 	private Member update(Member member, MemberRequest request) {
 		Optional<Member> byNickName = memberRepository.findByNickName(request.getNickName());
 		if (byNickName.isEmpty()) {
-			Optional.ofNullable(request.getProfileImgUrl()).ifPresent(member::setProfileImgUrl);
 			Optional.ofNullable(request.getNickName()).ifPresent(member::setNickName);
 			return member;
 		} else {
