@@ -106,7 +106,6 @@ public class MemberControllerTest {
 	@Test
 	@DisplayName("사용자는 자신의 프로필 닉네임만 변경할 수 있다.")
 	void updateMyProfileNickNameTest() throws Exception {
-
 		//given
 		String request = new ObjectMapper().writeValueAsString(new MemberRequest("updateNickName"));
 
