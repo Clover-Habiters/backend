@@ -1,4 +1,4 @@
-package com.clover.habbittracker.domain.member.dto;
+package com.clover.habbittracker.domain.member.entity;
 
 import java.util.Random;
 
