@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.clover.habbittracker.domain.member.entity.ProfileImg;
+
 public class ProfileImgTest {
 
 	@Test
