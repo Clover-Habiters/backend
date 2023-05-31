@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.member.exception.MemberDuplicateNickName;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.security.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -84,14 +85,13 @@ public class MemberControllerTest {
 	void updateNickNameDuplicateTest() throws Exception {
 		//given
 		String request = new ObjectMapper().writeValueAsString(new MemberRequest("testNickName"));
-
 		//when then
 		mockMvc.perform(put("/users/me")
 				.header("Authorization", "Bearer " + accessJwt)
 				.contentType(APPLICATION_JSON)
 				.content(request))
 			.andExpect(
-				result -> assertThat(result.getResolvedException()).isInstanceOf(IllegalArgumentException.class))
+				result -> assertThat(result.getResolvedException()).isInstanceOf(MemberDuplicateNickName.class))
 			.andDo(document("duplicate-member",
 				getDocumentRequest(),
 				getDocumentResponse(),
