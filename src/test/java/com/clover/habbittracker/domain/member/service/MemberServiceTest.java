@@ -50,39 +50,20 @@ public class MemberServiceTest {
 	}
 
 	@Test
-	@DisplayName("사용자에게 nickName,ProfileImgUrl을 요청받아, 사용자 프로필을 업데이트 할 수 있다.")
+	@DisplayName("사용자에게 nickName 요청받아, 사용자 프로필을 업데이트 할 수 있다.")
 	void successUpdateProfileTest() {
 
 		//given
-		MemberRequest memberRequest = MemberRequest.builder()
-			.nickName("updateNickName")
-			.profileImgUrl("updateImgUrl")
-			.build();
+		MemberRequest memberRequest = new MemberRequest("updateNickName");
 
 		//when
 		MemberResponse memberResponse = memberService.updateProfile(getId(), memberRequest);
 
 		//then
 		assertThat(memberResponse)
-			.hasFieldOrPropertyWithValue("nickName", memberRequest.getNickName())
-			.hasFieldOrPropertyWithValue("profileImgUrl", memberRequest.getProfileImgUrl());
+			.hasFieldOrPropertyWithValue("nickName", memberRequest.getNickName());
 	}
 
-	@Test
-	@DisplayName("사용자에게 nickName,ProfileImgUrl 하나만 요청 받아 사용자 프로필을 업데이트 할 수 있다.")
-	void optionUpdateProfileTest() {
-		//given
-		MemberRequest memberRequest = MemberRequest.builder().profileImgUrl("updateImgUrl2").build();
-
-		//when
-		MemberResponse memberResponse = memberService.updateProfile(1L, memberRequest);
-
-		//then
-		// 닉네임은 변경되고, 그 외의는 이전의 데이터와 같은지 비교
-		assertThat(memberResponse)
-			.hasFieldOrPropertyWithValue("profileImgUrl", memberRequest.getProfileImgUrl())
-			.hasFieldOrPropertyWithValue("nickName",getNickName());
-	}
 
 	@Test
 	@DisplayName("로그인을 할 경우 oauthId와 provider를 비교하여 사용자 정보가 없다면 자동으로 회원가입 한다.")

@@ -12,7 +12,6 @@ public class GoogleUser implements SocialUser{
 	String nickName;
 	String provider;
 	String oauthId;
-	String profileImgUrl;
 
 	@Override
 	public String getEmail() {
@@ -34,11 +33,6 @@ public class GoogleUser implements SocialUser{
 		return this.oauthId;
 	}
 
-	@Override
-	public String getProfileImgUrl() {
-		return this.profileImgUrl;
-	}
-
 	public static SocialUser info(OAuth2User oAuth2User) {
 		Map<String, Object> response = oAuth2User.getAttributes();
 
@@ -47,7 +41,6 @@ public class GoogleUser implements SocialUser{
 			.nickName(String.valueOf(response.get("name")))
 			.oauthId(String.valueOf(response.get("sub")))
 			.provider("google")
-			.profileImgUrl(String.valueOf(response.get("picture")))
 			.build();
 	}
 }
