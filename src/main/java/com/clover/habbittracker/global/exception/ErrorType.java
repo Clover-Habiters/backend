@@ -14,6 +14,7 @@ public enum ErrorType {
 	EXPIRED_JWT(HttpStatus.BAD_REQUEST,"유효시간이 만료된 토큰입니다."),
 
 	MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "회원 정보가 존재하지 않습니다."),
+	MEMBER_DUPLICATE_NICKNAME(HttpStatus.CONFLICT, "중복된 닉네임 입니다."),
 
 	HABIT_NOT_FOUND(HttpStatus.NOT_FOUND, "습관 정보가 존재하지 않습니다."),
 	HABIT_CHECK_DUPLICATE(HttpStatus.CONFLICT, "중복 체크는 불가능합니다."),
