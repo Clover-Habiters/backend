@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
+import com.clover.habbittracker.domain.member.exception.MemberDuplicateNickName;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.security.oauth.dto.GoogleUser;
@@ -62,6 +63,18 @@ public class MemberServiceTest {
 		//then
 		assertThat(memberResponse)
 			.hasFieldOrPropertyWithValue("nickName", memberRequest.getNickName());
+	}
+	@Test
+	@DisplayName("중복된 닉네임은 사용 할 수 없습니다.")
+	void failedUpdateProfileTest() {
+
+		//given
+		MemberRequest memberRequest = new MemberRequest("testNickName");
+
+		//when then
+		assertThrows(MemberDuplicateNickName.class, () -> {
+			memberService.updateProfile(getId(), memberRequest);
+		});
 	}
 
 
