@@ -115,7 +115,7 @@ public class MemberControllerTest {
 				.contentType(APPLICATION_JSON)
 				.content(request))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data.nickName", is("updateNickName")))
+			.andExpect(jsonPath("$.data.nickName", is("updateNick")))
 			.andDo(document("member-update-nickName",
 				getDocumentRequest(),
 				getDocumentResponse(),
