@@ -3,6 +3,8 @@ package com.clover.habbittracker.global.exception;
 import static com.clover.habbittracker.global.util.MyLogger.*;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -32,5 +34,12 @@ public class GlobalExceptionHandler {
 		ErrorType errorType = ErrorType.INVALID_ARGUMENTS;
 		commonExceptionWarnLogging(request, e, errorType);
 		return new ResponseEntity<>(ErrorResponse.from(errorType), errorType.getStatus());
+	}
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ErrorResponse> validationException(HttpServletRequest request, MethodArgumentNotValidException e) {
+		ErrorType errorType = ErrorType.INVALID_ARGUMENTS;
+		BindingResult bindingResult = e.getBindingResult();
+		commonExceptionWarnLogging(request, e, errorType);
+		return new ResponseEntity<>(ErrorResponse.from(bindingResult), errorType.getStatus());
 	}
 }

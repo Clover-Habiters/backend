@@ -160,7 +160,10 @@ public class DiaryControllerTest {
 	@Test
 	@DisplayName("사용자는 회고록을 월 별로 조회 할 수 있다.")
 	void getAMonthlyMyDiaryListTest() throws Exception {
-		String date = "2023-05";
+		//given
+		LocalDateTime now = LocalDateTime.now();
+		String date = now.getYear() + "-0" + now.getMonthValue();
+
 		//when then
 		mockMvc.perform(
 				get("/diaries")

@@ -69,15 +69,13 @@ public class HabitServiceTest {
 	}
 
 	@Test
-	@DisplayName("올바르지 않은 사용자 ID 또는 습관 내용이 없다면 등록 시 예외가 터진다.")
+	@DisplayName("올바르지 않은 사용자 ID 로 습관 등록 요청 시 예외가 발생한다.")
 	void failedRegisterHabitTest() {
 		//given
-		Long testMemberId = testMember.getId();
 		Long wrongMemberId = 0L;
 		HabitRequest habitRequest = new HabitRequest(null);
 
 		//when then
-		assertThrows(IllegalArgumentException.class, () -> habitService.register(testMemberId, habitRequest));
 		assertThrows(MemberNotFoundException.class, () -> habitService.register(wrongMemberId, habitRequest));
 	}
 

@@ -1,5 +1,9 @@
 package com.clover.habbittracker.global.dto;
 
+import java.util.Objects;
+
+import org.springframework.validation.BindingResult;
+
 import com.clover.habbittracker.global.exception.ErrorType;
 
 import lombok.Builder;
@@ -15,6 +19,13 @@ public class ErrorResponse {
 		return ErrorResponse.builder()
 			.errorName(errorType.name())
 			.msg(errorType.getErrorMsg())
+			.build();
+	}
+
+	public static ErrorResponse from(BindingResult bindingResult) {
+		return ErrorResponse.builder()
+			.errorName(Objects.requireNonNull(bindingResult.getFieldError()).getObjectName().toUpperCase())
+			.msg(bindingResult.getFieldError().getDefaultMessage())
 			.build();
 	}
 

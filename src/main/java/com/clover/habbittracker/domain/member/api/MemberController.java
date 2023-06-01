@@ -17,6 +17,7 @@ import com.clover.habbittracker.domain.member.dto.MemberResponse;
 import com.clover.habbittracker.domain.member.service.MemberService;
 import com.clover.habbittracker.global.dto.BaseResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -35,7 +36,7 @@ public class MemberController {
 
 	@PutMapping("/me")
 	ResponseEntity<BaseResponse<MemberResponse>> updateMyProfile(@AuthenticationPrincipal Long memberId,
-		@RequestBody MemberRequest request) {
+		@Valid @RequestBody MemberRequest request) {
 		MemberResponse updateProfile = memberService.updateProfile(memberId, request);
 		BaseResponse<MemberResponse> response = BaseResponse.of(updateProfile, MEMBER_UPDATE);
 		return ResponseEntity.ok().body(response);

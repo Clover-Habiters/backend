@@ -7,8 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
-import com.clover.habbittracker.domain.member.dto.ProfileImg;
+import com.clover.habbittracker.domain.member.entity.ProfileImg;
 import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.member.exception.MemberDuplicateNickName;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
@@ -66,7 +67,7 @@ public class MemberServiceImpl implements MemberService {
 			Optional.ofNullable(request.getNickName()).ifPresent(member::setNickName);
 			return member;
 		} else {
-			throw new IllegalArgumentException();
+			throw new MemberDuplicateNickName(byNickName.get().getNickName());
 		}
 	}
 }

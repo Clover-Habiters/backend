@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.member.exception.MemberDuplicateNickName;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.security.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -84,14 +85,13 @@ public class MemberControllerTest {
 	void updateNickNameDuplicateTest() throws Exception {
 		//given
 		String request = new ObjectMapper().writeValueAsString(new MemberRequest("testNickName"));
-
 		//when then
 		mockMvc.perform(put("/users/me")
 				.header("Authorization", "Bearer " + accessJwt)
 				.contentType(APPLICATION_JSON)
 				.content(request))
 			.andExpect(
-				result -> assertThat(result.getResolvedException()).isInstanceOf(IllegalArgumentException.class))
+				result -> assertThat(result.getResolvedException()).isInstanceOf(MemberDuplicateNickName.class))
 			.andDo(document("duplicate-member",
 				getDocumentRequest(),
 				getDocumentResponse(),
@@ -107,7 +107,7 @@ public class MemberControllerTest {
 	@DisplayName("사용자는 자신의 프로필 닉네임만 변경할 수 있다.")
 	void updateMyProfileNickNameTest() throws Exception {
 		//given
-		String request = new ObjectMapper().writeValueAsString(new MemberRequest("updateNickName"));
+		String request = new ObjectMapper().writeValueAsString(new MemberRequest("updateNick"));
 
 		//when then
 		mockMvc.perform(put("/users/me")
@@ -115,7 +115,7 @@ public class MemberControllerTest {
 				.contentType(APPLICATION_JSON)
 				.content(request))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.data.nickName", is("updateNickName")))
+			.andExpect(jsonPath("$.data.nickName", is("updateNick")))
 			.andDo(document("member-update-nickName",
 				getDocumentRequest(),
 				getDocumentResponse(),

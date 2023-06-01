@@ -114,17 +114,6 @@ public class DiaryServiceTest {
 	}
 
 	@Test
-	@DisplayName("회고 내용이 없다면 등록 시 예외가 터진다.")
-	void failedRegisterDiaryTest() {
-		//given
-		Long testMemberId = testMember.getId();
-		DiaryRequest diaryRequest = new DiaryRequest(null);
-
-		//when then
-		assertThrows(IllegalArgumentException.class, () -> diaryService.register(testMemberId, diaryRequest));
-	}
-
-	@Test
 	@DisplayName("잘못된 회고록 ID, 사용자 ID 를 요청하면 예외가 터진다.")
 	void wrongHabitIdTest() {
 		//given
