@@ -24,6 +24,7 @@ import com.clover.habbittracker.domain.habit.service.HabitService;
 import com.clover.habbittracker.domain.habitcheck.dto.HabitCheckRequest;
 import com.clover.habbittracker.global.dto.BaseResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -45,7 +46,7 @@ public class HabitController {
 	@PostMapping
 	public ResponseEntity<BaseResponse<Long>> createHabit(
 			@AuthenticationPrincipal Long memberId,
-			@RequestBody HabitRequest request) {
+			@Valid @RequestBody HabitRequest request) {
 		Long registerId = habitService.register(memberId, request);
 		BaseResponse<Long> response = BaseResponse.of(registerId, HABIT_CREATE);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -54,7 +55,7 @@ public class HabitController {
 	@PutMapping("{habitId}")
 	public ResponseEntity<BaseResponse<HabitResponse>> updateHabit(
 			@PathVariable Long habitId,
-			@RequestBody HabitRequest request) {
+			@Valid @RequestBody HabitRequest request) {
 		HabitResponse updateHabit = habitService.updateMyHabit(habitId, request);
 		BaseResponse<HabitResponse> response = BaseResponse.of(updateHabit, HABIT_UPDATE);
 		return ResponseEntity.ok().body(response);

@@ -22,6 +22,7 @@ import com.clover.habbittracker.domain.diary.dto.DiaryResponse;
 import com.clover.habbittracker.domain.diary.service.DiaryService;
 import com.clover.habbittracker.global.dto.BaseResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -32,7 +33,7 @@ public class DiaryController {
 	private final DiaryService diaryService;
 
 	@PostMapping
-	ResponseEntity<BaseResponse<Long>> createDiary(@AuthenticationPrincipal Long memberId, @RequestBody DiaryRequest request) {
+	ResponseEntity<BaseResponse<Long>> createDiary(@AuthenticationPrincipal Long memberId, @Valid @RequestBody DiaryRequest request) {
 		Long registerId = diaryService.register(memberId, request);
 		BaseResponse<Long> response = BaseResponse.of(registerId, DIARY_CREATE);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -48,7 +49,7 @@ public class DiaryController {
 
 	@PutMapping("/{diaryId}")
 	ResponseEntity<BaseResponse<DiaryResponse>> updateDiary(@PathVariable Long diaryId,
-		@RequestBody DiaryRequest request) {
+		@Valid @RequestBody DiaryRequest request) {
 		DiaryResponse updateDiary = diaryService.updateDiary(diaryId, request);
 		BaseResponse<DiaryResponse> response = BaseResponse.of(updateDiary, DIARY_UPDATE);
 		return ResponseEntity.ok().body(response);
