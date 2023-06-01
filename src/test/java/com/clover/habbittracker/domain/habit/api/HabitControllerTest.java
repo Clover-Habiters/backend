@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -258,10 +259,13 @@ public class HabitControllerTest {
 		//given
 		HabitCheck testHabitCheck = HabitCheck.builder().habit(testHabit).checked(true).build();
 		habitCheckRepository.save(testHabitCheck);
+		LocalDateTime now = LocalDateTime.now();
+		String date = now.getYear() + "-0" + now.getMonthValue();
 
+		//when then
 		mockMvc.perform(
 				get("/habits")
-					.header("Authorization", "Bearer " + accessJwt).param("date","2023-05"))
+					.header("Authorization", "Bearer " + accessJwt).param("date",date))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data.[0].id").exists())
 			.andExpect(jsonPath("$.data.[0].content").exists())
@@ -363,7 +367,7 @@ public class HabitControllerTest {
 	void habitCheckTestWithExpiredDate() throws Exception {
 		//given
 		LocalDate yesterday = LocalDate.now().minusDays(1);
-		String past = "0" + yesterday.getMonthValue() + "-" + yesterday.getDayOfMonth();
+		String past = yesterday.getMonthValue() + "-" + yesterday.getDayOfMonth();
 		String request = mapper.writeValueAsString(new HabitCheckRequest(past));
 
 		//when then
