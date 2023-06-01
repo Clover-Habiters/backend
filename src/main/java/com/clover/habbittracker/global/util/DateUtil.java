@@ -2,7 +2,6 @@ package com.clover.habbittracker.global.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,9 +21,10 @@ public class DateUtil {
 	}
 
 	public static LocalDate getLocalDate(String date) {
-
-		String formattedDate = Year.now().getValue() + "-" + date;
-		return LocalDate.parse(formattedDate);
+		String[] parts = date.split("-");
+		int month = Integer.parseInt(parts[0]);
+		int day = Integer.parseInt(parts[1]);
+		return LocalDate.of(LocalDate.now().getYear(), month, day);
 	}
 
 }
