@@ -108,7 +108,7 @@ public class MemberControllerTest {
 	void updateMyProfileNickNameTest() throws Exception {
 
 		//given
-		String request = new ObjectMapper().writeValueAsString(new MemberRequest("updateNickName"));
+		String request = new ObjectMapper().writeValueAsString(new MemberRequest("updateNick"));
 
 		//when then
 		mockMvc.perform(put("/users/me")
