@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HabitRequest {
 
-	@Size(max = 10, message = "습관은 10글자 이상으로 작성해주세요.")
+	@Size(max = 10, message = "습관은 10글자 이내로 입력해주세요.")
 	@NotNull(message = "습관 내용이 비어 있을 수 없습니다.")
 	String content;
 }
