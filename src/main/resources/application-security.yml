@@ -10,7 +10,6 @@ spring:
             client-id: ${KAKAO_CLIENT_ID}
             scope:
               - profile_nickname
-              - profile_image
               - account_email
             redirect-uri: ${KAKAO_URI}
             authorization-grant-type: authorization_code
@@ -30,7 +29,6 @@ spring:
             scope:
               - name
               - email
-              - profile_image
             redirect-uri: ${NAVER_URI}
             authorization-grant-type: authorization_code
         provider:
