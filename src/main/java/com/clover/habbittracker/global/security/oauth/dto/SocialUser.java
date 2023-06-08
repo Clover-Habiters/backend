@@ -13,6 +13,10 @@ public interface SocialUser {
 
 	default String trimNickName(String nickName) {
 
+		if(nickName == null) {
+			return null;
+		}
+
 		if(nickName.length() > 8){
 			nickName = nickName.replace(" ","").substring(0, 8);
 		}
