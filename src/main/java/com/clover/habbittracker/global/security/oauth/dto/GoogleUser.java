@@ -20,7 +20,7 @@ public class GoogleUser implements SocialUser{
 
 	@Override
 	public String getNickName() {
-		return this.nickName;
+		return trimNickName(nickName);
 	}
 
 	@Override
