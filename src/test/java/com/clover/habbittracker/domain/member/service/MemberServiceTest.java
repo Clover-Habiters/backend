@@ -85,10 +85,12 @@ public class MemberServiceTest {
 		SocialUser newUser = GoogleUser.builder()
 			.oauthId("GoogleOauthId")
 			.provider("google")
+			.nickName(getNickName())
 			.build();
 		SocialUser savedUser = GoogleUser.builder()
 			.oauthId("testOauthId")
 			.provider("testProvider")
+			.nickName(getNickName())
 			.build();
 		//when
 		Long newMemberID = memberService.join(newUser);
