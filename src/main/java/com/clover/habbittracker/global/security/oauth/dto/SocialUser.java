@@ -10,6 +10,12 @@ public interface SocialUser {
 	String getProvider();
 
 	String getOauthId();
-	//
-	// String getProfileImgUrl();
+
+	default String trimNickName(String nickName) {
+
+		if(nickName.length() > 8){
+			nickName = nickName.replace(" ","").substring(0, 8);
+		}
+		return nickName;
+	}
 }
