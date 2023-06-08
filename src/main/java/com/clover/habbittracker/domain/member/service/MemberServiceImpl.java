@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
-import com.clover.habbittracker.domain.member.entity.ProfileImg;
 import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.member.entity.ProfileImg;
 import com.clover.habbittracker.domain.member.exception.MemberDuplicateNickName;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
@@ -55,7 +55,7 @@ public class MemberServiceImpl implements MemberService {
 			Member.builder()
 				.email(socialUser.getEmail())
 				.oauthId(socialUser.getOauthId())
-				.nickName("해빗터_" + socialUser.getNickName())
+				.nickName("해비터_" + socialUser.getNickName())
 				.provider(socialUser.getProvider())
 				.profileImgUrl(ProfileImg.getRandProfileImg().getImgUrl())
 				.build());
