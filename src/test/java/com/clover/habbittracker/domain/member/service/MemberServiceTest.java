@@ -98,5 +98,21 @@ public class MemberServiceTest {
 		assertThat(savedUserId).isEqualTo(getId());
 	}
 
+	@Test
+	@DisplayName("회원 가입을 할 경우 닉네임이 8자 이상이라면, \"해비터_\"를 공백을 제외한 8자까지 닉네임을 사용한다")
+	void memberRegisterTrimNickNameTest() {
+		//given
+		SocialUser newUser = GoogleUser.builder()
+			.oauthId("GoogleOauthId")
+			.provider("google")
+			.nickName("test Nick Name")
+			.build();
+		Long newMemberID = memberService.join(newUser);
+		//when
+		MemberResponse profile = memberService.getProfile(newMemberID);
+		//then
+		assertThat(profile.getNickName().substring(4)).isEqualTo(newUser.getNickName().replace(" ","").substring(0,8));
+
+	}
 
 }
