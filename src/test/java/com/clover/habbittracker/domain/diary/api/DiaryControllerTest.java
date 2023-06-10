@@ -130,7 +130,8 @@ public class DiaryControllerTest {
 					fieldWithPath("message").type(STRING).description("결과 메시지"),
 					fieldWithPath("data.id").type(NUMBER).description("회고록 아이디"),
 					fieldWithPath("data.content").type(STRING).description("회고록 내용"),
-					fieldWithPath("data.createDate").type(STRING).description("회고록 등록 날짜")
+					fieldWithPath("data.createDate").type(STRING).description("회고록 등록 날짜"),
+					fieldWithPath("data.endUpdateDate").type(STRING).description("회고 수정 마감 날짜")
 				)));
 	}
 
@@ -153,7 +154,8 @@ public class DiaryControllerTest {
 					fieldWithPath("message").type(STRING).description("결과 메시지"),
 					fieldWithPath("data[].id").type(NUMBER).description("회고록 아이디"),
 					fieldWithPath("data[].content").type(STRING).description("회고록 내용"),
-					fieldWithPath("data[].createDate").type(STRING).description("회고 등록 날짜")
+					fieldWithPath("data[].createDate").type(STRING).description("회고 등록 날짜"),
+					fieldWithPath("data[].endUpdateDate").type(STRING).description("회고 수정 마감 날짜")
 				)));
 	}
 
@@ -184,7 +186,8 @@ public class DiaryControllerTest {
 					fieldWithPath("message").type(STRING).description("결과 메시지"),
 					fieldWithPath("data[].id").type(NUMBER).description("회고록 아이디"),
 					fieldWithPath("data[].content").type(STRING).description("회고록 내용"),
-					fieldWithPath("data[].createDate").type(STRING).description("회고 등록 날짜")
+					fieldWithPath("data[].createDate").type(STRING).description("회고 등록 날짜"),
+					fieldWithPath("data[].endUpdateDate").type(STRING).description("회고 수정 마감 날짜")
 				)));
 	}
 
