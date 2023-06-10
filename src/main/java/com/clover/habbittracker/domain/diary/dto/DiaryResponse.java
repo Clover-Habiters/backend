@@ -13,12 +13,14 @@ public class DiaryResponse {
 	private Long id;
 	private String content;
 	private LocalDateTime createDate;
+	private LocalDateTime endUpdateDate;
 
 	public static DiaryResponse from(Diary diary) {
 		return DiaryResponse.builder()
 			.id(diary.getId())
 			.content(diary.getContent())
-			.createDate(diary.getUpdatedAt())
+			.createDate(diary.getCreatedAt())
+			.endUpdateDate(diary.getEndUpdateDate())
 			.build();
 	}
 
