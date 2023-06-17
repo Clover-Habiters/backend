@@ -14,9 +14,6 @@ jobs:
       ## 리포지토리 체크아웃 및 submodule 업데이트
       - name: get repository
         uses: actions/checkout@v3
-        with:
-          token: ${{secrets.CI_TOKEN}}
-          submodules: recursive
 
       ## JDK 17 설치
       - name: install JDK 17
@@ -24,15 +21,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      ## MySQL 설치 및 데이터베이스 설정
-      - name: SetUp MySQL
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          mysql version: '8.0.32'
-          mysql database: 'habiters-db'
-          mysql user: 'root'
-          mysql password: '1234'
 
       # 환경 변수 설정
       - name: Set up Environment
@@ -59,7 +47,7 @@ jobs:
         with:
           title: 테스트 커버리지 리포트입니다
           paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
-          token: ${{secrets.CI_TOKEN}}
+          token: ${{ github.token }}
           min-coverage-overall: 80
           min-coverage-changed-files: 80
 
