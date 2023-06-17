@@ -4,39 +4,13 @@ networks:
     driver: bridge
 
 services:
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    depends_on:
-      - nginx
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    command: certonly --webroot --webroot-path=/var/www/certbot --email xogmlwkdi77@gmail.com --agree-tos --no-eff-email --force-renewal -d api.habiters.store
-    networks:
-      - habiters-network
-  nginx:
-    container_name: habiters-nginx
-    image: nginx
-    depends_on:
-      - web
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - habiters-network
-
   web:
     container_name: habiters-app
     image: hantaehee/habiters
     depends_on:
       - db
-    expose:
-      - 8080
+    ports:
+      - "8080:8080"
     environment:
       JWT_SECRET: ${JWT_SECRET}
       DB_USER_NAME: ${DB_USER_NAME}
@@ -54,7 +28,6 @@ services:
       NCP_SECRET_KEY: ${NCP_SECRET_KEY}
     networks:
       - habiters-network
-
   db:
     container_name: habiters-db
     image: mysql:8.0
