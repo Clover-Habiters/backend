@@ -2,6 +2,11 @@
 -- create schema habiters-db;
 -- use habiters-db;
 
+DROP TABLE IF EXISTS bookmark;
+DROP TABLE IF EXISTS `like`;
+DROP TABLE IF EXISTS comment;
+DROP TABLE IF EXISTS post;
+
 DROP TABLE IF EXISTS habit_check;
 DROP TABLE IF EXISTS habbit;
 DROP TABLE IF EXISTS diary;

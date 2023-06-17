@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService {
+
 	private final MemberRepository memberRepository;
 
 	@Override
