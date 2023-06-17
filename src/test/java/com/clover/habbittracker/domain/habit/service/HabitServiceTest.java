@@ -30,6 +30,7 @@ import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 
 @SpringBootTest
+@Transactional
 public class HabitServiceTest {
 
 	@Autowired

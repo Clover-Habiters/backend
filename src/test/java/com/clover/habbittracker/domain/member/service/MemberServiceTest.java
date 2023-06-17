@@ -3,12 +3,15 @@ package com.clover.habbittracker.domain.member.service;
 import static com.clover.habbittracker.global.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
@@ -18,8 +21,9 @@ import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.security.oauth.dto.GoogleUser;
 import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 
-@SpringBootTest(properties = { "spring.datasource.url=jdbc:h2:mem:testdb", "spring.datasource.driver-class-name=org.h2.Driver", "spring.datasource.username=sa", "spring.datasource.password=" })
-public class MemberServiceTest {
+@SpringBootTest
+@Transactional
+class MemberServiceTest {
 
 	@Autowired
 	private MemberService memberService;
@@ -27,9 +31,11 @@ public class MemberServiceTest {
 	@Autowired
 	private MemberRepository memberRepository;
 
+	private Long saveId;
+
 	@BeforeEach
 	void setUp() {
-		memberRepository.save(createTestMember());
+		saveId = memberRepository.save(createTestMember()).getId();
 	}
 
 
@@ -37,7 +43,7 @@ public class MemberServiceTest {
 	@DisplayName("사용자 ID로 사용자 프로필 정보를 얻어 올 수 있다.")
 	void successGetProfileTest() {
 		//when
-		MemberResponse memberResponse = memberService.getProfile(getId());
+		MemberResponse memberResponse = memberService.getProfile(saveId);
 		//then
 		assertThat(memberResponse.getNickName()).isEqualTo(getNickName());
 	}
@@ -46,7 +52,7 @@ public class MemberServiceTest {
 	@DisplayName("잘못된 사용자 ID로 사용자 프로필을 조회 할 경우 예외가 터진다.")
 	void failedGetProfileTest() {
 		assertThrows(MemberNotFoundException.class, () -> {
-			memberService.getProfile(2L);
+			memberService.getProfile(-1L);
 		});
 	}
 
@@ -58,12 +64,13 @@ public class MemberServiceTest {
 		MemberRequest memberRequest = new MemberRequest("updateNickName");
 
 		//when
-		MemberResponse memberResponse = memberService.updateProfile(getId(), memberRequest);
+		MemberResponse memberResponse = memberService.updateProfile(saveId, memberRequest);
 
 		//then
 		assertThat(memberResponse)
 			.hasFieldOrPropertyWithValue("nickName", memberRequest.getNickName());
 	}
+
 	@Test
 	@DisplayName("중복된 닉네임은 사용 할 수 없습니다.")
 	void failedUpdateProfileTest() {
@@ -73,10 +80,9 @@ public class MemberServiceTest {
 
 		//when then
 		assertThrows(MemberDuplicateNickName.class, () -> {
-			memberService.updateProfile(getId(), memberRequest);
+			memberService.updateProfile(saveId, memberRequest);
 		});
 	}
-
 
 	@Test
 	@DisplayName("로그인을 할 경우 oauthId와 provider를 비교하여 사용자 정보가 없다면 자동으로 회원가입 한다.")
@@ -96,8 +102,8 @@ public class MemberServiceTest {
 		Long newMemberID = memberService.join(newUser);
 		Long savedUserId = memberService.join(savedUser);
 		//then
-		assertThat(newMemberID).isNotSameAs(getId());
-		assertThat(savedUserId).isEqualTo(getId());
+		assertThat(newMemberID).isNotSameAs(saveId);
+		assertThat(savedUserId).isEqualTo(saveId);
 	}
 
 	@Test

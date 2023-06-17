@@ -1,12 +1,9 @@
 package com.clover.habbittracker.domain.member.repository;
 
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.clover.habbittracker.domain.member.entity.Member;
 
-public interface MemberRepository {
+public interface MemberRepository extends MemberCustomRepository, JpaRepository<Member, Long> {
 
-	Optional<Member> findByProviderAndOauthId(String provider, String oauthId);
-
-	Optional<Member> findByNickName(String nickName);
 }

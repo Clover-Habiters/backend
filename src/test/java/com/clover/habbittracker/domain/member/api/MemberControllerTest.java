@@ -30,9 +30,8 @@ import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.security.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest(properties = {"spring.datasource.url=jdbc:h2:mem:testdb",
-	"spring.datasource.driver-class-name=org.h2.Driver", "spring.datasource.username=sa",
-	"spring.datasource.password="})
+@SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.habiters.store")
 public class MemberControllerTest {
@@ -47,10 +46,9 @@ public class MemberControllerTest {
 	private String accessJwt;
 
 	@BeforeEach
-	@Transactional
 	void setUp() {
-		memberRepository.save(createTestMember());
-		accessJwt = jwtProvider.createAccessJwt(1L);
+		Member member = memberRepository.save(createTestMember());
+		accessJwt = jwtProvider.createAccessJwt(member.getId());
 	}
 
 	@Test

@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberRepositoryImpl implements MemberRepository {
+public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
 	private final JPAQueryFactory jpaQueryFactory;
 

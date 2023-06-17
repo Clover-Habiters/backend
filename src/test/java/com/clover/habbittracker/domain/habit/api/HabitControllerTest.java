@@ -22,8 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.clover.habbittracker.domain.habit.dto.HabitRequest;
 import com.clover.habbittracker.domain.habit.entity.Habit;
@@ -33,11 +35,13 @@ import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
 import com.clover.habbittracker.domain.habitcheck.repository.HabitCheckRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
+import com.clover.habbittracker.global.config.JpaConfig;
 import com.clover.habbittracker.global.exception.ErrorType;
 import com.clover.habbittracker.global.security.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.habiters.store")
 public class HabitControllerTest {
@@ -62,10 +66,10 @@ public class HabitControllerTest {
 	@BeforeEach
 	void setUp() {
 		Member testMember = createTestMember();
-		testHabit = Habit.builder().content("미리 저장된 습관입니다.").member(testMember).build();
-		memberRepository.save(testMember);
-		habitRepository.save(testHabit);
-		accessJwt = jwtProvider.createAccessJwt(getId());
+		Member saveMember = memberRepository.save(testMember);
+		Habit habit = Habit.builder().content("미리 저장된 습관입니다.").member(saveMember).build();
+		testHabit = habitRepository.save(habit);
+		accessJwt = jwtProvider.createAccessJwt(saveMember.getId());
 	}
 
 	@Test
@@ -234,7 +238,7 @@ public class HabitControllerTest {
 			.andExpect(jsonPath("$.data.[0].id").exists())
 			.andExpect(jsonPath("$.data.[0].content").exists())
 			.andExpect(jsonPath("$.data.[0].createDate").exists())
-			.andExpect(jsonPath("$.data.[0].habitChecks").exists())
+			.andExpect(jsonPath("$.data.[0].habitChecks").isArray())
 			.andDo(document("habit-read",
 				getDocumentRequest(),
 				getDocumentResponse(),
@@ -247,9 +251,7 @@ public class HabitControllerTest {
 					fieldWithPath("data[].id").type(NUMBER).description("습관 아이디"),
 					fieldWithPath("data[].content").type(STRING).description("습관 내용"),
 					fieldWithPath("data[].createDate").type(STRING).description("습관 등록 날짜"),
-					fieldWithPath("data[].habitChecks[]").type(ARRAY).description("습관 체크 여부"),
-					fieldWithPath("data[].habitChecks[].id").type(NUMBER).description("습관 체크 여부 id"),
-					fieldWithPath("data[].habitChecks[].updatedAt").type(STRING).description("습관 수행 날짜")
+					fieldWithPath("data[].habitChecks[]").type(ARRAY).description("습관 체크 여부")
 				)
 			));
 	}
@@ -270,7 +272,7 @@ public class HabitControllerTest {
 			.andExpect(jsonPath("$.data.[0].id").exists())
 			.andExpect(jsonPath("$.data.[0].content").exists())
 			.andExpect(jsonPath("$.data.[0].createDate").exists())
-			.andExpect(jsonPath("$.data.[0].habitChecks").exists())
+			.andExpect(jsonPath("$.data.[0].habitChecks").isArray())
 			.andDo(document("monthly-habit-read",
 				getDocumentRequest(),
 				getDocumentResponse(),
@@ -286,9 +288,7 @@ public class HabitControllerTest {
 					fieldWithPath("data[].id").type(NUMBER).description("습관 아이디"),
 					fieldWithPath("data[].content").type(STRING).description("습관 내용"),
 					fieldWithPath("data[].createDate").type(STRING).description("습관 등록 날짜"),
-					fieldWithPath("data[].habitChecks[]").type(ARRAY).description("습관 체크 여부"),
-					fieldWithPath("data[].habitChecks[].id").type(NUMBER).description("습관 체크 여부 id"),
-					fieldWithPath("data[].habitChecks[].updatedAt").type(STRING).description("습관 수행 날짜")
+					fieldWithPath("data[].habitChecks[]").type(ARRAY).description("습관 체크 여부")
 				)
 			));
 	}

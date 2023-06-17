@@ -28,7 +28,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("habits")
+@RequestMapping("/habits")
 @RequiredArgsConstructor
 public class HabitController {
 
@@ -52,7 +52,7 @@ public class HabitController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	@PutMapping("{habitId}")
+	@PutMapping("/{habitId}")
 	public ResponseEntity<BaseResponse<HabitResponse>> updateHabit(
 			@PathVariable Long habitId,
 			@Valid @RequestBody HabitRequest request) {
@@ -61,21 +61,21 @@ public class HabitController {
 		return ResponseEntity.ok().body(response);
 	}
 
-	@DeleteMapping("{habitId}")
+	@DeleteMapping("/{habitId}")
 	public ResponseEntity<BaseResponse<Void>> deleteHabit(@PathVariable Long habitId) {
 		habitService.deleteHabit(habitId);
 		BaseResponse<Void> response = BaseResponse.of(null, HABIT_DELETE);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 	}
 
-	@PostMapping("{habitId}/check")
+	@PostMapping("/{habitId}/check")
 	public ResponseEntity<BaseResponse<Void>> HabitCheck(@PathVariable Long habitId, @RequestBody HabitCheckRequest request) {
 		habitService.habitCheck(habitId, request.getRequestDate());
 		BaseResponse<Void> response = BaseResponse.of(null, HABIT_CHECK_CREATE);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	@DeleteMapping("{habitCheckId}/uncheck")
+	@DeleteMapping("/{habitCheckId}/uncheck")
 	public ResponseEntity<BaseResponse<Void>> HabitUnCheck(@PathVariable Long habitCheckId) {
 		habitService.habitUnCheck(habitCheckId);
 		BaseResponse<Void> response = BaseResponse.of(null, HABIT_CHECK_DELETE);
