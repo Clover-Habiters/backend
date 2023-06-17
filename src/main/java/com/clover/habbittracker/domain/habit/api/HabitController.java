@@ -21,12 +21,14 @@ import com.clover.habbittracker.domain.habit.dto.HabitRequest;
 import com.clover.habbittracker.domain.habit.dto.HabitResponse;
 import com.clover.habbittracker.domain.habit.dto.MyHabitResponse;
 import com.clover.habbittracker.domain.habit.service.HabitService;
+import com.clover.habbittracker.domain.habitcheck.dto.HabitCheckRequest;
 import com.clover.habbittracker.global.dto.BaseResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("habits")
+@RequestMapping("/habits")
 @RequiredArgsConstructor
 public class HabitController {
 
@@ -44,38 +46,38 @@ public class HabitController {
 	@PostMapping
 	public ResponseEntity<BaseResponse<Long>> createHabit(
 			@AuthenticationPrincipal Long memberId,
-			@RequestBody HabitRequest request) {
+			@Valid @RequestBody HabitRequest request) {
 		Long registerId = habitService.register(memberId, request);
 		BaseResponse<Long> response = BaseResponse.of(registerId, HABIT_CREATE);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	@PutMapping("{habitId}")
+	@PutMapping("/{habitId}")
 	public ResponseEntity<BaseResponse<HabitResponse>> updateHabit(
 			@PathVariable Long habitId,
-			@RequestBody HabitRequest request) {
+			@Valid @RequestBody HabitRequest request) {
 		HabitResponse updateHabit = habitService.updateMyHabit(habitId, request);
 		BaseResponse<HabitResponse> response = BaseResponse.of(updateHabit, HABIT_UPDATE);
 		return ResponseEntity.ok().body(response);
 	}
 
-	@DeleteMapping("{habitId}")
+	@DeleteMapping("/{habitId}")
 	public ResponseEntity<BaseResponse<Void>> deleteHabit(@PathVariable Long habitId) {
 		habitService.deleteHabit(habitId);
 		BaseResponse<Void> response = BaseResponse.of(null, HABIT_DELETE);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 	}
 
-	@PostMapping("{habitId}/check")
-	public ResponseEntity<BaseResponse<Void>> HabitCheck(@PathVariable Long habitId) {
-		habitService.habitCheck(habitId);
+	@PostMapping("/{habitId}/check")
+	public ResponseEntity<BaseResponse<Void>> HabitCheck(@PathVariable Long habitId, @RequestBody HabitCheckRequest request) {
+		habitService.habitCheck(habitId, request.getRequestDate());
 		BaseResponse<Void> response = BaseResponse.of(null, HABIT_CHECK_CREATE);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
-	@DeleteMapping("{habitId}/check")
-	public ResponseEntity<BaseResponse<Void>> HabitUnCheck(@PathVariable Long habitId) {
-		habitService.habitUnCheck(habitId);
+	@DeleteMapping("/{habitCheckId}/uncheck")
+	public ResponseEntity<BaseResponse<Void>> HabitUnCheck(@PathVariable Long habitCheckId) {
+		habitService.habitUnCheck(habitCheckId);
 		BaseResponse<Void> response = BaseResponse.of(null, HABIT_CHECK_DELETE);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 	}

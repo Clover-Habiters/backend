@@ -1,0 +1,15 @@
+===== Path Parameters
+
+|===
+|경로 변수|필수값|설명
+
+{{#parameters}}
+	|{{#tableCellContent}}`+{{name}}+`{{/tableCellContent}}
+	|{{#tableCellContent}}
+		{{^optional}}true{{/optional}}
+		{{#optional}}false{{/optional}}
+	{{/tableCellContent}}
+	|{{#tableCellContent}}{{description}}{{/tableCellContent}}
+
+{{/parameters}}
+|===

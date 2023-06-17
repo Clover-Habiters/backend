@@ -21,7 +21,7 @@ import com.clover.habbittracker.domain.habitcheck.repository.HabitCheckRepositor
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.util.DateCalculate;
+import com.clover.habbittracker.global.util.DateUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -47,7 +47,7 @@ public class HabitServiceImpl implements HabitService {
 
 	@Override
 	public List<MyHabitResponse> getMyList(Long memberId, String date) {
-		Map<String, LocalDateTime> dateMap = DateCalculate.startEnd(date);
+		Map<String, LocalDateTime> dateMap = DateUtil.getMonthStartAndEndDate(date);
 		return habitRepository.joinHabitCheckFindByMemberId(memberId)
 			.stream()
 			.map(habit -> MyHabitResponse.from(habit, dateMap))
@@ -66,16 +66,18 @@ public class HabitServiceImpl implements HabitService {
 
 	@Override
 	@Transactional
-	public void habitCheck(Long habitId) {
+	public void habitCheck(Long habitId, String date) {
 		Habit habit = habitRepository.findById(habitId)
 			.orElseThrow(()-> new HabitNotFoundException(habitId));
-		if (!validDate(habit.getUpdatedAt())) {
+		LocalDate requestDate = DateUtil.getLocalDate(date);
+		if (!isToday(requestDate)) {
 			throw new HabitCheckExpiredException(habitId);
 		}
 
 		habitCheckRepository.findByHabitOrderByUpdatedAtDesc(habit)
 			.ifPresent(lastHabitCheck -> {
-				if (validDate(lastHabitCheck.getUpdatedAt())) {
+				if (isToday(lastHabitCheck.getUpdatedAt().toLocalDate())) {
+					System.out.println(lastHabitCheck.getUpdatedAt());
 					throw new HabitCheckDuplicateException(habitId);
 				}
 			});
@@ -89,21 +91,11 @@ public class HabitServiceImpl implements HabitService {
 	}
 
 	@Override
-	public void habitUnCheck(Long habitId) {
-		Habit habit = habitRepository.findById(habitId)
-			.orElseThrow(()-> new HabitNotFoundException(habitId));
-
-		habitCheckRepository.findByHabit(habit)
-			.ifPresent(habitCheck -> habitCheckRepository.deleteById(habitCheck.getId()));
-		// habitCheckRepository.findByHabitOrderByUpdatedAtDesc(habit)
-		// 	.ifPresent(lastHabitCheck -> {
-		// 		if (validDate(lastHabitCheck.getUpdatedAt())) {
-		// 			throw new HabitException("같은 날 두번 체크는 불가능합니다.");
-		// 		}
-		// 	});
+	public void habitUnCheck(Long habitCheckId) {
+		habitCheckRepository.deleteById(habitCheckId);
 	}
 
-	private boolean validDate(LocalDateTime updateDate) {
-		return updateDate.toLocalDate().isEqual(LocalDate.now());
+	private boolean isToday(LocalDate dateTime) {
+		return dateTime.isEqual(LocalDate.now());
 	}
 }

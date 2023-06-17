@@ -26,6 +26,7 @@ import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 
 @SpringBootTest
+@Transactional
 public class DiaryServiceTest {
 
 	@Autowired
@@ -111,17 +112,6 @@ public class DiaryServiceTest {
 				.hasFieldOrProperty("content"));
 
 		assertThat(myList2.size()).isEqualTo(0);
-	}
-
-	@Test
-	@DisplayName("회고 내용이 없다면 등록 시 예외가 터진다.")
-	void failedRegisterDiaryTest() {
-		//given
-		Long testMemberId = testMember.getId();
-		DiaryRequest diaryRequest = new DiaryRequest(null);
-
-		//when then
-		assertThrows(IllegalArgumentException.class, () -> diaryService.register(testMemberId, diaryRequest));
 	}
 
 	@Test

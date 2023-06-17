@@ -19,7 +19,7 @@ import com.clover.habbittracker.domain.diary.entity.Diary;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.config.JpaConfig;
-import com.clover.habbittracker.global.util.DateCalculate;
+import com.clover.habbittracker.global.util.DateUtil;
 
 @DataJpaTest
 @Import(JpaConfig.class)
@@ -82,14 +82,14 @@ public class DiaryRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("사용자의 월별 회고록 리스트를 조회 할 수 있다.")
+	@DisplayName("사용자의 월별 회고록 리스트를 최신순으로 조회 할 수 있다.")
 	void findByMemberIdDateBetweenTest() {
 		//given
 		for (int i = 0; i < 10; i++) {
 			diaryRepository.save(Diary.builder().content("테스트회고입니다." + i).member(testMember).build());
 		}
-		Map<String, LocalDateTime> dateTimeMap1 = DateCalculate.startEnd(null);
-		Map<String, LocalDateTime> dateTimeMap2 = DateCalculate.startEnd("2023-03");
+		Map<String, LocalDateTime> dateTimeMap1 = DateUtil.getMonthStartAndEndDate(null);
+		Map<String, LocalDateTime> dateTimeMap2 = DateUtil.getMonthStartAndEndDate("2023-03");
 
 		//when
 		List<Diary> diaryList1 = diaryRepository.findByMemberId(testMember.getId(), dateTimeMap1.get("start"),
@@ -100,10 +100,16 @@ public class DiaryRepositoryTest {
 		//then
 		assertThat(diaryList1.size()).isEqualTo(10);
 		assertThat(diaryList2.size()).isEqualTo(0);
-		diaryList1.forEach(
-			diary -> assertThat(diary)
+		LocalDateTime previousDate = null;
+		for (Diary diary : diaryList1) {
+			assertThat(diary)
 				.hasFieldOrProperty("id")
-				.hasFieldOrProperty("content"));
+				.hasFieldOrProperty("content");
+			if (previousDate != null) {
+				assertThat(diary.getCreatedAt()).isBeforeOrEqualTo(previousDate);
+			}
+			previousDate = diary.getCreatedAt();
+		}
 	}
 
 }

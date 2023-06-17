@@ -1,0 +1,15 @@
+===== Request Parameters
+
+|===
+|변수명|필수값|설명
+
+{{#parameters}}
+|{{#tableCellContent}}`+{{name}}+`{{/tableCellContent}}
+|{{#tableCellContent}}
+	{{^optional}}true{{/optional}}
+	{{#optional}}false{{/optional}}
+{{/tableCellContent}}
+|{{#tableCellContent}}{{description}}{{/tableCellContent}}
+
+{{/parameters}}
+|===

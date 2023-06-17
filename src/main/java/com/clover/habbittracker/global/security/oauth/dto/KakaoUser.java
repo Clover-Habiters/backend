@@ -12,7 +12,6 @@ public class KakaoUser implements SocialUser{
 	String nickName;
 	String provider;
 	String oauthId;
-	String profileImgUrl;
 
 	@Override
 	public String getEmail() {
@@ -21,7 +20,7 @@ public class KakaoUser implements SocialUser{
 
 	@Override
 	public String getNickName() {
-		return this.nickName;
+		return trimNickName(nickName);
 	}
 
 	@Override
@@ -34,10 +33,6 @@ public class KakaoUser implements SocialUser{
 		return this.oauthId;
 	}
 
-	@Override
-	public String getProfileImgUrl() {
-		return this.profileImgUrl;
-	}
 
 	public static SocialUser info(OAuth2User oAuth2User) {
 		Map<String, Object> response = oAuth2User.getAttributes();
@@ -49,7 +44,6 @@ public class KakaoUser implements SocialUser{
 			.nickName(String.valueOf(properties.get("nickname")))
 			.oauthId(String.valueOf(response.get("id")))
 			.provider("kakao")
-			.profileImgUrl(String.valueOf(properties.get("profile_image")))
 			.build();
 	}
 }

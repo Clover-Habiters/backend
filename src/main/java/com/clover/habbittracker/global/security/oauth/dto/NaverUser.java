@@ -12,7 +12,6 @@ public class NaverUser implements SocialUser {
 	String nickName;
 	String provider;
 	String oauthId;
-	String profileImgUrl;
 
 	@Override
 	public String getEmail() {
@@ -21,7 +20,7 @@ public class NaverUser implements SocialUser {
 
 	@Override
 	public String getNickName() {
-		return this.nickName;
+		return trimNickName(nickName);
 	}
 
 	@Override
@@ -34,10 +33,6 @@ public class NaverUser implements SocialUser {
 		return this.oauthId;
 	}
 
-	@Override
-	public String getProfileImgUrl() {
-		return this.profileImgUrl;
-	}
 
 	public static SocialUser info(OAuth2User oAuth2User) {
 		Map<String, Object> response = oAuth2User.getAttribute("response");
@@ -47,7 +42,6 @@ public class NaverUser implements SocialUser {
 			.nickName(String.valueOf(response.get("name")))
 			.oauthId(String.valueOf(response.get("id")))
 			.provider("naver")
-			.profileImgUrl(String.valueOf(response.get("profile_image")))
 			.build();
 
 	}

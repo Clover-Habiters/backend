@@ -13,9 +13,9 @@ public interface HabitService {
 
 	HabitResponse updateMyHabit(Long habitId, HabitRequest request);
 
-	void habitCheck(Long habitId);
+	void habitCheck(Long habitId, String date);
 
 	void deleteHabit(Long habitId);
 
-	void habitUnCheck(Long habitId);
+	void habitUnCheck(Long habitCheckId);
 }
