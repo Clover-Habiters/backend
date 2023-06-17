@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 public enum ProfileImg {
 
-	HABITEE_LUCKY("https://kr.object.ncloudstorage.com/user-profile-image/Habitee_Lucky.svg"),
-	HABITEE_HOPE("https://kr.object.ncloudstorage.com/user-profile-image/Habitee_Hope.svg"),
-	HABITEE_DREAM("https://kr.object.ncloudstorage.com/user-profile-image/Habitee_Dream.svg");
+	HABITEE_LUCKY("https://kr.object.ncloudstorage.com/habiters-bucket/Habitee_Lucky.svg"),
+	HABITEE_HOPE("https://kr.object.ncloudstorage.com/habiters-bucket/Habitee_Hope.svg"),
+	HABITEE_DREAM("https://kr.object.ncloudstorage.com/habiters-bucket/Habitee_Dream.svg");
 
 	private final String imgUrl;
 
