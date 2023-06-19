@@ -10,8 +10,9 @@ import org.hibernate.annotations.Where;
 
 import com.clover.habbittracker.domain.comment.entity.Comment;
 import com.clover.habbittracker.domain.like.entity.Like;
-import com.clover.habbittracker.domain.like.entity.Type;
 import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.post.dto.PostRequest;
+import com.clover.habbittracker.global.entity.BaseEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -33,7 +34,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 @Where(clause = "deleted = false")
 @SQLDelete(sql = "UPDATE post set deleted = true where id=?")
-public class Post {
+public class Post extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,5 +72,11 @@ public class Post {
 		this.content = content;
 		this.category = category;
 		this.member = member;
+	}
+
+	public void updatePost(PostRequest postRequest) {
+		this.title = postRequest.getTitle();
+		this.content = postRequest.getContent();
+		this.category = postRequest.getCategory();
 	}
 }
