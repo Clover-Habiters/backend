@@ -8,7 +8,7 @@ import java.util.List;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import com.clover.habbittracker.domain.like.entity.Like;
+import com.clover.habbittracker.domain.emoji.entity.Emoji;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.entity.Post;
 

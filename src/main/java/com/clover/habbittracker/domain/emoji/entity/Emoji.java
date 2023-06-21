@@ -1,4 +1,4 @@
-package com.clover.habbittracker.domain.like.entity;
+package com.clover.habbittracker.domain.emoji.entity;
 
 import static lombok.AccessLevel.*;
 
@@ -22,11 +22,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "like")
+@Table(name = "emoji")
 @NoArgsConstructor(access = PROTECTED)
 @Where(clause = "deleted = false")
-@SQLDelete(sql = "UPDATE like set deleted = true where id=?")
-public class Like {
+@SQLDelete(sql = "UPDATE emoji set deleted = true where id=?")
+public class Emoji {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +47,7 @@ public class Like {
 	private Comment comment;
 
 	@Builder
-	public Like(Type type, Member member, Post post, Comment comment) {
+	public Emoji(Type type, Member member, Post post, Comment comment) {
 		this.type = type;
 		this.member = member;
 		this.post = post;
