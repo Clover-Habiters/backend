@@ -39,7 +39,7 @@ public class Comment {
 		cascade = CascadeType.REMOVE,
 		orphanRemoval = true,
 		fetch = FetchType.LAZY)
-	private final List<Like> likes = new ArrayList<>();
+	private final List<Emoji> likes = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

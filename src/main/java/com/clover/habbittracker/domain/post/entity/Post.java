@@ -10,6 +10,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import com.clover.habbittracker.domain.comment.entity.Comment;
+import com.clover.habbittracker.domain.emoji.entity.Emoji;
 import com.clover.habbittracker.domain.like.entity.Like;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.dto.PostRequest;
@@ -67,7 +68,7 @@ public class Post extends BaseEntity {
 		orphanRemoval = true,
 		fetch = FetchType.LAZY)
 	@BatchSize(size = 50)
-	private final List<Like> likes = new ArrayList<>();
+	private final List<Emoji> likes = new ArrayList<>();
 
 	@Builder
 	public Post(String title, String content, Category category, Member member) {
