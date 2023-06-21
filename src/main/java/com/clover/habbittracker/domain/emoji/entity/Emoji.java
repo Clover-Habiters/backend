@@ -2,9 +2,6 @@ package com.clover.habbittracker.domain.emoji.entity;
 
 import static lombok.AccessLevel.*;
 
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
-
 import com.clover.habbittracker.domain.comment.entity.Comment;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.entity.Post;
@@ -24,8 +21,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "emoji")
 @NoArgsConstructor(access = PROTECTED)
-@Where(clause = "deleted = false")
-@SQLDelete(sql = "UPDATE emoji set deleted = true where id=?")
 public class Emoji {
 
 	@Id
@@ -53,4 +48,13 @@ public class Emoji {
 		this.post = post;
 		this.comment = comment;
 	}
+
+	public void updateStatus(Type type) {
+		this.type = isSameType(type) ? Type.NONE : type;
+	}
+
+	public boolean isSameType(Type type) {
+		return this.type == type;
+	}
+
 }
