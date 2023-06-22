@@ -11,6 +11,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PostResponse {
+	private Long id;
 	private String title;
 	private String content;
 	private Category category;
@@ -21,6 +22,7 @@ public class PostResponse {
 
 	public static PostResponse from(Post post) {
 		return PostResponse.builder()
+			.id(post.getId())
 			.title(post.getTitle())
 			.content(post.getContent())
 			.category(post.getCategory())
