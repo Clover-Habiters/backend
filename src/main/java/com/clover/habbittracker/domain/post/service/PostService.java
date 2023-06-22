@@ -15,5 +15,5 @@ public interface PostService {
 
 	List<PostResponse> getPostList(Pageable pageable);
 
-	void updatePost(Long postId, PostRequest request);
+	PostResponse updatePost(Long postId, PostRequest request);
 }
