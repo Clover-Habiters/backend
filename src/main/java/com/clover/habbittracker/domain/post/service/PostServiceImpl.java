@@ -41,9 +41,11 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public PostDetailResponse getPost(Long postId) {
-		return PostDetailResponse.from(
-			postRepository.findById(postId).orElseThrow(NoSuchElementException::new)); //TODO : 임시 예외 처리
+		Post post = postRepository.joinCommentAndLikeFindById(postId).orElseThrow(NoSuchElementException::new); //TODO : 임시 예외 처리
+		postRepository.updateViews(postId);
+		return PostDetailResponse.from(post);
 
 	}
 
@@ -55,8 +57,9 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	@Transactional
-	public void updatePost(Long postId, PostRequest request) {
+	public PostResponse updatePost(Long postId, PostRequest request) {
 		Post post = postRepository.findById(postId).orElseThrow(NoSuchElementException::new);//TODO : 임시 예외 처리
 		post.updatePost(request);
+		return PostResponse.from(post);
 	}
 }
