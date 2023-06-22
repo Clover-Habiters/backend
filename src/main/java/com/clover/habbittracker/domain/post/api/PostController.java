@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,9 +32,10 @@ public class PostController {
 	private final PostService postService;
 
 	@PostMapping
-	public ResponseEntity<BaseResponse<Void>> createPost(@AuthenticationPrincipal Long memberId, PostRequest request) {
+	public ResponseEntity<BaseResponse<Void>> createPost(@AuthenticationPrincipal Long memberId, @RequestBody PostRequest request) {
 		Long postId = postService.register(memberId, request);
-		return ResponseEntity.created(URI.create("/posts" + postId.toString())).body(BaseResponse.of(null,ResponseType.POST_READ));
+		BaseResponse<Void> response = BaseResponse.of(null, ResponseType.POST_CREATE);
+		return ResponseEntity.created(URI.create("/posts/" + postId.toString())).body(response);
 	}
 	@GetMapping
 	public ResponseEntity<BaseResponse<List<PostResponse>>> getPostList(@PageableDefault(size = 15) Pageable pageable) {
@@ -51,9 +53,10 @@ public class PostController {
 
 
 	@PutMapping("/{postId}")
-	public void updatePost(@PathVariable Long postId, PostRequest request) {
-		postService.updatePost(postId,request);
-
+	public ResponseEntity<BaseResponse<PostResponse>> updatePost(@PathVariable Long postId, @RequestBody PostRequest request) {
+		PostResponse postResponse = postService.updatePost(postId, request);
+		BaseResponse<PostResponse> response = BaseResponse.of(postResponse, ResponseType.POST_UPDATE);
+		return ResponseEntity.created(URI.create("/posts/" + postId.toString())).body(response);
 	}
 
 }
