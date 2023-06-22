@@ -50,6 +50,8 @@ public class SecurityConfig {
 			.requestMatchers("/diaries").authenticated()
 			.requestMatchers("/habits").authenticated()
 			.requestMatchers("/habits/**").authenticated()
+			.requestMatchers("/posts").authenticated()
+			.requestMatchers("/posts/**").authenticated()
 			.anyRequest().permitAll()
 			.and()
 			.oauth2Login()
