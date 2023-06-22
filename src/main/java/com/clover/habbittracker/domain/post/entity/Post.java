@@ -3,7 +3,9 @@ package com.clover.habbittracker.domain.post.entity;
 import static lombok.AccessLevel.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -64,7 +66,7 @@ public class Post extends BaseEntity {
 		cascade = CascadeType.REMOVE,
 		orphanRemoval = true,
 		fetch = FetchType.LAZY)
-	private final List<Like> likes = new ArrayList<>();
+	private final Set<Like> likes = new HashSet<>();
 
 	@Builder
 	public Post(String title, String content, Category category, Member member) {
@@ -72,6 +74,7 @@ public class Post extends BaseEntity {
 		this.content = content;
 		this.category = category;
 		this.member = member;
+		this.views = 0L;
 	}
 
 	public void updatePost(PostRequest postRequest) {
