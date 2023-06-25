@@ -2,7 +2,6 @@ package com.clover.habbittracker.domain.post.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 import com.clover.habbittracker.domain.comment.entity.Comment;
 import com.clover.habbittracker.domain.like.entity.Like;
@@ -20,7 +19,7 @@ public class PostDetailResponse {
 	private Category category;
 	private Long views;
 	private List<Comment> comments;
-	private Set<Like> likes;
+	private List<Like> likes;
 	private LocalDateTime createDate;
 	private LocalDateTime updateDate;
 
