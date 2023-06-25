@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Deprecated
 public class BaseResponse<T> {
 
 	private final String code;

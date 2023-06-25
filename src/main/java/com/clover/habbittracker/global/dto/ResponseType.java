@@ -3,6 +3,7 @@ package com.clover.habbittracker.global.dto;
 import lombok.Getter;
 
 @Getter
+@Deprecated
 public enum ResponseType {
 	HABIT_CREATE("습관이 정상적으로 생성 되었습니다."),
 	HABIT_READ("습관 조회 요청이 성공 하였습니다."),

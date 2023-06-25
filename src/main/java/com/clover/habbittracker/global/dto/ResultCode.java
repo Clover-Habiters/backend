@@ -1,12 +1,13 @@
-package com.clover.habbittracker.global.exception;
+package com.clover.habbittracker.global.dto;
 
 import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
 
 @Getter
-@Deprecated
-public enum ErrorType {
+public enum ResultCode {
+
+	SUCCESS(HttpStatus.OK , "성공"),
 
 	INVALID_ARGUMENTS(HttpStatus.BAD_REQUEST, "내용이 없습니다."),
 	INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러 입니다."),
@@ -25,10 +26,10 @@ public enum ErrorType {
 	DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, "회고록 정보가 존재하지 않습니다.");
 
 	private final HttpStatus status;
-	private final String errorMsg;
+	private final String message;
 
-	ErrorType(HttpStatus status, String errorMsg) {
+	ResultCode(HttpStatus status, String message) {
 		this.status = status;
-		this.errorMsg = errorMsg;
+		this.message = message;
 	}
 }
