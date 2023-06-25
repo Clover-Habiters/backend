@@ -13,14 +13,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
 import com.clover.habbittracker.domain.post.dto.PostRequest;
 import com.clover.habbittracker.domain.post.dto.PostResponse;
+import com.clover.habbittracker.domain.post.entity.Category;
 import com.clover.habbittracker.domain.post.service.PostService;
-import com.clover.habbittracker.global.dto.BaseResponse;
-import com.clover.habbittracker.global.dto.ResponseType;
+import com.clover.habbittracker.global.dto.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,31 +33,32 @@ public class PostController {
 	private final PostService postService;
 
 	@PostMapping
-	public ResponseEntity<BaseResponse<Void>> createPost(@AuthenticationPrincipal Long memberId, @RequestBody PostRequest request) {
+	public ResponseEntity<ApiResponse<Void>> createPost(@AuthenticationPrincipal Long memberId,
+		@RequestBody PostRequest request) {
 		Long postId = postService.register(memberId, request);
-		BaseResponse<Void> response = BaseResponse.of(null, ResponseType.POST_CREATE);
-		return ResponseEntity.created(URI.create("/posts/" + postId.toString())).body(response);
+		return ResponseEntity.created(URI.create("/posts/" + postId.toString())).body(ApiResponse.success());
 	}
+
 	@GetMapping
-	public ResponseEntity<BaseResponse<List<PostResponse>>> getPostList(@PageableDefault(size = 15) Pageable pageable) {
-		List<PostResponse> postList = postService.getPostList(pageable);
-		BaseResponse<List<PostResponse>> response = BaseResponse.of(postList, ResponseType.POST_READ);
-		return ResponseEntity.ok().body(response);
+	public ResponseEntity<ApiResponse<List<PostResponse>>> getPostList(
+		@PageableDefault(size = 15) Pageable pageable,
+		@RequestParam(required = false) Category category
+	) {
+		List<PostResponse> postList = postService.getPostList(pageable, category);
+		return ResponseEntity.ok().body(ApiResponse.success(postList));
 	}
 
 	@GetMapping("/{postId}")
-	public ResponseEntity<BaseResponse<PostDetailResponse>> getPost(@PathVariable Long postId){
+	public ResponseEntity<ApiResponse<PostDetailResponse>> getPost(@PathVariable Long postId) {
 		PostDetailResponse postDetail = postService.getPost(postId);
-		BaseResponse<PostDetailResponse> response = BaseResponse.of(postDetail, ResponseType.POST_READ);
-		return ResponseEntity.ok().body(response);
+		return ResponseEntity.ok().body(ApiResponse.success(postDetail));
 	}
 
-
 	@PutMapping("/{postId}")
-	public ResponseEntity<BaseResponse<PostResponse>> updatePost(@PathVariable Long postId, @RequestBody PostRequest request) {
+	public ResponseEntity<ApiResponse<PostResponse>> updatePost(@PathVariable Long postId,
+		@RequestBody PostRequest request) {
 		PostResponse postResponse = postService.updatePost(postId, request);
-		BaseResponse<PostResponse> response = BaseResponse.of(postResponse, ResponseType.POST_UPDATE);
-		return ResponseEntity.created(URI.create("/posts/" + postId.toString())).body(response);
+		return ResponseEntity.created(URI.create("/posts/" + postId.toString())).body(ApiResponse.success(postResponse));
 	}
 
 }

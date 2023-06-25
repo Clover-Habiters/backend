@@ -14,6 +14,7 @@ import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.domain.post.dto.PostRequest;
 import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
 import com.clover.habbittracker.domain.post.dto.PostResponse;
+import com.clover.habbittracker.domain.post.entity.Category;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
 
@@ -43,15 +44,16 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public PostDetailResponse getPost(Long postId) {
-		Post post = postRepository.joinCommentAndLikeFindById(postId).orElseThrow(NoSuchElementException::new); //TODO : 임시 예외 처리
+		Post post = postRepository.joinCommentAndLikeFindById(postId)
+			.orElseThrow(NoSuchElementException::new); //TODO : 임시 예외 처리
 		postRepository.updateViews(postId);
 		return PostDetailResponse.from(post);
 
 	}
 
 	@Override
-	public List<PostResponse> getPostList(Pageable pageable) {
-		Page<Post> postsSummary = postRepository.findAllPostsSummary(pageable);
+	public List<PostResponse> getPostList(Pageable pageable, Category category) {
+		Page<Post> postsSummary = postRepository.findAllPostsSummary(pageable, category);
 		return postsSummary.stream().map(PostResponse::from).toList();
 	}
 
