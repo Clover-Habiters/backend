@@ -16,5 +16,7 @@ public interface PostService {
 
 	List<PostResponse> getPostList(Pageable pageable, Category category);
 
-	PostResponse updatePost(Long postId, PostRequest request);
+	PostResponse updatePost(Long postId, PostRequest request, Long memberId);
+
+	void deletePost(Long postId, Long memberId);
 }
