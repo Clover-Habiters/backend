@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.clover.habbittracker.domain.post.entity.Post;
 
-public interface PostRepository extends JpaRepository<Post,Long> {
+public interface PostRepository extends PostCustomRepository, JpaRepository<Post, Long> {
 }

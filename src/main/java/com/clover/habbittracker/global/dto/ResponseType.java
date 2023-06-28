@@ -3,6 +3,7 @@ package com.clover.habbittracker.global.dto;
 import lombok.Getter;
 
 @Getter
+@Deprecated
 public enum ResponseType {
 	HABIT_CREATE("습관이 정상적으로 생성 되었습니다."),
 	HABIT_READ("습관 조회 요청이 성공 하였습니다."),
@@ -16,7 +17,11 @@ public enum ResponseType {
 	DIARY_CREATE("회고록이 정상적으로 생성 되었습니다."),
 	DIARY_READ("회고록 조회 요청이 성공하였습니다."),
 	DIARY_UPDATE("회고록 정보가 정상적으로 업데이트 되었습니다."),
-	DIARY_DELETE("회고록이 정상적으로 삭제 되었습니다.");
+	DIARY_DELETE("회고록이 정상적으로 삭제 되었습니다."),
+	POST_READ("글 조회 요청이 성공하였습니다."),
+	POST_CREATE("글이 정상적으로 생성 되었습니다."),
+	POST_UPDATE("글이 정상적으로 업데이트 되었습니다.");
+
 
 	private final String message;
 

@@ -11,6 +11,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        globally_quoted_identifiers: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
   config:
     import: application-token.yml, application-security.yml

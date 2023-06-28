@@ -1,16 +1,22 @@
 package com.clover.habbittracker.domain.post.service;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-import com.clover.habbittracker.domain.post.repository.PostRepository;
+import org.springframework.data.domain.Pageable;
 
-import lombok.RequiredArgsConstructor;
+import com.clover.habbittracker.domain.post.dto.PostRequest;
+import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
+import com.clover.habbittracker.domain.post.dto.PostResponse;
+import com.clover.habbittracker.domain.post.entity.Category;
 
-@Service
-@RequiredArgsConstructor
-public class PostService {
+public interface PostService {
+	Long register(Long memberId, PostRequest request);
 
-	private final PostRepository postRepository;
+	PostDetailResponse getPost(Long postId);
 
+	List<PostResponse> getPostList(Pageable pageable, Category category);
 
+	PostResponse updatePost(Long postId, PostRequest request, Long memberId);
+
+	void deletePost(Long postId, Long memberId);
 }

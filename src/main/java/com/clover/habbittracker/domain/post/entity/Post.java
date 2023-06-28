@@ -5,13 +5,15 @@ import static lombok.AccessLevel.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import com.clover.habbittracker.domain.comment.entity.Comment;
 import com.clover.habbittracker.domain.like.entity.Like;
-import com.clover.habbittracker.domain.like.entity.Type;
 import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.post.dto.PostRequest;
+import com.clover.habbittracker.global.entity.BaseEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -33,7 +35,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 @Where(clause = "deleted = false")
 @SQLDelete(sql = "UPDATE post set deleted = true where id=?")
-public class Post {
+public class Post extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,6 +58,7 @@ public class Post {
 		cascade = CascadeType.REMOVE,
 		orphanRemoval = true,
 		fetch = FetchType.LAZY)
+	@BatchSize(size = 50)
 	private final List<Comment> comments = new ArrayList<>();
 
 	@OneToMany(
@@ -63,6 +66,7 @@ public class Post {
 		cascade = CascadeType.REMOVE,
 		orphanRemoval = true,
 		fetch = FetchType.LAZY)
+	@BatchSize(size = 50)
 	private final List<Like> likes = new ArrayList<>();
 
 	@Builder
@@ -71,5 +75,12 @@ public class Post {
 		this.content = content;
 		this.category = category;
 		this.member = member;
+		this.views = 0L;
+	}
+
+	public void updatePost(PostRequest postRequest) {
+		this.title = postRequest.getTitle();
+		this.content = postRequest.getContent();
+		this.category = postRequest.getCategory();
 	}
 }
