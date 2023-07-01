@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class PostRequest {
-	String title;
-	String content;
-	Category category;
+	private String title;
+	private String content;
+	private Category category;
 }

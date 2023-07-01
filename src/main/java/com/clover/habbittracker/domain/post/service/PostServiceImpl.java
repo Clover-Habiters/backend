@@ -29,17 +29,18 @@ public class PostServiceImpl implements PostService {
 
 	private final MemberRepository memberRepository;
 
+	@Transactional
 	public Long register(Long memberId, PostRequest request) {
-		Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
+		Member member = getMemberBy(memberId);
 		Post post = Post.builder()
 			.title(request.getTitle())
 			.content(request.getContent())
 			.category(request.getCategory())
 			.member(member)
 			.build();
-		postRepository.save(post);
+		Post savedPost = postRepository.save(post);
 
-		return post.getId();
+		return savedPost.getId();
 	}
 
 	@Override
@@ -79,5 +80,10 @@ public class PostServiceImpl implements PostService {
 		if (!member.getId().equals(memberId)) {
 			throw new PermissionDeniedException(memberId);
 		}
+	}
+
+	private Member getMemberBy(Long memberId) {
+		return memberRepository.findById(memberId)
+			.orElseThrow(() -> new MemberNotFoundException(memberId));
 	}
 }
