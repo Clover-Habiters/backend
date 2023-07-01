@@ -11,6 +11,7 @@ import org.hibernate.annotations.Where;
 
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.entity.Post;
+import com.clover.habbittracker.global.entity.BaseEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,11 +30,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 @Where(clause = "deleted = false")
 @SQLDelete(sql = "UPDATE bookmark set deleted = true where id=?")
-public class Bookmark {
-
-	@ManyToMany
-	@JoinTable(name = "bookmark_folder")
-	private final Set<Post> post = new HashSet<>();
+public class Bookmark extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -47,6 +44,10 @@ public class Bookmark {
 	@JoinColumn(name = "memberId")
 	private Member member;
 
+	@ManyToMany
+	@JoinTable(name = "bookmark_folder")
+	private final Set<Post> posts = new HashSet<>();
+
 	public Bookmark(Member member, String title, String description) {
 		this.member = member;
 		this.title = title;
@@ -58,11 +59,11 @@ public class Bookmark {
 	}
 
 	public void addPost(Post post) {
-		this.post.add(post);
+		this.posts.add(post);
 	}
 
 	public void removePostBy(Long postId) {
-		this.post.removeIf(p -> p.getId().equals(postId));
+		this.posts.removeIf(p -> p.getId().equals(postId));
 	}
 
 }
