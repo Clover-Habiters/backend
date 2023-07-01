@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.clover.habbittracker.domain.bookmark.dto.BookmarkResponse;
 import com.clover.habbittracker.domain.bookmark.dto.CreateBookmarkRequest;
-import com.clover.habbittracker.domain.bookmark.entity.Bookmark;
 import com.clover.habbittracker.domain.bookmark.service.BookmarkService;
 
 import jakarta.validation.constraints.NotNull;
@@ -46,26 +46,26 @@ public class BookmarkController {
 	public void addPost(
 		@AuthenticationPrincipal Long memberId,
 		@RequestParam Long postId,
-		@RequestParam(required = false, defaultValue = "1") Long bookmarkId // 옳은 방식인지 아직 감이 안온다..RESTful 한가?
+		@RequestParam(required = false, defaultValue = "1") Long bookmarkId // 옳은 방식인지 아직 감이 안온다..RESTful 한가? / 기본값 전략
 	) {
 		bookMarkService.addPost(bookmarkId, memberId, postId);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Bookmark>> getAllBookmarks(
+	public ResponseEntity<List<BookmarkResponse>> getAllBookmarks(
 		@AuthenticationPrincipal Long memberId
 	) {
-		List<Bookmark> bookmarks = bookMarkService.getAllBookmarks(memberId);
+		List<BookmarkResponse> bookmarks = bookMarkService.getAllBookmarks(memberId);
 		return ResponseEntity.ok(bookmarks);
 
 	}
 
 	@GetMapping("/{bookmarkId}")
-	public ResponseEntity<Bookmark> getBookmark(
+	public ResponseEntity<BookmarkResponse> getBookmark(
 		@AuthenticationPrincipal Long memberId,
 		@PathVariable Long bookmarkId
 	) {
-		Bookmark bookmark = bookMarkService.getBookmark(bookmarkId, memberId);
+		BookmarkResponse bookmark = bookMarkService.getBookmark(bookmarkId, memberId);
 		return ResponseEntity.ok(bookmark);
 	}
 

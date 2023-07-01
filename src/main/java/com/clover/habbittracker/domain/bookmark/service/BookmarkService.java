@@ -1,15 +1,18 @@
 package com.clover.habbittracker.domain.bookmark.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.clover.habbittracker.domain.bookmark.dto.BookmarkResponse;
 import com.clover.habbittracker.domain.bookmark.dto.CreateBookmarkRequest;
 import com.clover.habbittracker.domain.bookmark.entity.Bookmark;
 import com.clover.habbittracker.domain.bookmark.repository.BookmarkRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
+import com.clover.habbittracker.domain.post.dto.PostSimpleResponse;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
 
@@ -46,12 +49,16 @@ public class BookmarkService {
 		bookmark.addPost(post);
 	}
 
-	public List<Bookmark> getAllBookmarks(Long memberId) {
-		return bookMarkRepository.findByMemberId(memberId);
+	public List<BookmarkResponse> getAllBookmarks(Long memberId) {
+		return bookMarkRepository.findByMemberId(memberId)
+			.stream()
+			.map(bookmark -> BookmarkResponse.from(bookmark, postToResponse(bookmark.getPosts())))
+			.toList();
 	}
 
-	public Bookmark getBookmark(Long bookmarkId, Long memberId) {
+	public BookmarkResponse getBookmark(Long bookmarkId, Long memberId) {
 		return bookMarkRepository.findByIdAndMemberId(bookmarkId, memberId)
+			.map(bookmark -> BookmarkResponse.from(bookmark, postToResponse(bookmark.getPosts())))
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 	}
 
@@ -79,4 +86,9 @@ public class BookmarkService {
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다."));
 	}
 
+	private List<PostSimpleResponse> postToResponse(Set<Post> posts) {
+		return posts.stream()
+			.map(PostSimpleResponse::from)
+			.toList();
+	}
 }
