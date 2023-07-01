@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,14 +42,14 @@ public class BookmarkController {
 		return ResponseEntity.created(location).build();
 	}
 
-	@PostMapping
+	@PostMapping("/{bookmarkId}")
 	@ResponseStatus(NO_CONTENT)
 	public void addPost(
 		@AuthenticationPrincipal Long memberId,
-		@RequestParam Long postId,
-		@RequestParam(required = false, defaultValue = "1") Long bookmarkId // 옳은 방식인지 아직 감이 안온다..RESTful 한가? / 기본값 전략
+		@PathVariable(required = false) Optional<Long> bookmarkId,
+		@RequestParam Long postId
 	) {
-		bookMarkService.addPost(bookmarkId, memberId, postId);
+		bookMarkService.addPost(bookmarkId.orElse(1L), memberId, postId);
 	}
 
 	@GetMapping
@@ -57,7 +58,6 @@ public class BookmarkController {
 	) {
 		List<BookmarkResponse> bookmarks = bookMarkService.getAllBookmarks(memberId);
 		return ResponseEntity.ok(bookmarks);
-
 	}
 
 	@GetMapping("/{bookmarkId}")
@@ -69,23 +69,22 @@ public class BookmarkController {
 		return ResponseEntity.ok(bookmark);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("/{bookmarkId}")
 	@ResponseStatus(NO_CONTENT)
 	public void deletePost(
 		@AuthenticationPrincipal Long memberId,
-		@RequestParam Long postId,
-		@RequestParam(required = false) Long bookmarkId
+		@PathVariable Long bookmarkId,
+		@RequestParam Long postId
 	) {
 		bookMarkService.deletePost(bookmarkId, memberId, postId);
 	}
 
-	@DeleteMapping("/{bookmarkId}")
+	@DeleteMapping
 	@ResponseStatus(NO_CONTENT)
 	public void deleteBookmark(
 		@AuthenticationPrincipal Long memberId,
-		@PathVariable Long bookmarkId
+		@RequestParam Long bookmarkId
 	) {
 		bookMarkService.delete(bookmarkId, memberId);
 	}
-
 }

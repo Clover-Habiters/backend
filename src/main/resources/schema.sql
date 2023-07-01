@@ -3,7 +3,7 @@
 -- use habiters-db;
 
 DROP TABLE IF EXISTS bookmark;
-DROP TABLE IF EXISTS `like`;
+DROP TABLE IF EXISTS emoji;
 DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS post;
 
@@ -87,7 +87,7 @@ create table comment
     deleted      boolean      not null default false
 );
 
-create table `like`
+create table emoji
 (
     id           bigint auto_increment primary key,
     type         varchar(255) null,
