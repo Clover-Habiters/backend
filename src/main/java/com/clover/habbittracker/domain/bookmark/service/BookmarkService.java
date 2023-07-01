@@ -55,10 +55,12 @@ public class BookmarkService {
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 	}
 
+	@Transactional
 	public void delete(Long bookmarkId, Long memberId) {
 		bookMarkRepository.deleteByIdAndMemberId(bookmarkId, memberId);
 	}
 
+	@Transactional
 	public void deletePost(Long bookmarkId, Long memberId, Long postId) {
 
 		Bookmark bookmark = bookMarkRepository.findByIdAndMemberId(bookmarkId, memberId)
