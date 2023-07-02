@@ -69,7 +69,7 @@ public class BookmarkController {
 		return ResponseEntity.ok(bookmark);
 	}
 
-	@DeleteMapping("/{bookmarkId}")
+	@DeleteMapping("/{bookmarkId}/posts")
 	@ResponseStatus(NO_CONTENT)
 	public void deletePost(
 		@AuthenticationPrincipal Long memberId,
