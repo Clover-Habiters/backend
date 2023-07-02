@@ -1,11 +1,12 @@
 package com.clover.habbittracker.domain.post.api;
 
+import static org.springframework.http.HttpStatus.*;
+
 import java.net.URI;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
@@ -35,10 +37,14 @@ public class PostController {
 	private final PostService postService;
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Void>> createPost(@AuthenticationPrincipal Long memberId,
-		@RequestBody PostRequest request) {
+	public ResponseEntity<ApiResponse<Void>> createPost(
+		@AuthenticationPrincipal Long memberId,
+		@RequestBody PostRequest request
+	) {
 		Long postId = postService.register(memberId, request);
-		return ResponseEntity.created(URI.create("/posts/" + postId.toString())).body(ApiResponse.success());
+		URI location = URI.create("/posts/" + postId.toString());
+		ApiResponse<Void> response = ApiResponse.success();
+		return ResponseEntity.created(location).body(response);
 	}
 
 	@GetMapping
@@ -47,28 +53,39 @@ public class PostController {
 		@RequestParam(required = false) Category category
 	) {
 		List<PostResponse> postList = postService.getPostList(pageable, category);
-		return ResponseEntity.ok().body(ApiResponse.success(postList));
+		ApiResponse<List<PostResponse>> response = ApiResponse.success(postList);
+		return ResponseEntity.ok().body(response);
 	}
 
 	@GetMapping("/{postId}")
-	public ResponseEntity<ApiResponse<PostDetailResponse>> getPost(@PathVariable Long postId) {
+	public ResponseEntity<ApiResponse<PostDetailResponse>> getPost(
+		@PathVariable Long postId
+	) {
 		PostDetailResponse postDetail = postService.getPost(postId);
-		return ResponseEntity.ok().body(ApiResponse.success(postDetail));
+		ApiResponse<PostDetailResponse> response = ApiResponse.success(postDetail);
+		return ResponseEntity.ok().body(response);
 	}
 
 	@PutMapping("/{postId}")
 	public ResponseEntity<ApiResponse<PostResponse>> updatePost(
 		@PathVariable Long postId,
 		@AuthenticationPrincipal Long memberId,
-		@RequestBody PostRequest request) {
+		@RequestBody PostRequest request
+	) {
 		PostResponse postResponse = postService.updatePost(postId, request, memberId);
-		return ResponseEntity.created(URI.create("/posts/" + postId.toString())).body(ApiResponse.success(postResponse));
+		ApiResponse<PostResponse> response = ApiResponse.success(postResponse);
+		URI location = URI.create("/posts/" + postId.toString());
+		return ResponseEntity.ok().location(location).body(response);
 	}
 
 	@DeleteMapping("/{postId}")
-	public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId, @AuthenticationPrincipal Long memberId) {
+	@ResponseStatus(NO_CONTENT)
+	public ApiResponse<Void> deletePost(
+		@PathVariable Long postId,
+		@AuthenticationPrincipal Long memberId
+	) {
 		postService.deletePost(postId, memberId);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success());
+		return ApiResponse.success();
 	}
 
 }

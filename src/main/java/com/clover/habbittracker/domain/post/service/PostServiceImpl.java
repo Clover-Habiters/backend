@@ -16,6 +16,7 @@ import com.clover.habbittracker.domain.post.dto.PostResponse;
 import com.clover.habbittracker.domain.post.entity.Category;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.exception.PostNotFoundException;
+import com.clover.habbittracker.domain.post.mapper.PostMapper;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
 import com.clover.habbittracker.global.exception.PermissionDeniedException;
 
@@ -29,17 +30,15 @@ public class PostServiceImpl implements PostService {
 
 	private final MemberRepository memberRepository;
 
-	public Long register(Long memberId, PostRequest request) {
-		Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(memberId));
-		Post post = Post.builder()
-			.title(request.getTitle())
-			.content(request.getContent())
-			.category(request.getCategory())
-			.member(member)
-			.build();
-		postRepository.save(post);
+	private final PostMapper postMapper;
 
-		return post.getId();
+	@Transactional
+	public Long register(Long memberId, PostRequest request) {
+		Member member = getMemberBy(memberId);
+		Post post = postMapper.toPost(request, member);
+		Post savedPost = postRepository.save(post);
+
+		return savedPost.getId();
 	}
 
 	@Override
@@ -48,14 +47,14 @@ public class PostServiceImpl implements PostService {
 		Post post = postRepository.joinCommentAndLikeFindById(postId)
 			.orElseThrow(() -> new PostNotFoundException(postId));
 		postRepository.updateViews(post.getId());
-		return PostDetailResponse.from(post);
+		return postMapper.toPostDetail(post);
 
 	}
 
 	@Override
 	public List<PostResponse> getPostList(Pageable pageable, Category category) {
 		Page<Post> postsSummary = postRepository.findAllPostsSummary(pageable, category);
-		return postsSummary.stream().map(PostResponse::from).toList();
+		return postsSummary.stream().map(postMapper::toPostResponse).toList();
 	}
 
 	@Override
@@ -64,7 +63,7 @@ public class PostServiceImpl implements PostService {
 		Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(postId));
 		verifyPermissions(post.getMember(), memberId);
 		post.updatePost(request);
-		return PostResponse.from(post);
+		return postMapper.toPostResponse(post);
 	}
 
 	@Override
@@ -79,5 +78,10 @@ public class PostServiceImpl implements PostService {
 		if (!member.getId().equals(memberId)) {
 			throw new PermissionDeniedException(memberId);
 		}
+	}
+
+	private Member getMemberBy(Long memberId) {
+		return memberRepository.findById(memberId)
+			.orElseThrow(() -> new MemberNotFoundException(memberId));
 	}
 }
