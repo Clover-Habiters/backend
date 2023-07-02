@@ -15,14 +15,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RedisConfig {
 
-	@Value("${spring.data.redis.host}")
-	public String host;
+	@Value("${spring.redis.host}")
+	private String host;
 
-	@Value("${spring.data.redis.port}")
-	public int port;
-
-	@Value("${spring.data.redis.timeout}")
-	private Long timeout;
+	@Value("${spring.redis.port}")
+	private int port;
 
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {

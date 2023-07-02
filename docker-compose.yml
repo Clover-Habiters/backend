@@ -26,6 +26,8 @@ services:
       NAVER_URI: ${NAVER_URI}
       NCP_API_ACCESS_KEY: ${NCP_API_ACCESS_KEY}
       NCP_SECRET_KEY: ${NCP_SECRET_KEY}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
     networks:
       - habiters-network
   db:
@@ -43,5 +45,13 @@ services:
       - ./mysqldata:/var/lib/mysql
     networks:
       - habiters-network
+
+  redis:
+    container_name: habiters-redis
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
 
 

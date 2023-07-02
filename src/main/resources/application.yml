@@ -1,9 +1,13 @@
 spring:
+  config:
+    import: application-token.yml, application-security.yml
+
   datasource:
     url: ${DB_URL}
     username: ${DB_USER_NAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     show-sql: true
     hibernate:
@@ -13,7 +17,8 @@ spring:
         format_sql: true
         globally_quoted_identifiers: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
-  config:
-    import: application-token.yml, application-security.yml
 
-
+  # redis
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
