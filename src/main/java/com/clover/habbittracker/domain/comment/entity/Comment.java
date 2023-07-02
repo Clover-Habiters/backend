@@ -21,9 +21,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,31 +34,26 @@ import lombok.NoArgsConstructor;
 @SQLDelete(sql = "UPDATE comment set deleted = true where id=?")
 public class Comment {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	private String content;
-
-	@ManyToOne
-	@JoinColumn(name = "memberId")
-	private Member member;
-
-	@ManyToOne
-	@JoinColumn(name = "postId")
-	private Post post;
-
 	@OneToMany(
 		mappedBy = "comment",
 		cascade = CascadeType.REMOVE,
 		orphanRemoval = true,
 		fetch = FetchType.LAZY)
 	private final List<Like> likes = new ArrayList<>();
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private String content;
+	@ManyToOne
+	@JoinColumn(name = "memberId")
+	private Member member;
+	@ManyToOne
+	@JoinColumn(name = "postId")
+	private Post post;
 	private Long commentId;
 
 	@Builder
-	public Comment(String content, Member member, Post post, Long commentId)  {
+	public Comment(String content, Member member, Post post, Long commentId) {
 		this.content = content;
 		this.member = member;
 		this.post = post;
