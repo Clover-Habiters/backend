@@ -2,6 +2,7 @@ package com.clover.habbittracker.domain.emoji.service;
 
 import java.util.Optional;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmojiService {
 
+	private final RedisTemplate<String, Object> redisTemplate;
 	private final MemberRepository memberRepository;
 	private final PostRepository postRepository;
 	private final CommentRepository commentRepository;
@@ -106,4 +108,20 @@ public class EmojiService {
 		return commentRepository.findById(commentId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
 	}
+
+	// @Transactional
+	// public void addLikesCntToRedis(Long problemId) {
+	// 	HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
+	// 	String key = "problemId::" + problemId;
+	// 	String hashkey = "likes";
+	// 	if (hashOperations.get(key, hashkey) == null) {
+	// 		hashOperations.put(key, hashkey, problemRepository.getLikesCnt(problemId));
+	// 		hashOperations.increment(key, hashkey, 1L);
+	// 		System.out.println(hashOperations.get(key, hashkey));
+	// 	} else {
+	// 		hashOperations.increment(key, hashkey, 1L);
+	// 		System.out.println(hashOperations.get(key, hashkey));
+	// 	}
+	// }
+
 }
