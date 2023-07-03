@@ -5,13 +5,16 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
 import org.springframework.restdocs.operation.preprocess.OperationResponsePreprocessor;
 
-public interface ApiDocumentUtils {
+public class ApiDocumentUtils {
 
-	static OperationRequestPreprocessor getDocumentRequest() {
+	private ApiDocumentUtils() {
+	}
+
+	public static OperationRequestPreprocessor getDocumentRequest() {
 		return preprocessRequest(modifyUris().scheme("https").host("habiters.api.com").removePort(), prettyPrint());
 	}
 
-	static OperationResponsePreprocessor getDocumentResponse() {
+	public static OperationResponsePreprocessor getDocumentResponse() {
 		return preprocessResponse(prettyPrint());
 	}
 }

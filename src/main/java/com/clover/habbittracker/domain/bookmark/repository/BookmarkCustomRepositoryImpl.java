@@ -23,7 +23,7 @@ public class BookmarkCustomRepositoryImpl implements BookmarkCustomRepository {
 
 		return jpaQueryFactory.selectFrom(bookmark)
 			.where(bookmark.member.id.eq(memberId))
-			.orderBy(bookmark.id.desc())
+			.orderBy(bookmark.id.asc())
 			.fetch();
 	}
 
@@ -41,6 +41,7 @@ public class BookmarkCustomRepositoryImpl implements BookmarkCustomRepository {
 	public void deleteByIdAndMemberId(Long bookmarkId, Long memberId) {
 
 		jpaQueryFactory.delete(bookmark)
-			.where(bookmark.id.eq(bookmarkId).and(bookmark.member.id.eq(memberId)));
+			.where(bookmark.id.eq(bookmarkId).and(bookmark.member.id.eq(memberId)))
+			.execute();
 	}
 }

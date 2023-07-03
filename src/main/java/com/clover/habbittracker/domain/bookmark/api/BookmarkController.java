@@ -22,7 +22,7 @@ import com.clover.habbittracker.domain.bookmark.dto.BookmarkResponse;
 import com.clover.habbittracker.domain.bookmark.dto.CreateBookmarkRequest;
 import com.clover.habbittracker.domain.bookmark.service.BookmarkService;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -35,14 +35,14 @@ public class BookmarkController {
 	@PostMapping
 	public ResponseEntity<Void> createBookmark(
 		@AuthenticationPrincipal Long memberId,
-		@NotNull @RequestBody CreateBookmarkRequest request
+		@Valid @RequestBody CreateBookmarkRequest request
 	) {
 		Long bookmarkId = bookMarkService.crate(memberId, request);
 		URI location = URI.create("/bookmarks/" + bookmarkId);
 		return ResponseEntity.created(location).build();
 	}
 
-	@PostMapping("/{bookmarkId}")
+	@PostMapping("/{bookmarkId}/posts")
 	@ResponseStatus(NO_CONTENT)
 	public void addPost(
 		@AuthenticationPrincipal Long memberId,
@@ -69,7 +69,7 @@ public class BookmarkController {
 		return ResponseEntity.ok(bookmark);
 	}
 
-	@DeleteMapping("/{bookmarkId}")
+	@DeleteMapping("/{bookmarkId}/posts")
 	@ResponseStatus(NO_CONTENT)
 	public void deletePost(
 		@AuthenticationPrincipal Long memberId,
@@ -79,11 +79,11 @@ public class BookmarkController {
 		bookMarkService.deletePost(bookmarkId, memberId, postId);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("/{bookmarkId}")
 	@ResponseStatus(NO_CONTENT)
 	public void deleteBookmark(
 		@AuthenticationPrincipal Long memberId,
-		@RequestParam Long bookmarkId
+		@PathVariable Long bookmarkId
 	) {
 		bookMarkService.delete(bookmarkId, memberId);
 	}

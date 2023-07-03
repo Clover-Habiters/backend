@@ -2,6 +2,7 @@
 -- create schema habiters-db;
 -- use habiters-db;
 
+DROP TABLE IF EXISTS bookmark_folder;
 DROP TABLE IF EXISTS bookmark;
 DROP TABLE IF EXISTS emoji;
 DROP TABLE IF EXISTS comment;
@@ -102,10 +103,18 @@ create table emoji
 create table bookmark
 (
     id           bigint auto_increment primary key,
-    post_id      bigint      null,
-    member_id    bigint      null,
-    created_date datetime(6) not null default CURRENT_TIMESTAMP(6),
-    updated_date datetime(6) not null default CURRENT_TIMESTAMP(6),
-    deleted      boolean     not null default false
+    title        varchar(255) null,
+    description  varchar(500) null,
+    post_id      bigint       null,
+    member_id    bigint       null,
+    created_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
+    updated_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
+    deleted      boolean      not null default false
+);
+
+create table bookmark_folder
+(
+    bookmark_id bigint null,
+    posts_id    bigint null
 );
 
