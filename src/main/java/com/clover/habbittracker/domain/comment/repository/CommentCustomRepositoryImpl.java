@@ -1,0 +1,28 @@
+package com.clover.habbittracker.domain.comment.repository;
+
+import static com.clover.habbittracker.domain.comment.entity.QComment.*;
+
+import java.util.Optional;
+
+import org.springframework.stereotype.Repository;
+
+import com.clover.habbittracker.domain.comment.entity.Comment;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import lombok.RequiredArgsConstructor;
+
+@Repository
+@RequiredArgsConstructor
+public class CommentCustomRepositoryImpl implements CommentCustomRepository{
+
+	private final JPAQueryFactory jpaQueryFactory;
+	@Override
+	public Optional<Comment> findByIdAndPostId(Long commentId, Long postId) {
+
+		Comment result = jpaQueryFactory.selectFrom(comment)
+			.where(comment.id.eq(commentId).and(comment.post.id.eq(postId)))
+			.fetchOne();
+
+		return Optional.ofNullable(result);
+	}
+}
