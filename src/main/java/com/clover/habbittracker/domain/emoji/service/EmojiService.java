@@ -2,7 +2,6 @@ package com.clover.habbittracker.domain.emoji.service;
 
 import java.util.Optional;
 
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,12 +24,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EmojiService {
 
-	private final RedisTemplate<String, Object> redisTemplate;
 	private final MemberRepository memberRepository;
 	private final PostRepository postRepository;
 	private final CommentRepository commentRepository;
 	private final EmojiRepository emojiRepository;
 
+	@Transactional
 	public void updateStatus(Long memberId, EmojiRequest emojiRequest) {
 
 		Domain domain = emojiRequest.domain();
@@ -40,10 +39,10 @@ public class EmojiService {
 			Long postId = emojiRequest.id();
 			Optional<Emoji> emoji = emojiRepository.findByMemberIdAndPostId(memberId, postId);
 			emoji.ifPresentOrElse(
-				e -> updateEmojiStatus(e, type),
+				e -> e.updateStatus(type),
 				() -> {
 					Emoji newEmoji = createPostEmoji(memberId, type, postId);
-					save(newEmoji);
+					emojiRepository.save(newEmoji);
 				}
 			);
 		}
@@ -52,24 +51,14 @@ public class EmojiService {
 			Long commentId = emojiRequest.id();
 			Optional<Emoji> emoji = emojiRepository.findByMemberIdAndCommentId(memberId, commentId);
 			emoji.ifPresentOrElse(
-				e -> updateEmojiStatus(e, type),
+				e -> e.updateStatus(type),
 				() -> {
 					Emoji newEmoji = createCommentEmoji(memberId, type, commentId);
-					save(newEmoji);
+					emojiRepository.save(newEmoji);
 				}
 			);
 		}
 
-	}
-
-	@Transactional
-	public void updateEmojiStatus(Emoji emoji, Type type) {
-		emoji.updateStatus(type);
-	}
-
-	@Transactional
-	public void save(Emoji emoji) {
-		emojiRepository.save(emoji);
 	}
 
 	public Emoji createCommentEmoji(Long memberId, Type type, Long commentId) {
@@ -108,20 +97,5 @@ public class EmojiService {
 		return commentRepository.findById(commentId)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
 	}
-
-	// @Transactional
-	// public void addLikesCntToRedis(Long problemId) {
-	// 	HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
-	// 	String key = "problemId::" + problemId;
-	// 	String hashkey = "likes";
-	// 	if (hashOperations.get(key, hashkey) == null) {
-	// 		hashOperations.put(key, hashkey, problemRepository.getLikesCnt(problemId));
-	// 		hashOperations.increment(key, hashkey, 1L);
-	// 		System.out.println(hashOperations.get(key, hashkey));
-	// 	} else {
-	// 		hashOperations.increment(key, hashkey, 1L);
-	// 		System.out.println(hashOperations.get(key, hashkey));
-	// 	}
-	// }
 
 }

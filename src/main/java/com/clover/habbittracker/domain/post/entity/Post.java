@@ -50,7 +50,7 @@ public class Post extends BaseEntity {
 		orphanRemoval = true,
 		fetch = FetchType.LAZY)
 	@BatchSize(size = 50)
-	private final List<Emoji> likes = new ArrayList<>();
+	private final List<Emoji> emojis = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
