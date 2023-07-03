@@ -8,6 +8,7 @@ import java.util.List;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import com.clover.habbittracker.domain.comment.dto.CommentRequest;
 import com.clover.habbittracker.domain.like.entity.Like;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.entity.Post;
@@ -58,6 +59,10 @@ public class Comment {
 		this.member = member;
 		this.post = post;
 		this.commentId = commentId;
+	}
+
+	public void updateComment(CommentRequest request) {
+		this.content = request.content();
 	}
 
 }

@@ -1,14 +1,12 @@
 package com.clover.habbittracker.domain.comment.service;
 
-import org.springframework.stereotype.Service;
+import com.clover.habbittracker.domain.comment.dto.CommentRequest;
 
-import com.clover.habbittracker.domain.comment.repository.CommentRepository;
+public interface CommentService {
 
-import lombok.RequiredArgsConstructor;
 
-@Service
-@RequiredArgsConstructor
-public class CommentService {
+	Long createComment(Long memberId, Long postId, CommentRequest request);
 
-	private final CommentRepository commentRepository;
+
+	void updateComment(Long memberId, Long commentId, Long postId, CommentRequest request);
 }
