@@ -51,14 +51,14 @@ public class Comment {
 	@ManyToOne
 	@JoinColumn(name = "postId")
 	private Post post;
-	private Long commentId;
+	private Long parentId;
 
 	@Builder
 	public Comment(String content, Member member, Post post, Long commentId) {
 		this.content = content;
 		this.member = member;
 		this.post = post;
-		this.commentId = commentId;
+		this.parentId = commentId;
 	}
 
 	public void updateComment(CommentRequest request) {

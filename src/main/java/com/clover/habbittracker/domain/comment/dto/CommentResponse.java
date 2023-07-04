@@ -11,4 +11,8 @@ public record CommentResponse(
 	public static List<CommentResponse> from(List<Comment> comments) {
 		return comments.stream().map(comment -> new CommentResponse(comment.getId(), comment.getContent())).toList();
 	}
+
+	public static CommentResponse from(Comment comment) {
+		return new CommentResponse(comment.getId(), comment.getContent());
+	}
 }

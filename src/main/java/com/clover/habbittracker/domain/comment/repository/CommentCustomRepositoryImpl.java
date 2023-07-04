@@ -2,6 +2,7 @@ package com.clover.habbittracker.domain.comment.repository;
 
 import static com.clover.habbittracker.domain.comment.entity.QComment.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -25,4 +26,13 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository{
 
 		return Optional.ofNullable(result);
 	}
+
+	@Override
+	public List<Comment> findChildCommentById(Long commentId) {
+
+		return jpaQueryFactory.selectFrom(comment)
+			.where(comment.parentId.eq(commentId))
+			.fetch();
+	}
+
 }

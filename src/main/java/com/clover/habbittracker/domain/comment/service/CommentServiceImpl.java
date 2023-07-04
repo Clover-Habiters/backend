@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.clover.habbittracker.domain.comment.dto.CommentRequest;
+import com.clover.habbittracker.domain.comment.dto.CommentResponse;
 import com.clover.habbittracker.domain.comment.entity.Comment;
 import com.clover.habbittracker.domain.comment.repository.CommentRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
@@ -27,7 +28,7 @@ public class CommentServiceImpl implements CommentService{
 
 	@Override
 	@Transactional
-	public Long createComment(Long memberId, Long postId, CommentRequest request) {
+	public CommentResponse createComment(Long memberId, Long postId, CommentRequest request) {
 		Member member = getMemberBy(memberId);
 		Post post = getPostBy(postId);
 		Comment comment = Comment.builder()
@@ -37,17 +38,28 @@ public class CommentServiceImpl implements CommentService{
 			.build();
 		Comment saveComment = commentRepository.save(comment);
 
-		return saveComment.getId();
+		return CommentResponse.from(saveComment);
 	}
 
 
 	@Override
 	@Transactional
-	public void updateComment(Long memberId, Long commentId, Long postId, CommentRequest request) {
+	public CommentResponse updateComment(Long memberId, Long commentId, Long postId, CommentRequest request) {
 		Comment comment = commentRepository.findByIdAndPostId(commentId, postId)
 			.orElseThrow(() -> new IllegalArgumentException("NotFoundComment"));
 		verifyPermissions(comment.getMember(), memberId);
 		comment.updateComment(request);
+		return CommentResponse.from(comment);
+	}
+
+	@Override
+	public void getReplyList(Long commentId) {
+		commentRepository.findChildCommentById(commentId);
+	}
+
+	@Override
+	public void createReply(Long commentId) {
+
 	}
 
 	private void verifyPermissions(Member member, Long memberId) {
