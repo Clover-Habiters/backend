@@ -54,11 +54,11 @@ public class Comment {
 	private Long parentId;
 
 	@Builder
-	public Comment(String content, Member member, Post post, Long commentId) {
+	public Comment(String content, Member member, Post post, Long parentId) {
 		this.content = content;
 		this.member = member;
 		this.post = post;
-		this.parentId = commentId;
+		this.parentId = parentId;
 	}
 
 	public void updateComment(CommentRequest request) {
