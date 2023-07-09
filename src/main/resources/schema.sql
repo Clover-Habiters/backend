@@ -82,7 +82,7 @@ create table comment
     content      varchar(255) not null,
     member_id    bigint       null,
     post_id      bigint       null,
-    comment_id   bigint       null,
+    parent_id    bigint       null,
     created_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
     updated_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
     deleted      boolean      not null default false
