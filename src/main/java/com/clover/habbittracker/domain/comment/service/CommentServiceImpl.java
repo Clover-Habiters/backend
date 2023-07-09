@@ -1,5 +1,7 @@
 package com.clover.habbittracker.domain.comment.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,13 +55,25 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public void getReplyList(Long commentId) {
-		commentRepository.findChildCommentById(commentId);
+	public List<CommentResponse> getReplyList(Long commentId, Long postId) {
+
+		List<Comment> childCommentList = commentRepository.findChildCommentById(commentId);
+		return CommentResponse.from(childCommentList);
 	}
 
 	@Override
-	public void createReply(Long commentId) {
+	@Transactional
+	public void createReply(Long memberId, Long commentId, Long postId, CommentRequest request) {
+		Member member = getMemberBy(memberId);
+		Post post = getPostBy(postId);
+		Comment comment = Comment.builder()
+			.member(member)
+			.post(post)
+			.parentId(commentId)
+			.content(request.content())
+			.build();
 
+		commentRepository.save(comment);
 	}
 
 	private void verifyPermissions(Member member, Long memberId) {

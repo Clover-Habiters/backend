@@ -1,6 +1,8 @@
 package com.clover.habbittracker.domain.comment.repository;
 
 import static com.clover.habbittracker.domain.comment.entity.QComment.*;
+import static com.clover.habbittracker.domain.member.entity.QMember.*;
+import static com.clover.habbittracker.domain.post.entity.QPost.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +22,12 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository{
 	@Override
 	public Optional<Comment> findByIdAndPostId(Long commentId, Long postId) {
 
-		Comment result = jpaQueryFactory.selectFrom(comment)
+		Comment result = jpaQueryFactory
+			.selectFrom(comment)
+			.leftJoin(comment.post, post)
+			.fetchJoin()
+			.leftJoin(comment.member, member)
+			.fetchJoin()
 			.where(comment.id.eq(commentId).and(comment.post.id.eq(postId)))
 			.fetchOne();
 

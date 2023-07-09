@@ -2,6 +2,8 @@ package com.clover.habbittracker.domain.comment.api;
 
 import static org.springframework.http.HttpStatus.*;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +28,7 @@ public class CommentController {
 
 	private final CommentService commentService;
 
-	@PostMapping("/{postId}/comments")
+	@PostMapping("/{postId}/comment")
 	public ResponseEntity<ApiResponse<CommentResponse>> createComment(
 		@AuthenticationPrincipal Long memberId,
 		@PathVariable Long postId,
@@ -37,7 +39,7 @@ public class CommentController {
 		return ResponseEntity.status(CREATED).body(response);
 	}
 
-	@PutMapping("/{postId}/comments/{commentId}")
+	@PutMapping("/{postId}/comment/{commentId}")
 	public ResponseEntity<ApiResponse<CommentResponse>> updateComment(
 		@AuthenticationPrincipal Long memberId,
 		@PathVariable Long commentId,
@@ -49,17 +51,24 @@ public class CommentController {
 		return ResponseEntity.ok().body(response);
 	}
 
-	@GetMapping("/comment/{commentId}/reply")
-	public void getReplyList(
+	@GetMapping("/{postId}/comment/{commentId}/reply")
+	public ResponseEntity<ApiResponse<List<CommentResponse>>> getReplyList(
+		@PathVariable Long postId,
 		@PathVariable Long commentId
 	) {
-		commentService.getReplyList(commentId);
+		List<CommentResponse> replyList = commentService.getReplyList(commentId, postId);
+		ApiResponse<List<CommentResponse>> response = ApiResponse.success(replyList);
+		return ResponseEntity.ok().body(response);
 	}
 
-	@PostMapping("/comment/{commentId}/reply")
-	public void createReply(
-		@PathVariable Long commentId
+	@PostMapping("/{postId}/comment/{commentId}/reply")
+	public ResponseEntity<ApiResponse<Void>> createReply(
+		@AuthenticationPrincipal Long memberId,
+		@PathVariable Long commentId,
+		@PathVariable Long postId,
+		@RequestBody CommentRequest request
 	) {
-		commentService.createReply(commentId);
+		commentService.createReply(memberId, commentId, postId, request);
+		return ResponseEntity.ok().body(ApiResponse.success());
 	}
 }
