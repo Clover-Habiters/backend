@@ -12,9 +12,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.clover.habbittracker.domain.comment.entity.Comment;
 import com.clover.habbittracker.domain.post.entity.Category;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -43,12 +46,22 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 
 	@Override
 	public Optional<Post> joinCommentAndLikeFindById(Long postId) {
+
+		JPQLQuery<Comment> commentSubQuery = JPAExpressions
+			.selectFrom(comment)
+			.where(comment.post.eq(post))
+			.where(comment.parentId.isNull());
+
+
 		Post result = jpaQueryFactory.selectFrom(post)
 			.leftJoin(post.member, member)
 			.fetchJoin()
 			.leftJoin(post.comments, comment)
 			.fetchJoin()
-			.where(eqId(postId))
+			.where(
+				eqId(postId)
+					.and(comment.in(commentSubQuery))
+			)
 			.fetchOne();
 		return Optional.ofNullable(result);
 	}
