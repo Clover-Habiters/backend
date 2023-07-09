@@ -49,7 +49,6 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 
 		JPQLQuery<Comment> commentSubQuery = JPAExpressions
 			.selectFrom(comment)
-			.where(comment.post.eq(post))
 			.where(comment.parentId.isNull());
 
 
