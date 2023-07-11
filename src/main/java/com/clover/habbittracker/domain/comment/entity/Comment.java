@@ -1,5 +1,6 @@
 package com.clover.habbittracker.domain.comment.entity;
 
+import static com.clover.habbittracker.global.util.ValidateUtil.*;
 import static lombok.AccessLevel.*;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import com.clover.habbittracker.domain.comment.dto.CommentRequest;
 import com.clover.habbittracker.domain.like.entity.Like;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.entity.Post;
+import com.clover.habbittracker.global.entity.BaseEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -33,7 +35,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED)
 @Where(clause = "deleted = false")
 @SQLDelete(sql = "UPDATE comment set deleted = true where id=?")
-public class Comment {
+public class Comment extends BaseEntity {
 
 	@OneToMany(
 		mappedBy = "comment",
@@ -62,7 +64,11 @@ public class Comment {
 	}
 
 	public void updateComment(CommentRequest request) {
-		this.content = request.content();
+		this.content = validateContent(request.content());
 	}
 
+	private String validateContent(String content) {
+		checkText(content, "내용이 비어 있을 수 없습니다.(null, 빈 문자열, 공백만 있음)");
+		return content;
+	}
 }
