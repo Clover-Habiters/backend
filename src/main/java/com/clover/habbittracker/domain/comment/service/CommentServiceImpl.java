@@ -1,6 +1,7 @@
 package com.clover.habbittracker.domain.comment.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.clover.habbittracker.domain.comment.dto.CommentRequest;
 import com.clover.habbittracker.domain.comment.dto.CommentResponse;
 import com.clover.habbittracker.domain.comment.entity.Comment;
+import com.clover.habbittracker.domain.comment.mapper.CommentMapper;
 import com.clover.habbittracker.domain.comment.repository.CommentRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
@@ -22,27 +24,23 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
 
 	private final CommentRepository commentRepository;
 	private final MemberRepository memberRepository;
 	private final PostRepository postRepository;
+	private final CommentMapper commentMapper;
 
 	@Override
 	@Transactional
 	public CommentResponse createComment(Long memberId, Long postId, CommentRequest request) {
 		Member member = getMemberBy(memberId);
 		Post post = getPostBy(postId);
-		Comment comment = Comment.builder()
-			.member(member)
-			.post(post)
-			.content(request.content())
-			.build();
+		Comment comment = commentMapper.toComment(request, member, post);
 		Comment saveComment = commentRepository.save(comment);
 
-		return CommentResponse.from(saveComment);
+		return commentMapper.toCommentResponse(saveComment);
 	}
-
 
 	@Override
 	@Transactional
@@ -51,14 +49,15 @@ public class CommentServiceImpl implements CommentService{
 			.orElseThrow(() -> new IllegalArgumentException("NotFoundComment"));
 		verifyPermissions(comment.getMember(), memberId);
 		comment.updateComment(request);
-		return CommentResponse.from(comment);
+		return commentMapper.toCommentResponse(comment);
 	}
 
 	@Override
 	public List<CommentResponse> getReplyList(Long commentId, Long postId) {
-
 		List<Comment> childCommentList = commentRepository.findChildCommentById(commentId);
-		return CommentResponse.from(childCommentList);
+		return childCommentList.stream()
+			.map(commentMapper::toCommentResponse)
+			.toList();
 	}
 
 	@Override
@@ -66,18 +65,12 @@ public class CommentServiceImpl implements CommentService{
 	public void createReply(Long memberId, Long commentId, Long postId, CommentRequest request) {
 		Member member = getMemberBy(memberId);
 		Post post = getPostBy(postId);
-		Comment comment = Comment.builder()
-			.member(member)
-			.post(post)
-			.parentId(commentId)
-			.content(request.content())
-			.build();
-
-		commentRepository.save(comment);
+		Comment reply = commentMapper.toReply(request, member, post, commentId);
+		commentRepository.save(reply);
 	}
 
 	private void verifyPermissions(Member member, Long memberId) {
-		if (!member.getId().equals(memberId)) {
+		if (!Objects.equals(member.getId(), memberId)) {
 			throw new PermissionDeniedException(memberId);
 		}
 	}
