@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.clover.habbittracker.domain.emoji.entity.Type;
+import com.clover.habbittracker.domain.emoji.entity.Emoji;
 import com.clover.habbittracker.domain.emoji.service.EmojiService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class EmojiController {
 	public void clickEmojiOnPost(
 		@AuthenticationPrincipal Long memberId,
 		@PathVariable Long postId,
-		@RequestParam Type type
+		@RequestParam Emoji.Type type
 	) {
 		emojiService.clickOnPost(memberId, postId, type);
 	}
@@ -33,7 +33,7 @@ public class EmojiController {
 	public void clickEmojiOnComment(
 		@AuthenticationPrincipal Long memberId,
 		@PathVariable Long commentId,
-		@RequestParam Type type
+		@RequestParam Emoji.Type type
 	) {
 		emojiService.clickOnComment(memberId, commentId, type);
 	}

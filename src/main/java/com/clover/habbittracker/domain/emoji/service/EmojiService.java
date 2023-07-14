@@ -1,14 +1,14 @@
 package com.clover.habbittracker.domain.emoji.service;
 
+import static com.clover.habbittracker.domain.emoji.entity.Emoji.Domain.*;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.clover.habbittracker.domain.emoji.entity.Domain;
 import com.clover.habbittracker.domain.emoji.entity.Emoji;
-import com.clover.habbittracker.domain.emoji.entity.Type;
 import com.clover.habbittracker.domain.emoji.repository.EmojiRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,9 +21,8 @@ public class EmojiService {
 	private final EmojiRepository emojiRepository;
 
 	// 검증 로직을 제외해봤음!
-
 	@Transactional
-	public void clickOnPost(Long memberId, Long postId, Type type) {
+	public void clickOnPost(Long memberId, Long postId, Emoji.Type type) {
 
 		Optional<Emoji> emoji = emojiRepository.findByMemberIdAndPostId(memberId, postId);
 
@@ -33,7 +32,7 @@ public class EmojiService {
 
 				Emoji newEmoji = Emoji.builder()
 					.type(type)
-					.domain(Domain.POST)
+					.domain(Emoji.Domain.POST)
 					.domainId(postId)
 					.memberId(memberId)
 					.build();
@@ -44,7 +43,7 @@ public class EmojiService {
 	}
 
 	@Transactional
-	public void clickOnComment(Long memberId, Long commentId, Type type) {
+	public void clickOnComment(Long memberId, Long commentId, Emoji.Type type) {
 
 		Optional<Emoji> emoji = emojiRepository.findByMemberIdAndCommentId(memberId, commentId);
 
@@ -53,7 +52,7 @@ public class EmojiService {
 			() -> {
 				Emoji newEmoji = Emoji.builder()
 					.type(type)
-					.domain(Domain.COMMENT)
+					.domain(COMMENT)
 					.domainId(commentId)
 					.memberId(memberId)
 					.build();
@@ -67,10 +66,10 @@ public class EmojiService {
 		return emojiRepository.countByPostId(postId);
 	}
 
-	private Consumer<Emoji> updateOrDelete(Type type) {
+	private Consumer<Emoji> updateOrDelete(Emoji.Type type) {
 		return e -> {
 			if (e.isSameType(type)) {
-				e.updateStatus(Type.NONE); // softdelete
+				e.updateStatus(Emoji.Type.NONE); // softdelete
 				return;
 			}
 			e.updateStatus(type);

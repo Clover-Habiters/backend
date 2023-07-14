@@ -26,6 +26,22 @@ import lombok.NoArgsConstructor;
 @SQLDelete(sql = "UPDATE emoji set deleted = true where id=?")
 public class Emoji extends BaseEntity {
 
+	public enum Type {
+		SMILE, ANGRY, SAD, SURPRISED, NONE
+	}
+
+	public enum Domain {
+		COMMENT, POST;
+
+		public boolean isPost() {
+			return this == POST;
+		}
+
+		public boolean isComment() {
+			return this == COMMENT;
+		}
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
