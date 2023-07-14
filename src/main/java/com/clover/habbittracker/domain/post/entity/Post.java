@@ -44,11 +44,8 @@ public class Post extends BaseEntity {
 		fetch = FetchType.LAZY)
 	@BatchSize(size = 50)
 	private final List<Comment> comments = new ArrayList<>();
-	@OneToMany(
-		mappedBy = "post",
-		cascade = CascadeType.REMOVE,
-		orphanRemoval = true,
-		fetch = FetchType.LAZY)
+	@OneToMany
+	@JoinColumn(name = "domainId")
 	@BatchSize(size = 50)
 	private final List<Emoji> emojis = new ArrayList<>();
 	@Id

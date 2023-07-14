@@ -12,9 +12,7 @@ import com.clover.habbittracker.domain.emoji.entity.Emoji;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.entity.Post;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,12 +32,9 @@ import lombok.NoArgsConstructor;
 @SQLDelete(sql = "UPDATE comment set deleted = true where id=?")
 public class Comment {
 
-	@OneToMany(
-		mappedBy = "comment",
-		cascade = CascadeType.REMOVE,
-		orphanRemoval = true,
-		fetch = FetchType.LAZY)
-	private final List<Emoji> likes = new ArrayList<>();
+	@OneToMany
+	@JoinColumn(name = "domainId")
+	private final List<Emoji> emojis = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
