@@ -2,16 +2,17 @@ package com.clover.habbittracker.domain.emoji.entity;
 
 import static lombok.AccessLevel.*;
 
-import com.clover.habbittracker.domain.comment.entity.Comment;
-import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.domain.post.entity.Post;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+import com.clover.habbittracker.global.entity.BaseEntity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,36 +22,34 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "emoji")
 @NoArgsConstructor(access = PROTECTED)
-public class Emoji {
+@Where(clause = "deleted = false")
+@SQLDelete(sql = "UPDATE emoji set deleted = true where id=?")
+public class Emoji extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Enumerated(EnumType.STRING)
+	private Domain domain;
+
+	@Enumerated(EnumType.STRING)
 	private Type type;
 
-	@ManyToOne
-	@JoinColumn(name = "memberId")
-	private Member member;
+	private Long memberId;
 
-	@ManyToOne
-	@JoinColumn(name = "postId")
-	private Post post;
-
-	@ManyToOne
-	@JoinColumn(name = "commentId")
-	private Comment comment;
+	private Long domainId;
 
 	@Builder
-	public Emoji(Type type, Member member, Post post, Comment comment) {
+	public Emoji(Domain domain, Type type, Long memberId, Long domainId) {
+		this.domain = domain;
 		this.type = type;
-		this.member = member;
-		this.post = post;
-		this.comment = comment;
+		this.memberId = memberId;
+		this.domainId = domainId;
 	}
 
 	public void updateStatus(Type type) {
-		this.type = isSameType(type) ? Type.NONE : type;
+		this.type = type;
 	}
 
 	public boolean isSameType(Type type) {
