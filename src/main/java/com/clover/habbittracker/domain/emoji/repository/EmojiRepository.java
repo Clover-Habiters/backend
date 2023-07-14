@@ -12,7 +12,7 @@ public interface EmojiRepository extends JpaRepository<Emoji, Long>, EmojiCustom
 
 	@Query(value = "select * from member "
 	               + "where memberId = :memberId "
-	               + "AND domainId = :memberId "
+	               + "AND domainId = :postId "
 	               + "AND domain = 'POST'",
 		nativeQuery = true)
 	Optional<Emoji> findByMemberIdAndPostId(
