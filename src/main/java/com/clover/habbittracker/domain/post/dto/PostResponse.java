@@ -11,7 +11,7 @@ public record PostResponse(
 	Category category,
 	Long views,
 	Integer numOfComments,
-	Integer numOfLikes,
+	Integer numOfEmojis,
 	LocalDateTime createDate
 ) {
 }
