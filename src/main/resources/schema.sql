@@ -91,13 +91,13 @@ create table comment
 create table emoji
 (
     id           bigint auto_increment primary key,
-    type         varchar(255) null,
-    post_id      bigint       null,
-    comment_id   bigint       null,
-    member_id    bigint       null,
-    created_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
-    updated_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
-    deleted      boolean      not null default false
+    domain       varchar(30) not null,
+    type         varchar(30) not null,
+    member_id    bigint      not null,
+    domain_id    bigint      null,
+    created_date datetime(6) not null default CURRENT_TIMESTAMP(6),
+    updated_date datetime(6) not null default CURRENT_TIMESTAMP(6),
+    deleted      boolean     not null default false
 );
 
 create table bookmark
