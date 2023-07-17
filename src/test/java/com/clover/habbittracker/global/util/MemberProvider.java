@@ -12,7 +12,6 @@ public class MemberProvider {
 
 	public static Member createTestMember() {
 		return Member.builder()
-			.id(ID)
 			.email(EMAIL)
 			.oauthId(OAUTH_ID)
 			.profileImgUrl(PROFILE_IMG_URL)

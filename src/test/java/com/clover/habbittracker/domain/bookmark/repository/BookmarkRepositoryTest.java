@@ -1,6 +1,7 @@
 package com.clover.habbittracker.domain.bookmark.repository;
 
 import static com.clover.habbittracker.global.util.MemberProvider.*;
+import static com.clover.habbittracker.global.util.PostProvider.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -16,7 +17,6 @@ import org.springframework.context.annotation.Import;
 import com.clover.habbittracker.domain.bookmark.entity.Bookmark;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.domain.post.entity.Category;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
 import com.clover.habbittracker.global.config.JpaConfig;
@@ -44,15 +44,7 @@ class BookmarkRepositoryTest {
 	void setUp() {
 		Member member = createTestMember();
 		savedMember = memberRepository.save(member);
-
-		Post post = Post.builder()
-			.title("test_title")
-			.content("test_content")
-			.category(Category.STUDY)
-			.member(savedMember)
-			.build();
-
-		savedPost = postRepository.save(post);
+		savedPost = postRepository.save(createTestPost(savedMember));
 
 		Bookmark bookmark = new Bookmark(savedMember, "테스트입니다.", "테스트용입니다.");
 		bookmark.addPost(savedPost);
