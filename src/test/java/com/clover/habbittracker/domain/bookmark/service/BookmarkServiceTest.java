@@ -1,6 +1,7 @@
 package com.clover.habbittracker.domain.bookmark.service;
 
 import static com.clover.habbittracker.global.util.MemberProvider.*;
+import static com.clover.habbittracker.global.util.PostProvider.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -19,7 +20,6 @@ import com.clover.habbittracker.domain.bookmark.entity.Bookmark;
 import com.clover.habbittracker.domain.bookmark.repository.BookmarkRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.domain.post.entity.Category;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
 
@@ -48,14 +48,7 @@ class BookmarkServiceTest {
 		Member member = createTestMember();
 		savedMember = memberRepository.save(member);
 
-		Post post = Post.builder()
-			.title("test_title")
-			.content("test_content")
-			.category(Category.STUDY)
-			.member(savedMember)
-			.build();
-
-		savedPost = postRepository.save(post);
+		savedPost = postRepository.save(createTestPost(savedMember));
 	}
 
 	@Test

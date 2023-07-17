@@ -1,14 +1,11 @@
 package com.clover.habbittracker.domain.comment.repository;
 
+import static com.clover.habbittracker.global.util.PostProvider.*;
+import static org.assertj.core.api.Assertions.*;
 
-import com.clover.habbittracker.domain.comment.entity.Comment;
-import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.domain.post.entity.Category;
-import com.clover.habbittracker.domain.post.entity.Post;
-import com.clover.habbittracker.domain.post.repository.PostRepository;
-import com.clover.habbittracker.global.config.JpaConfig;
-import com.clover.habbittracker.global.util.MemberProvider;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.clover.habbittracker.domain.comment.entity.Comment;
+import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.member.repository.MemberRepository;
+import com.clover.habbittracker.domain.post.entity.Post;
+import com.clover.habbittracker.domain.post.repository.PostRepository;
+import com.clover.habbittracker.global.config.JpaConfig;
+import com.clover.habbittracker.global.util.MemberProvider;
 
 @DataJpaTest
 @Import(JpaConfig.class)
@@ -43,14 +43,7 @@ public class CommentRepositoryTest {
         Member member = MemberProvider.createTestMember();
         testMember = memberRepository.save(member);
 
-        Post post = Post.builder()
-                .title("testTitle")
-                .content("testContent")
-                .category(Category.DAILY)
-                .member(testMember)
-                .build();
-
-        testPost = postRepository.save(post);
+        testPost = postRepository.save(createTestPost(member));
     }
 
     @Test

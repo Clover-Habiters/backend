@@ -1,6 +1,7 @@
 package com.clover.habbittracker.domain.comment.service;
 
 import static com.clover.habbittracker.global.util.MemberProvider.*;
+import static com.clover.habbittracker.global.util.PostProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +22,6 @@ import com.clover.habbittracker.domain.comment.repository.CommentRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.domain.post.entity.Category;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.exception.PostNotFoundException;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
@@ -52,15 +52,7 @@ public class CommentServiceTest {
 		Member member = createTestMember();
 		testMember = memberRepository.save(member);
 		memberId = testMember.getId();
-
-		Post post = Post.builder()
-			.content("testContent")
-			.member(testMember)
-			.category(Category.DAILY)
-			.title("testTitle")
-			.build();
-
-		testPost = postRepository.save(post);
+		testPost = postRepository.save(createTestPost(member));
 		postId = testPost.getId();
 	}
 
