@@ -10,7 +10,7 @@ import org.mapstruct.Mappings;
 import org.mapstruct.Named;
 
 import com.clover.habbittracker.domain.comment.entity.Comment;
-import com.clover.habbittracker.domain.like.entity.Like;
+import com.clover.habbittracker.domain.emoji.entity.Emoji;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
 import com.clover.habbittracker.domain.post.dto.PostRequest;
@@ -20,12 +20,11 @@ import com.clover.habbittracker.domain.post.entity.Post;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = IGNORE)
 public interface PostMapper {
 
-
 	Post toPost(PostRequest request, Member member);
 
 	@Mappings({
-		@Mapping(source = "post.comments",target = "numOfComments", qualifiedByName = "commentsToSize"),
-		@Mapping(source = "post.likes",target = "numOfLikes", qualifiedByName = "likesToSize"),
+		@Mapping(source = "post.comments", target = "numOfComments", qualifiedByName = "commentsToSize"),
+		@Mapping(source = "post.emojis", target = "numOfEmojis", qualifiedByName = "emojisToSize"),
 		@Mapping(source = "post.createdAt", target = "createDate")
 	})
 	PostResponse toPostResponse(Post post);
@@ -41,8 +40,8 @@ public interface PostMapper {
 		return comments.size();
 	}
 
-	@Named("likesToSize")
-	static Integer likesToSize(List<Like> likes) {
-		return likes.size();
+	@Named("emojisToSize")
+	static Integer emojisToSize(List<Emoji> emojis) {
+		return emojis.size();
 	}
 }
