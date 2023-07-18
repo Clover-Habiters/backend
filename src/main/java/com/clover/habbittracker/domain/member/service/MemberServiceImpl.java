@@ -8,11 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
 import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.domain.member.entity.ProfileImg;
 import com.clover.habbittracker.domain.member.exception.MemberDuplicateNickName;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,13 +19,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberServiceImpl implements MemberService {
 
 	private final MemberRepository memberRepository;
-
-	@Override
-	public Long join(SocialUser socialUser) {
-		return memberRepository.findByProviderAndOauthId(socialUser.getProvider(), socialUser.getOauthId())
-			.map(Member::getId)
-			.orElseGet(() -> register(socialUser).getId());
-	}
 
 	@Override
 	public MemberResponse getProfile(Long memberId) {
@@ -51,16 +42,6 @@ public class MemberServiceImpl implements MemberService {
 		memberRepository.deleteById(memberId);
 	}
 
-	private Member register(SocialUser socialUser) {
-		return memberRepository.save(
-			Member.builder()
-				.email(socialUser.getEmail())
-				.oauthId(socialUser.getOauthId())
-				.nickName("해비터_" + socialUser.getNickName())
-				.provider(socialUser.getProvider())
-				.profileImgUrl(ProfileImg.getRandProfileImg().getImgUrl())
-				.build());
-	}
 
 	private Member update(Member member, MemberRequest request) {
 		Optional<Member> byNickName = memberRepository.findByNickName(request.getNickName());
