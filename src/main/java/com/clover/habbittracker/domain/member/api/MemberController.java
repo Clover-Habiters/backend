@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.member.api;
 
-import static com.clover.habbittracker.global.dto.ResponseType.*;
+import static com.clover.habbittracker.global.base.dto.ResponseType.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
 import com.clover.habbittracker.domain.member.service.MemberService;
-import com.clover.habbittracker.global.dto.BaseResponse;
+import com.clover.habbittracker.global.base.dto.BaseResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

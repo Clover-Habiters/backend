@@ -1,4 +1,4 @@
-package com.clover.habbittracker.ncp.config;
+package com.clover.habbittracker.global.infra.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

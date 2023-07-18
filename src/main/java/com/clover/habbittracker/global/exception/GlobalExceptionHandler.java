@@ -8,7 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.clover.habbittracker.global.dto.ErrorResponse;
+import com.clover.habbittracker.global.base.dto.ErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -18,25 +18,28 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> serverError(HttpServletRequest request, RuntimeException e) {
 		ErrorType errorType = ErrorType.INTERNAL_SERVER_ERROR;
-		commonExceptionErrorLogging(request,e,errorType);
+		commonExceptionErrorLogging(request, e, errorType);
 		return new ResponseEntity<>(ErrorResponse.from(errorType), errorType.getStatus());
 	}
 
 	@ExceptionHandler(BaseException.class)
-	public ResponseEntity<ErrorResponse> baseExceptionHandler(HttpServletRequest request,BaseException e) {
+	public ResponseEntity<ErrorResponse> baseExceptionHandler(HttpServletRequest request, BaseException e) {
 		ErrorType errorType = e.getErrorType();
-		warnExceptionLogging(request,e);
+		warnExceptionLogging(request, e);
 		return new ResponseEntity<>(ErrorResponse.from(errorType), errorType.getStatus());
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<ErrorResponse> illegalArgumentException(HttpServletRequest request, IllegalArgumentException e) {
+	public ResponseEntity<ErrorResponse> illegalArgumentException(HttpServletRequest request,
+		IllegalArgumentException e) {
 		ErrorType errorType = ErrorType.INVALID_ARGUMENTS;
 		commonExceptionWarnLogging(request, e, errorType);
 		return new ResponseEntity<>(ErrorResponse.from(errorType), errorType.getStatus());
 	}
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<ErrorResponse> validationException(HttpServletRequest request, MethodArgumentNotValidException e) {
+	public ResponseEntity<ErrorResponse> validationException(HttpServletRequest request,
+		MethodArgumentNotValidException e) {
 		ErrorType errorType = ErrorType.INVALID_ARGUMENTS;
 		BindingResult bindingResult = e.getBindingResult();
 		commonExceptionWarnLogging(request, e, errorType);

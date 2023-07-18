@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.diary.api;
 
-import static com.clover.habbittracker.global.dto.ResponseType.*;
+import static com.clover.habbittracker.global.base.dto.ResponseType.*;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.clover.habbittracker.domain.diary.dto.DiaryRequest;
 import com.clover.habbittracker.domain.diary.dto.DiaryResponse;
 import com.clover.habbittracker.domain.diary.service.DiaryService;
-import com.clover.habbittracker.global.dto.BaseResponse;
+import com.clover.habbittracker.global.base.dto.BaseResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,8 @@ public class DiaryController {
 	private final DiaryService diaryService;
 
 	@PostMapping
-	ResponseEntity<BaseResponse<Long>> createDiary(@AuthenticationPrincipal Long memberId, @Valid @RequestBody DiaryRequest request) {
+	ResponseEntity<BaseResponse<Long>> createDiary(@AuthenticationPrincipal Long memberId,
+		@Valid @RequestBody DiaryRequest request) {
 		Long registerId = diaryService.register(memberId, request);
 		BaseResponse<Long> response = BaseResponse.of(registerId, DIARY_CREATE);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);

@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.dto;
+package com.clover.habbittracker.global.base.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -27,7 +27,7 @@ public class BaseResponse<T> {
 	// 	this.message = responseType.getMessage();
 	// }
 
-	public static <T> BaseResponse<T> of(T data,ResponseType responseType) {
+	public static <T> BaseResponse<T> of(T data, ResponseType responseType) {
 		return BaseResponse.<T>builder()
 			.data(data)
 			.code(responseType.name())

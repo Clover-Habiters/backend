@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
-import com.clover.habbittracker.global.entity.BaseEntity;
 import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.global.base.entity.BaseEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
