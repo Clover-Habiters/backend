@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.dto;
+package com.clover.habbittracker.global.base.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -22,7 +22,6 @@ public class ApiResponse<T> {
 		this.message = message;
 		this.data = data;
 	}
-
 
 	public static <T> ApiResponse<T> success() {
 		return ApiResponse.<T>builder()

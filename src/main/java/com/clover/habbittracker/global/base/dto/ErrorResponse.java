@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.dto;
+package com.clover.habbittracker.global.base.dto;
 
 import java.util.Objects;
 

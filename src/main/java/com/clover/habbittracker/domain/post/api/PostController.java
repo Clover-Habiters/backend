@@ -25,7 +25,7 @@ import com.clover.habbittracker.domain.post.dto.PostRequest;
 import com.clover.habbittracker.domain.post.dto.PostResponse;
 import com.clover.habbittracker.domain.post.entity.Category;
 import com.clover.habbittracker.domain.post.service.PostService;
-import com.clover.habbittracker.global.dto.ApiResponse;
+import com.clover.habbittracker.global.base.dto.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
 

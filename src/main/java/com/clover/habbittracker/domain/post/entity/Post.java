@@ -13,7 +13,7 @@ import com.clover.habbittracker.domain.comment.entity.Comment;
 import com.clover.habbittracker.domain.emoji.entity.Emoji;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.dto.PostRequest;
-import com.clover.habbittracker.global.entity.BaseEntity;
+import com.clover.habbittracker.global.base.entity.BaseEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

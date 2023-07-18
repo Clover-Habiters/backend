@@ -1,4 +1,4 @@
-package com.clover.habbittracker.ncp;
+package com.clover.habbittracker.infra;
 
 import static org.mockito.Mockito.*;
 
@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.clover.habbittracker.global.infra.ObjectStorageService;
 
 public class ObjectStorageServiceTest {
 	private ObjectStorageService objectStorageService;
@@ -39,12 +40,12 @@ public class ObjectStorageServiceTest {
 
 		//when
 		when(mockStorage.putObject(any(PutObjectRequest.class))).thenReturn(null);
-		when(mockStorage.getUrl(anyString(),anyString())).thenReturn(new URL(mockUrl));
+		when(mockStorage.getUrl(anyString(), anyString())).thenReturn(new URL(mockUrl));
 		String result = objectStorageService.profileImgSave(mockFile);
 
 		//then
 		Assertions.assertThat(result).isEqualTo(mockUrl);
-		verify(mockStorage).getUrl(eq(expectedBucketName),anyString());
+		verify(mockStorage).getUrl(eq(expectedBucketName), anyString());
 	}
 
 	@Test
@@ -55,7 +56,7 @@ public class ObjectStorageServiceTest {
 
 		//when
 		when(mockStorage.putObject(any(PutObjectRequest.class))).thenReturn(null);
-		when(mockStorage.getUrl(anyString(),anyString())).thenReturn(new URL(mockUrl));
+		when(mockStorage.getUrl(anyString(), anyString())).thenReturn(new URL(mockUrl));
 		String result = objectStorageService.profileImgSave(null);
 
 		//then

@@ -1,7 +1,7 @@
 package com.clover.habbittracker.domain.habitcheck.entity;
 
 import com.clover.habbittracker.domain.habit.entity.Habit;
-import com.clover.habbittracker.global.entity.BaseEntity;
+import com.clover.habbittracker.global.base.entity.BaseEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

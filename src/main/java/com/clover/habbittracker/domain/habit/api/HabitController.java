@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.habit.api;
 
-import static com.clover.habbittracker.global.dto.ResponseType.*;
+import static com.clover.habbittracker.global.base.dto.ResponseType.*;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import com.clover.habbittracker.domain.habit.dto.HabitResponse;
 import com.clover.habbittracker.domain.habit.dto.MyHabitResponse;
 import com.clover.habbittracker.domain.habit.service.HabitService;
 import com.clover.habbittracker.domain.habitcheck.dto.HabitCheckRequest;
-import com.clover.habbittracker.global.dto.BaseResponse;
+import com.clover.habbittracker.global.base.dto.BaseResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,8 +36,8 @@ public class HabitController {
 
 	@GetMapping
 	public ResponseEntity<BaseResponse<List<MyHabitResponse>>> getMyHabitList(
-			@AuthenticationPrincipal Long memberId,
-			@RequestParam(required = false) String date) {
+		@AuthenticationPrincipal Long memberId,
+		@RequestParam(required = false) String date) {
 		List<MyHabitResponse> myHabitList = habitService.getMyList(memberId, date);
 		BaseResponse<List<MyHabitResponse>> response = BaseResponse.of(myHabitList, HABIT_READ);
 		return ResponseEntity.ok().body(response);
@@ -45,8 +45,8 @@ public class HabitController {
 
 	@PostMapping
 	public ResponseEntity<BaseResponse<Long>> createHabit(
-			@AuthenticationPrincipal Long memberId,
-			@Valid @RequestBody HabitRequest request) {
+		@AuthenticationPrincipal Long memberId,
+		@Valid @RequestBody HabitRequest request) {
 		Long registerId = habitService.register(memberId, request);
 		BaseResponse<Long> response = BaseResponse.of(registerId, HABIT_CREATE);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -54,8 +54,8 @@ public class HabitController {
 
 	@PutMapping("/{habitId}")
 	public ResponseEntity<BaseResponse<HabitResponse>> updateHabit(
-			@PathVariable Long habitId,
-			@Valid @RequestBody HabitRequest request) {
+		@PathVariable Long habitId,
+		@Valid @RequestBody HabitRequest request) {
 		HabitResponse updateHabit = habitService.updateMyHabit(habitId, request);
 		BaseResponse<HabitResponse> response = BaseResponse.of(updateHabit, HABIT_UPDATE);
 		return ResponseEntity.ok().body(response);
@@ -69,7 +69,8 @@ public class HabitController {
 	}
 
 	@PostMapping("/{habitId}/check")
-	public ResponseEntity<BaseResponse<Void>> HabitCheck(@PathVariable Long habitId, @RequestBody HabitCheckRequest request) {
+	public ResponseEntity<BaseResponse<Void>> HabitCheck(@PathVariable Long habitId,
+		@RequestBody HabitCheckRequest request) {
 		habitService.habitCheck(habitId, request.getRequestDate());
 		BaseResponse<Void> response = BaseResponse.of(null, HABIT_CHECK_CREATE);
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);

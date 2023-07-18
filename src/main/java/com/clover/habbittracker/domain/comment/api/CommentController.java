@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.clover.habbittracker.domain.comment.dto.CommentRequest;
 import com.clover.habbittracker.domain.comment.dto.CommentResponse;
 import com.clover.habbittracker.domain.comment.service.CommentService;
-import com.clover.habbittracker.global.dto.ApiResponse;
+import com.clover.habbittracker.global.base.dto.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
 

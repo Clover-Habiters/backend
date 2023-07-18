@@ -5,7 +5,7 @@ import static lombok.AccessLevel.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import com.clover.habbittracker.global.entity.BaseEntity;
+import com.clover.habbittracker.global.base.entity.BaseEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

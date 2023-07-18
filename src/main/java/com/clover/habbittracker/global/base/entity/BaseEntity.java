@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.entity;
+package com.clover.habbittracker.global.base.entity;
 
 import java.time.LocalDateTime;
 

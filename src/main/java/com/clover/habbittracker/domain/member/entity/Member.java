@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.clover.habbittracker.domain.diary.entity.Diary;
 import com.clover.habbittracker.domain.habit.entity.Habit;
-import com.clover.habbittracker.global.entity.BaseEntity;
+import com.clover.habbittracker.global.base.entity.BaseEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

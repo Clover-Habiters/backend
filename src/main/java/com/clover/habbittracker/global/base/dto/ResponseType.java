@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.dto;
+package com.clover.habbittracker.global.base.dto;
 
 import lombok.Getter;
 
@@ -21,7 +21,6 @@ public enum ResponseType {
 	POST_READ("글 조회 요청이 성공하였습니다."),
 	POST_CREATE("글이 정상적으로 생성 되었습니다."),
 	POST_UPDATE("글이 정상적으로 업데이트 되었습니다.");
-
 
 	private final String message;
 
