@@ -26,10 +26,10 @@ public class OauthService {
 	private final String LOGOUT_FORM = "Success Logout Id : {}, Name : {}, Provider : {}";
 
 	public String login(SocialUser socialUser) {
-		Long userId = memberRepository.findByProviderAndOauthId(socialUser.getProvider(), socialUser.getOauthId())
+		Long userId = memberRepository.findByProviderAndOauthId(socialUser.provider(), socialUser.oauthId())
 			.map(Member::getId)
 			.orElseGet(() -> register(socialUser).getId());
-		log.info(LOGIN_FORM,userId,socialUser.getNickName(),socialUser.getProvider());
+		log.info(LOGIN_FORM,userId,socialUser.nickName(),socialUser.provider());
 		return jwtProvider.createAccessJwt(userId);
 	}
 
@@ -43,10 +43,10 @@ public class OauthService {
 	private Member register(SocialUser socialUser) {
 		return memberRepository.save(
 			Member.builder()
-				.email(socialUser.getEmail())
-				.oauthId(socialUser.getOauthId())
-				.nickName("해비터_" + socialUser.getNickName())
-				.provider(socialUser.getProvider())
+				.email(socialUser.email())
+				.oauthId(socialUser.oauthId())
+				.nickName("해비터_" + socialUser.nickName())
+				.provider(socialUser.provider())
 				.profileImgUrl(ProfileImg.getRandProfileImg().getImgUrl())
 				.build());
 	}

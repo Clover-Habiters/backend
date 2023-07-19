@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.global.security.jwt.JwtProvider;
-import com.clover.habbittracker.global.security.oauth.dto.GoogleUser;
 import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 
 import io.jsonwebtoken.Claims;
@@ -42,7 +41,7 @@ public class OauthServiceTest {
 	@DisplayName("로그인을 할 경우 oauthId와 provider를 비교하여 사용자 정보가 없다면 자동으로 회원가입 한다.")
 	void memberRegisterTest() {
 		//given
-		SocialUser user = GoogleUser.builder()
+		SocialUser user = SocialUser.builder()
 			.oauthId("GoogleOauthId")
 			.provider("google")
 			.nickName(testMember.getNickName())
