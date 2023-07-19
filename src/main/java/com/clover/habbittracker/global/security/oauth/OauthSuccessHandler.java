@@ -24,9 +24,6 @@ import lombok.RequiredArgsConstructor;
 public class OauthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 	private final OauthService oauthService;
 
-	// private final CustomRedirectStrategy customRedirectStrategy;
-	// private final ObjectMapper objectMapper;
-
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
@@ -35,17 +32,10 @@ public class OauthSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 		Object principal = authentication.getPrincipal();
 
 		if (principal instanceof OAuth2User user) {
-			SocialUser userInfo = OauthProvider.getProfile(user, provider);
+			SocialUser userInfo = OauthProvider.getSocialUser(user, provider);
 			String accessToken = oauthService.login(userInfo);
 			String targetUrl = determineTargetUrl(request,accessToken);
-			// setRedirectStrategy(customRedirectStrategy);
 			getRedirectStrategy().sendRedirect(request, response, targetUrl);
-			// response.setStatus(HttpStatus.OK.value());
-			// response.setContentType("application/json");
-			// response.setCharacterEncoding("UTF-8");
-			//
-			// response.getWriter().write(objectMapper.writeValueAsString(accessToken));
-
 		}
 
 	}
