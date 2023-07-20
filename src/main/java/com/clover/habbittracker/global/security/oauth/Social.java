@@ -12,7 +12,7 @@ import lombok.Getter;
 public enum Social {
 	KAKAO("kakao") {
 		@Override
-		public SocialUser toSocialUser(OAuth2User oAuth2User) {
+		public SocialUser toUserInfo(OAuth2User oAuth2User) {
 			Map<String, Object> response = oAuth2User.getAttributes();
 			Map<String, Object> properties = oAuth2User.getAttribute("properties");
 			Map<String, Object> account = oAuth2User.getAttribute("kakao_account");
@@ -28,7 +28,7 @@ public enum Social {
 
 	NAVER("naver"){
 		@Override
-		public SocialUser toSocialUser(OAuth2User oAuth2User) {
+		public SocialUser toUserInfo(OAuth2User oAuth2User) {
 			Map<String, Object> response = oAuth2User.getAttribute("response");
 
 			return SocialUser.builder()
@@ -42,7 +42,7 @@ public enum Social {
 
 	GOOGLE("google"){
 		@Override
-		public SocialUser toSocialUser(OAuth2User oAuth2User) {
+		public SocialUser toUserInfo(OAuth2User oAuth2User) {
 			Map<String, Object> response = oAuth2User.getAttributes();
 
 			return SocialUser.builder()
@@ -59,5 +59,5 @@ public enum Social {
 		this.provider = provider;
 	}
 
-	public abstract SocialUser toSocialUser(OAuth2User oAuth2User);
+	public abstract SocialUser toUserInfo(OAuth2User oAuth2User);
 }
