@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.security.oauth;
+package com.clover.habbittracker.global.security.oauth.service;
 
 import org.springframework.stereotype.Service;
 

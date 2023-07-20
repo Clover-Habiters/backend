@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.security.oauth;
+package com.clover.habbittracker.global.security.oauth.service;
 
 import static com.clover.habbittracker.global.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;

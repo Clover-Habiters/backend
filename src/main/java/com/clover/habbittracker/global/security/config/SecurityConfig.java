@@ -13,9 +13,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.clover.habbittracker.global.security.jwt.JwtAuthenticationEntryPoint;
 import com.clover.habbittracker.global.security.jwt.JwtFilter;
-import com.clover.habbittracker.global.security.oauth.HttpCookieOAuthAuthorizationRequestRepository;
-import com.clover.habbittracker.global.security.oauth.OAuthFailureHandler;
-import com.clover.habbittracker.global.security.oauth.OauthSuccessHandler;
+import com.clover.habbittracker.global.security.oauth.repository.HttpCookieOAuthAuthorizationRequestRepository;
+import com.clover.habbittracker.global.security.oauth.handler.OAuthFailureHandler;
+import com.clover.habbittracker.global.security.oauth.handler.OauthSuccessHandler;
 
 
 import lombok.RequiredArgsConstructor;
