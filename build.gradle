@@ -36,7 +36,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-
     // QueryDSL (Boot 3.x)
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
@@ -94,10 +93,10 @@ ext {
 }
 
 asciidoctor {
-    attributes 'snippets' : snippetsDir
+    attributes 'snippets': snippetsDir
     configurations 'asciidoctorExtensions'
     forkOptions {
-        jvmArgs('--add-opens', 'java.base/sun.nio.ch=ALL-UNNAMED','--add-opens','java.base/java.io=ALL-UNNAMED')
+        jvmArgs('--add-opens', 'java.base/sun.nio.ch=ALL-UNNAMED', '--add-opens', 'java.base/java.io=ALL-UNNAMED')
     }
     dependsOn test
     inputs.dir snippetsDir

@@ -58,7 +58,6 @@ public class Post extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private Member member;
-
 	@Builder
 	public Post(String title, String content, Category category, Member member) {
 		this.title = title;
@@ -72,5 +71,9 @@ public class Post extends BaseEntity {
 		this.title = postRequest.title();
 		this.content = postRequest.content();
 		this.category = postRequest.category();
+	}
+
+	public enum Category {
+		ALL, STUDY, EXERCISE, HEALTH, DAILY, ETC
 	}
 }
