@@ -55,6 +55,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // Embedded Redis
     testImplementation 'it.ozimov:embedded-redis:0.7.2'
+    // Slack
+    implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
 }
 
 /*jacoco 설정*/
@@ -94,10 +96,10 @@ ext {
 }
 
 asciidoctor {
-    attributes 'snippets' : snippetsDir
+    attributes 'snippets': snippetsDir
     configurations 'asciidoctorExtensions'
     forkOptions {
-        jvmArgs('--add-opens', 'java.base/sun.nio.ch=ALL-UNNAMED','--add-opens','java.base/java.io=ALL-UNNAMED')
+        jvmArgs('--add-opens', 'java.base/sun.nio.ch=ALL-UNNAMED', '--add-opens', 'java.base/java.io=ALL-UNNAMED')
     }
     dependsOn test
     inputs.dir snippetsDir
