@@ -73,7 +73,10 @@ create table post
     member_id    bigint       null,
     created_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
     updated_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
-    deleted      boolean      not null default false
+    deleted      boolean      not null default false,
+
+    FULLTEXT INDEX post_title (title),
+    FULLTEXT INDEX post_content (content)
 );
 
 create table comment
@@ -117,4 +120,3 @@ create table bookmark_folder
     bookmark_id bigint null,
     posts_id    bigint null
 );
-
