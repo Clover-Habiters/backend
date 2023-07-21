@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Import;
 import com.clover.habbittracker.domain.diary.entity.Diary;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.config.JpaConfig;
+import com.clover.habbittracker.global.config.db.JpaConfig;
 import com.clover.habbittracker.global.util.DateUtil;
 
 @DataJpaTest

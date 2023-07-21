@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.config;
+package com.clover.habbittracker.global.config.db;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -18,7 +18,7 @@ import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
 import com.clover.habbittracker.domain.habitcheck.repository.HabitCheckRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.config.JpaConfig;
+import com.clover.habbittracker.global.config.db.JpaConfig;
 
 @DataJpaTest
 @Import(JpaConfig.class)

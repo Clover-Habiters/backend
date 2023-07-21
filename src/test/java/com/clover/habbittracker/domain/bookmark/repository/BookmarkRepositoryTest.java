@@ -19,7 +19,7 @@ import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
-import com.clover.habbittracker.global.config.JpaConfig;
+import com.clover.habbittracker.global.config.db.JpaConfig;
 
 @Import({JpaConfig.class})
 @DataJpaTest
