@@ -27,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostCustomRepositoryImpl implements PostCustomRepository {
 
+	private static final String MATCH_FUNCTION = "function('match',{0},{1})";
+
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
@@ -111,25 +113,32 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 	private BooleanExpression matchKeyword(PostSearchCondition.SearchType searchType, String keyword) {
 		if (isNotValid(keyword)) {
 			return null;
-		} else if (searchType == TITLE) {
-			NumberExpression<Double> booleanTemplate = Expressions.numberTemplate(Double.class,
-				"function('match',{0},{1})", post.title, keyword);
-			return booleanTemplate.gt(0);
-		} else if (searchType == CONTENT) {
-			NumberTemplate<Double> booleanTemplate = Expressions.numberTemplate(Double.class,
-				"function('match',{0},{1})", post.content, keyword);
-			return booleanTemplate.gt(0);
-		} else { // TODO: 하나로 합쳐서 검색 / 나눠서 검색해서 합치기?
-			NumberExpression<Double> booleanTemplate = Expressions.numberTemplate(Double.class,
-				"function('match',{0},{1})", post.title, keyword);
-
-			NumberExpression<Double> booleanTemplate2 = Expressions.numberTemplate(Double.class,
-				"function('match',{0},{1})", post.content, keyword);
-
-			BooleanExpression result = booleanTemplate.gt(0).or(booleanTemplate2.gt(0));
-
-			return result;
 		}
+		if (searchType == TITLE) {
+			return searchTitle(keyword);
+		}
+		if (searchType == CONTENT) {
+			return searchContent(keyword);
+		}
+
+		BooleanExpression searchedTitleResult = searchTitle(keyword);
+		BooleanExpression searchedContentResult = searchContent(keyword);
+
+		return searchedTitleResult.or(searchedContentResult);
+	}
+
+	private BooleanExpression searchTitle(String keyword) {
+		NumberExpression<Double> booleanTemplate = Expressions.numberTemplate(Double.class,
+			MATCH_FUNCTION, post.title, keyword);
+
+		return booleanTemplate.gt(0);
+	}
+
+	private BooleanExpression searchContent(String keyword) {
+		NumberTemplate<Double> booleanTemplate = Expressions.numberTemplate(Double.class,
+			MATCH_FUNCTION, post.content, keyword);
+
+		return booleanTemplate.gt(0);
 	}
 
 	private boolean isNotValid(String keyword) {

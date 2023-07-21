@@ -19,6 +19,7 @@ public class PostSearchCondition {
 	private Post.Category category;
 	private SearchType searchType;
 	private String keyword;
+
 	public enum SearchType {
 		ALL, TITLE, CONTENT;
 

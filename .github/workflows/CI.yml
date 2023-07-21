@@ -43,6 +43,7 @@ jobs:
         uses: crate-ci/typos@v1.0.4
         with:
           files: 'src/**'
+
       ## 테스트 커버리지 리포트 작성
       - name: register test coverage as a comment in PR
         id: jacoco
