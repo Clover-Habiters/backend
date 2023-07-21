@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.clover.habbittracker.global.base.dto.ErrorResponse;
+import com.clover.habbittracker.global.report.annotation.Report;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+	@Report
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> serverError(HttpServletRequest request, RuntimeException e) {
 		ErrorType errorType = ErrorType.INTERNAL_SERVER_ERROR;
