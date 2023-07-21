@@ -13,7 +13,7 @@ import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
 import com.clover.habbittracker.domain.post.dto.PostRequest;
 import com.clover.habbittracker.domain.post.dto.PostResponse;
-import com.clover.habbittracker.domain.post.entity.Category;
+import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.exception.PostNotFoundException;
 import com.clover.habbittracker.domain.post.mapper.PostMapper;
@@ -43,7 +43,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	@Transactional
-	public PostDetailResponse getPost(Long postId) {
+	public PostDetailResponse getPostBy(Long postId) {
 		Post post = postRepository.joinCommentAndLikeFindById(postId)
 			.orElseThrow(() -> new PostNotFoundException(postId));
 		postRepository.updateViews(post.getId());
@@ -52,8 +52,16 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostResponse> getPostList(Pageable pageable, Category category) {
-		Page<Post> postsSummary = postRepository.findAllPostsSummary(pageable, category);
+	public Page<PostResponse> getPostBy(PostSearchCondition postSearchCondition, Pageable pageable) {
+
+		Page<Post> searchedPost = postRepository.searchPostBy(postSearchCondition, pageable);
+
+		return searchedPost.map(postMapper::toPostResponse);
+	}
+
+	@Override
+	public List<PostResponse> getPostAllBy(Post.Category category, Pageable pageable) {
+		List<Post> postsSummary = postRepository.findAllPostsSummary(pageable, category);
 		return postsSummary.stream().map(postMapper::toPostResponse).toList();
 	}
 
