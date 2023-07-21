@@ -1,13 +1,13 @@
 plugins {
     id 'java'
+    id 'jacoco'
     id 'org.springframework.boot' version '3.0.5'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'jacoco'
     id 'org.asciidoctor.jvm.convert' version '3.3.2'
 }
 
 group = 'com.clover'
-version = '1.0.0'
+version = '1.1.0'
 sourceCompatibility = '17'
 
 configurations {
@@ -22,31 +22,39 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
-    implementation 'javax.xml.bind:jaxb-api:2.3.0'
-    implementation 'com.mysql:mysql-connector-j:8.0.32'
-    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.429'
-    runtimeOnly 'com.h2database:h2'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    // DB - MySQL, H2
+    implementation 'com.mysql:mysql-connector-j:8.0.32'
+    runtimeOnly 'com.h2database:h2'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
     // QueryDSL (Boot 3.x)
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    implementation 'javax.xml.bind:jaxb-api:2.3.0' // ??
 
-    //mapstruct  * Lombok 의 getter, setter, builder 를 이용하여 생성되므로 Lombok 먼저 의존성 주입 후 사용해야함.
+    // Jwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // Mapstruct  * Lombok 의 getter, setter, builder 를 이용하여 생성되므로 Lombok 먼저 의존성 주입 후 사용해야함.
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
-    // spring restdocs
+    // Spring Restdocs
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
@@ -54,6 +62,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // Embedded Redis
     testImplementation 'it.ozimov:embedded-redis:0.7.2'
+
+    // AWS - S3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.429'
+
+    // Slack
+    implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
+
+    // Bucket4j - 처리율 제한
+    implementation 'com.bucket4j:bucket4j-core:8.3.0'
 }
 
 /*jacoco 설정*/
@@ -70,11 +87,11 @@ jacocoTestCoverageVerification {
     violationRules {
         rule {
             enabled = true
-            excludes = [
-                    '*.global.security.oauth*',
-                    '*.global.util*',
-                    '*.global.dto*',
-                    '*.global.exception*'
+            excludes = [ // 제외할 패키지
+                         '*.global.security.oauth*',
+                         '*.global.util*',
+                         '*.global.dto*',
+                         '*.global.exception*'
             ]
 
         }
@@ -88,6 +105,7 @@ tasks.named('test') {
     finalizedBy 'jacocoTestReport'
 }
 
+/*asciidoctor 설정*/
 ext {
     snippetsDir = file('build/generated-snippets')
 }
@@ -124,5 +142,4 @@ task copyDocument(type: Copy) {
 build {
     dependsOn copyDocument
 }
-
 
