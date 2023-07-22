@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.*;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
 import com.clover.habbittracker.domain.post.dto.PostRequest;
 import com.clover.habbittracker.domain.post.dto.PostResponse;
-import com.clover.habbittracker.domain.post.entity.Category;
+import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
+import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.service.PostService;
 import com.clover.habbittracker.global.base.dto.ApiResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -50,9 +53,9 @@ public class PostController {
 	@GetMapping
 	public ResponseEntity<ApiResponse<List<PostResponse>>> getPostList(
 		@PageableDefault(size = 15) Pageable pageable,
-		@RequestParam(required = false) Category category
+		@RequestParam(required = false) Post.Category category
 	) {
-		List<PostResponse> postList = postService.getPostList(pageable, category);
+		List<PostResponse> postList = postService.getPostAllBy(category, pageable);
 		ApiResponse<List<PostResponse>> response = ApiResponse.success(postList);
 		return ResponseEntity.ok().body(response);
 	}
@@ -61,8 +64,19 @@ public class PostController {
 	public ResponseEntity<ApiResponse<PostDetailResponse>> getPost(
 		@PathVariable Long postId
 	) {
-		PostDetailResponse postDetail = postService.getPost(postId);
+		PostDetailResponse postDetail = postService.getPostBy(postId);
 		ApiResponse<PostDetailResponse> response = ApiResponse.success(postDetail);
+		return ResponseEntity.ok().body(response);
+	}
+
+	@GetMapping("/search")
+	public ResponseEntity<ApiResponse<Page<PostResponse>>> searchPost(
+		@PageableDefault(size = 15) Pageable pageable,
+		@Valid @RequestBody PostSearchCondition postSearchCondition
+	) {
+		Page<PostResponse> postPages = postService.getPostBy(postSearchCondition, pageable);
+		ApiResponse<Page<PostResponse>> response = ApiResponse.success(postPages);
+
 		return ResponseEntity.ok().body(response);
 	}
 
@@ -87,5 +101,4 @@ public class PostController {
 		postService.deletePost(postId, memberId);
 		return ApiResponse.success();
 	}
-
 }

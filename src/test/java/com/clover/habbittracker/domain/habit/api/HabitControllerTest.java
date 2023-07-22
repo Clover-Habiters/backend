@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +34,6 @@ import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
 import com.clover.habbittracker.domain.habitcheck.repository.HabitCheckRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.config.JpaConfig;
 import com.clover.habbittracker.global.exception.ErrorType;
 import com.clover.habbittracker.global.security.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,6 +44,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.habiters.store")
 public class HabitControllerTest {
 
+	private final ObjectMapper mapper = new ObjectMapper();
 	@Autowired
 	private MockMvc mockMvc;
 	@Autowired
@@ -56,12 +55,8 @@ public class HabitControllerTest {
 	private JwtProvider jwtProvider;
 	@Autowired
 	private HabitCheckRepository habitCheckRepository;
-
 	private String accessJwt;
-
 	private Habit testHabit;
-
-	private final ObjectMapper mapper = new ObjectMapper();
 
 	@BeforeEach
 	void setUp() {
@@ -146,7 +141,7 @@ public class HabitControllerTest {
 	void deleteHabitTest() throws Exception {
 		//when then
 		mockMvc.perform(
-				RestDocumentationRequestBuilders.delete("/habits/{habitId}" , testHabit.getId())
+				RestDocumentationRequestBuilders.delete("/habits/{habitId}", testHabit.getId())
 					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isNoContent())
 			.andDo(document("habit-delete",
@@ -162,7 +157,7 @@ public class HabitControllerTest {
 					fieldWithPath("code").type(STRING).description("결과 코드"),
 					fieldWithPath("message").type(STRING).description("결과 메시지")
 				)
-				));
+			));
 	}
 
 	@Test
@@ -174,7 +169,7 @@ public class HabitControllerTest {
 		String request = mapper.writeValueAsString(new HabitCheckRequest(today));
 		//when then
 		mockMvc.perform(
-				RestDocumentationRequestBuilders.post("/habits/{habitId}/check"  ,testHabit.getId())
+				RestDocumentationRequestBuilders.post("/habits/{habitId}/check", testHabit.getId())
 					.header("Authorization", "Bearer " + accessJwt)
 					.contentType(APPLICATION_JSON)
 					.content(request))
@@ -255,6 +250,7 @@ public class HabitControllerTest {
 				)
 			));
 	}
+
 	@Test
 	@DisplayName("사용자는 나의 습관 리스트와 습관 수행 여부를 월 별로 조회 할 수 있다.")
 	void monthlyMyHabitListTest() throws Exception {
@@ -267,7 +263,7 @@ public class HabitControllerTest {
 		//when then
 		mockMvc.perform(
 				get("/habits")
-					.header("Authorization", "Bearer " + accessJwt).param("date",date))
+					.header("Authorization", "Bearer " + accessJwt).param("date", date))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data.[0].id").exists())
 			.andExpect(jsonPath("$.data.[0].content").exists())
@@ -334,13 +330,13 @@ public class HabitControllerTest {
 		String request = mapper.writeValueAsString(new HabitCheckRequest(today));
 		//when then
 		mockMvc.perform(
-			post("/habits/{habitId}/check" , testHabit.getId())
+			post("/habits/{habitId}/check", testHabit.getId())
 				.header("Authorization", "Bearer " + accessJwt)
 				.contentType(APPLICATION_JSON)
 				.content(request));
 
 		mockMvc.perform(
-				RestDocumentationRequestBuilders.post("/habits/{habitId}/check" , testHabit.getId())
+				RestDocumentationRequestBuilders.post("/habits/{habitId}/check", testHabit.getId())
 					.header("Authorization", "Bearer " + accessJwt)
 					.contentType(APPLICATION_JSON)
 					.content(request))
@@ -362,6 +358,7 @@ public class HabitControllerTest {
 				)));
 
 	}
+
 	@Test
 	@DisplayName("습관 수행 여부를 체크 할 경우 과거 또는 미래를 체크 할 경우 HabitExpiredException 예외가 터진다.")
 	void habitCheckTestWithExpiredDate() throws Exception {
@@ -372,11 +369,11 @@ public class HabitControllerTest {
 
 		//when then
 		mockMvc.perform(
-			post("/habits/{habitId}/check" , testHabit.getId())
+			post("/habits/{habitId}/check", testHabit.getId())
 				.header("Authorization", "Bearer " + accessJwt));
 
 		mockMvc.perform(
-				RestDocumentationRequestBuilders.post("/habits/{habitId}/check" , testHabit.getId())
+				RestDocumentationRequestBuilders.post("/habits/{habitId}/check", testHabit.getId())
 					.header("Authorization", "Bearer " + accessJwt)
 					.contentType(APPLICATION_JSON)
 					.content(request))

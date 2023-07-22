@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.util;
+package com.clover.habbittracker.global.log;
 
 import static org.springframework.web.servlet.HandlerMapping.*;
 

@@ -30,6 +30,10 @@ jobs:
       - name: grant permission to execute gradle command
         run: chmod +x gradlew
 
+      # 도커 MYSQL 이미지 실행
+      - name: Create Mysql Docker Container
+        run: sudo docker run -d -p 3310:3306 --env MYSQL_DATABASE="${{ secrets.TEST_DATABASE }}" --env MYSQL_ROOT_PASSWORD="${{ secrets.TEST_ROOT_PASSWORD }}" mysql:8.0.31
+
       ## Gradle 빌드 실행
       - name: run gradle build
         run: ./gradlew build
@@ -39,6 +43,7 @@ jobs:
         uses: crate-ci/typos@v1.0.4
         with:
           files: 'src/**'
+
       ## 테스트 커버리지 리포트 작성
       - name: register test coverage as a comment in PR
         id: jacoco
