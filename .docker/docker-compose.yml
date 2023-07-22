@@ -28,6 +28,7 @@ services:
       NCP_SECRET_KEY: ${NCP_SECRET_KEY}
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
+      SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL}
     networks:
       - habiters-network
   db:
