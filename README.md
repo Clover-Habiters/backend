@@ -5,10 +5,10 @@
 <br><br><br><br>
 ## 팀원 소개 😎
 
-|                                              Planner(PM)                                               |                                               Designer                                              |                                                 Developer(FE)                                                  |                                                 Developer(BE)                                                  |
-|:----------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------:|
-| <img src="https://user-images.githubusercontent.com/104195103/229460395-3d1013ad-d089-4645-84dd-ce59942b0f4a.jpg" alt="박가현_프로필이미지" width="150" height="150"> | <img src="https://user-images.githubusercontent.com/104195103/229458687-31d326d5-070f-4f2f-abf8-6f21face2af6.png" alt="조정현_프로필이미지" width="150" height="150"> | <img src="https://avatars.githubusercontent.com/u/117348712?v=4" alt="박미지_프로필이미지" width="150" height="150"> | <img src="https://avatars.githubusercontent.com/u/104195103?v=4" alt="한태희_프로필이미지" width="150" height="150"> | 
-|                                                    박가현                                                     |                                                    조정현                                                    |                                                    박미지                                                    |                                                    한태희                                                    | 
+|                                              Planner(PM)                                               |                                               Designer                                              |                                                 Developer(FE)                                                  |                                                 Developer(BE)                                                  |                                                 Developer(BE)                                                  |
+|:----------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------:| :----------------------------------------------------------------------------------------------------------:|
+| <img src="https://user-images.githubusercontent.com/104195103/229460395-3d1013ad-d089-4645-84dd-ce59942b0f4a.jpg" alt="박가현_프로필이미지" width="150" height="150"> | <img src="https://user-images.githubusercontent.com/104195103/229458687-31d326d5-070f-4f2f-abf8-6f21face2af6.png" alt="조정현_프로필이미지" width="150" height="150"> | <img src="https://avatars.githubusercontent.com/u/117348712?v=4" alt="박미지_프로필이미지" width="150" height="150"> | <img src="https://avatars.githubusercontent.com/u/104195103?v=4" alt="한태희_프로필이미지" width="150" height="150"> | <img src="https://avatars.githubusercontent.com/u/99165624?v=4" alt="권주성_프로필이미지" width="150" height="150"> | 
+|                                                    박가현                                                     |                                                    조정현                                                    |                                                    박미지                                                    |                                                    한태희                                                    |                                                    권주성                                                    |
 
 
 <br><br><br><br>
@@ -63,26 +63,31 @@ https://documenter.getpostman.com/view/25320340/2s93RWQXTs
 ## 프로젝트 실행 방법 ⚙
 프로젝트 실행 전 아래 항목을 확인해주세요
 
-- naver,kakao,google에서 어플리케이션을 생성 해주어야 합니다
-- 프로젝트에 필요한 환경 변수들을 지정해주어야 합니다
+- Cloud, DB가 설치 및 실행되어 있어야 합니다.
+- Naver,Kakao,Google,등에서 어플리케이션을 지정 해주어야 합니다
+- 프로젝트에 필요한 환경 변수들을 설정해주어야 합니다
 
 ### 환경 변수
 
 |        environment         |           description            |
 |:--------------------------:|:--------------------------------:|
-| DB_USER_NAME |    db에 접속할 수 있는 사용자 username     |
-| DB_PASSWORD |    db에 접속할 수 있는 사용자 password     |
-|   DB_URL    |          접속하려는 db의 url           |
-|       JWT_SECRET       |          JWT 검증을 위한 비밀키          |
-|   KAKAO_URI       | kakao 로그인에서 사용할 OAuth Redirect URI |
-|   KAKAO_CLIENT_ID          |      Kakao 앱 키(REST API 키)       |
-|   KAKAO_CLIENT_SECRET      |     Kakao에서 보안을 위해 제공하는 비밀키      |
-|    GOOGLE_URI     | google 로그인에서 사용할 OAuth Redirect URI |
-|    GOOGLE_CLIENT_ID        |      google 앱 키(REST API 키)       |
-|    GOOGLE_CLIENT_SECRET    |     google에서 보안을 위해 제공하는 비밀키     
-|       NAVER_URI       |     naver 로그인에서 사용할 OAuth Redirect URI      |
-|       NAVER_CLIENT_ID       |     Kakao 앱 키(REST API 키)      |
-|        NAVER_CLIENT_SECRET           |            Kakao에서 보안을 위해 제공하는 비밀키     |
+| DB_USER_NAME               |    db에 접속할 수 있는 사용자 username |
+| DB_PASSWORD                |    db에 접속할 수 있는 사용자 password |
+| DB_URL                     |          접속하려는 db의 url         |
+| JWT_SECRET                 |          JWT 검증을 위한 비밀키       |
+| KAKAO_URI                  | kakao 로그인에서 사용할 OAuth Redirect URI |
+| KAKAO_CLIENT_ID            |      Kakao 앱 키(REST API 키)      |
+| KAKAO_CLIENT_SECRET        |    Kakao에서 보안을 위해 제공하는 비밀키 |
+| GOOGLE_URI                 | google 로그인에서 사용할 OAuth Redirect URI |
+| GOOGLE_CLIENT_ID           |      google 앱 키(REST API 키)     |
+| GOOGLE_CLIENT_SECRET       |   google에서 보안을 위해 제공하는 비밀키  |     
+| NAVER_URI                  | naver 로그인에서 사용할 OAuth Redirect URI|
+| NAVER_CLIENT_ID            |     Kakao 앱 키(REST API 키)       |
+| NCP_API_ACCESS_KEY         |        NCP(클라우드) API 접속 키     |
+| NCP_SECRET_KEY             |         NCP(클라우드) 보안 키        |
+| REDIS_HOST                 |          Redis 호스트 주소          |
+| REDIS_PORT                 |           Redis 포트 번호 주소       |
+| SLACK_WEBHOOK_URL          |     알림을 수신할 슬랙 웹훅 주소        |
 
 ### using Github Project
 
