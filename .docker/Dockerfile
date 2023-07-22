@@ -1,5 +1,5 @@
 FROM openjdk:17-oracle
-ARG JAR_FILE=build/libs/Habiters-1.0.0.jar
+ARG JAR_FILE=build/libs/Habiters-1.1.0.jar
 ENV JWT_SECRET=${JWT_SECRET} \
 DB_USER_NAME=${DB_USER_NAME} \
 DB_PASSWORD=${DB_PASSWORD} \
