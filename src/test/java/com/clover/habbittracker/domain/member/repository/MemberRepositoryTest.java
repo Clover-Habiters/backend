@@ -9,15 +9,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.global.config.JpaConfig;
+import com.clover.habbittracker.global.config.db.JpaConfig;
 
-@DataJpaTest(properties = { "spring.datasource.url=jdbc:h2:mem:testdb", "spring.datasource.driver-class-name=org.h2.Driver", "spring.datasource.username=sa", "spring.datasource.password=" })
+@DataJpaTest
 @Import(JpaConfig.class)
-public class MemberRepositoryTest {
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class MemberRepositoryTest {
 
 	private final MemberRepository memberRepository;
 
@@ -30,7 +32,6 @@ public class MemberRepositoryTest {
 	void setMemberData() {
 		memberRepository.save(createTestMember());
 	}
-
 
 	@Test
 	@DisplayName("사용자를 저장 할 수 있다.")

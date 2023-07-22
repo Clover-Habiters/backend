@@ -1,6 +1,6 @@
 package com.clover.habbittracker.global.exception;
 
-import static com.clover.habbittracker.global.util.MyLogger.*;
+import static com.clover.habbittracker.global.log.MyLogger.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
