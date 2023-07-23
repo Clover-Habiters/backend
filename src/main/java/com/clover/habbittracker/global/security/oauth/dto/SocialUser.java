@@ -1,24 +1,18 @@
 package com.clover.habbittracker.global.security.oauth.dto;
 
+import lombok.Builder;
 
+@Builder
+public record SocialUser(String email, String nickName, String provider, String oauthId) {
+	@Override
+	public String nickName() {
 
-public interface SocialUser {
-	String getEmail();
-
-	String getNickName();
-
-	String getProvider();
-
-	String getOauthId();
-
-	default String trimNickName(String nickName) {
-
-		if(nickName == null) {
+		if (nickName == null) {
 			return null;
 		}
 
-		if(nickName.length() > 8){
-			nickName = nickName.replace(" ","").substring(0, 8);
+		if (nickName.length() > 8) {
+			nickName.replace(" ", "").substring(0, 8);
 		}
 		return nickName;
 	}

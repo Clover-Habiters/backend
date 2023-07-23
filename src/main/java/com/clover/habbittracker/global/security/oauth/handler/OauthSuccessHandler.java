@@ -1,6 +1,6 @@
-package com.clover.habbittracker.global.security.oauth;
+package com.clover.habbittracker.global.security.oauth.handler;
 
-import static com.clover.habbittracker.global.security.oauth.HttpCookieOAuthAuthorizationRequestRepository.*;
+import static com.clover.habbittracker.global.security.oauth.repository.HttpCookieOAuthAuthorizationRequestRepository.*;
 
 import java.io.IOException;
 
@@ -10,10 +10,11 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.clover.habbittracker.global.security.oauth.Social;
 import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
+import com.clover.habbittracker.global.security.oauth.service.OauthService;
 import com.clover.habbittracker.global.util.CookieUtil;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,28 +25,19 @@ import lombok.RequiredArgsConstructor;
 public class OauthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 	private final OauthService oauthService;
 
-	// private final CustomRedirectStrategy customRedirectStrategy;
-	// private final ObjectMapper objectMapper;
-
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-		Authentication authentication) throws IOException, ServletException {
+		Authentication authentication) throws IOException {
 		String[] splitURI = request.getRequestURI().split("/");
-		String provider = splitURI[splitURI.length - 1]; // URI 맨 뒤는 제공자
+		String provider = splitURI[splitURI.length - 1].toUpperCase(); // URI 맨 뒤는 제공자
+		Social social = Social.valueOf(provider);
 		Object principal = authentication.getPrincipal();
 
 		if (principal instanceof OAuth2User user) {
-			SocialUser userInfo = OauthProvider.getProfile(user, provider);
+			SocialUser userInfo = social.toUserInfo(user);
 			String accessToken = oauthService.login(userInfo);
 			String targetUrl = determineTargetUrl(request,accessToken);
-			// setRedirectStrategy(customRedirectStrategy);
 			getRedirectStrategy().sendRedirect(request, response, targetUrl);
-			// response.setStatus(HttpStatus.OK.value());
-			// response.setContentType("application/json");
-			// response.setCharacterEncoding("UTF-8");
-			//
-			// response.getWriter().write(objectMapper.writeValueAsString(accessToken));
-
 		}
 
 	}

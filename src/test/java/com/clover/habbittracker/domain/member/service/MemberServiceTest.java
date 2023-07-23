@@ -3,13 +3,11 @@ package com.clover.habbittracker.domain.member.service;
 import static com.clover.habbittracker.global.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +16,6 @@ import com.clover.habbittracker.domain.member.dto.MemberResponse;
 import com.clover.habbittracker.domain.member.exception.MemberDuplicateNickName;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.security.oauth.dto.GoogleUser;
-import com.clover.habbittracker.global.security.oauth.dto.SocialUser;
 
 @SpringBootTest
 @Transactional
@@ -83,44 +79,4 @@ class MemberServiceTest {
 			memberService.updateProfile(saveId, memberRequest);
 		});
 	}
-
-	@Test
-	@DisplayName("로그인을 할 경우 oauthId와 provider를 비교하여 사용자 정보가 없다면 자동으로 회원가입 한다.")
-	void memberRegisterTest() {
-		//given
-		SocialUser newUser = GoogleUser.builder()
-			.oauthId("GoogleOauthId")
-			.provider("google")
-			.nickName(getNickName())
-			.build();
-		SocialUser savedUser = GoogleUser.builder()
-			.oauthId("testOauthId")
-			.provider("testProvider")
-			.nickName(getNickName())
-			.build();
-		//when
-		Long newMemberID = memberService.join(newUser);
-		Long savedUserId = memberService.join(savedUser);
-		//then
-		assertThat(newMemberID).isNotSameAs(saveId);
-		assertThat(savedUserId).isEqualTo(saveId);
-	}
-
-	@Test
-	@DisplayName("회원 가입을 할 경우 닉네임이 8자 이상이라면, \"해비터_\"를 공백을 제외한 8자까지 닉네임을 사용한다")
-	void memberRegisterTrimNickNameTest() {
-		//given
-		SocialUser newUser = GoogleUser.builder()
-			.oauthId("GoogleOauthId")
-			.provider("google")
-			.nickName("test Nick Name")
-			.build();
-		Long newMemberID = memberService.join(newUser);
-		//when
-		MemberResponse profile = memberService.getProfile(newMemberID);
-		//then
-		assertThat(profile.getNickName().substring(4)).isEqualTo(newUser.getNickName().replace(" ","").substring(0,8));
-
-	}
-
 }

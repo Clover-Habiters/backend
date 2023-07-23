@@ -1,7 +1,7 @@
-package com.clover.habbittracker.global.security.oauth;
+package com.clover.habbittracker.global.security.oauth.handler;
 
 
-import static com.clover.habbittracker.global.security.oauth.HttpCookieOAuthAuthorizationRequestRepository.*;
+import static com.clover.habbittracker.global.security.oauth.repository.HttpCookieOAuthAuthorizationRequestRepository.*;
 
 import java.io.IOException;
 
@@ -10,6 +10,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.clover.habbittracker.global.security.oauth.repository.HttpCookieOAuthAuthorizationRequestRepository;
 import com.clover.habbittracker.global.util.CookieUtil;
 
 import jakarta.servlet.http.Cookie;
