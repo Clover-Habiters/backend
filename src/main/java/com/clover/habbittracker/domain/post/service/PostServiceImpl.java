@@ -1,6 +1,7 @@
 package com.clover.habbittracker.domain.post.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +45,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public PostDetailResponse getPostBy(Long postId) {
-		Post post = postRepository.joinCommentAndLikeFindById(postId)
+		Post post = postRepository.joinMemberAndCommentFindById(postId)
 			.orElseThrow(() -> new PostNotFoundException(postId));
 		postRepository.updateViews(post.getId());
 		return postMapper.toPostDetail(post);
@@ -68,7 +69,8 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public PostResponse updatePost(Long postId, PostRequest request, Long memberId) {
-		Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(postId));
+		Post post = postRepository.joinMemberAndCommentFindById(postId)
+			.orElseThrow(() -> new PostNotFoundException(postId));
 		verifyPermissions(post.getMember(), memberId);
 		post.updatePost(request);
 		return postMapper.toPostResponse(post);
@@ -77,13 +79,14 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public void deletePost(Long postId, Long memberId) {
-		Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(postId));
+		Post post = postRepository.joinMemberAndCommentFindById(postId)
+			.orElseThrow(() -> new PostNotFoundException(postId));
 		verifyPermissions(post.getMember(), memberId);
 		postRepository.deleteById(postId);
 	}
 
 	private void verifyPermissions(Member member, Long memberId) {
-		if (!member.getId().equals(memberId)) {
+		if (!Objects.equals(member.getId(), memberId)) {
 			throw new PermissionDeniedException(memberId);
 		}
 	}
