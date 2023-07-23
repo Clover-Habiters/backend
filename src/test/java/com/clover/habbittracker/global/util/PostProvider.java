@@ -17,4 +17,13 @@ public class PostProvider {
 			.member(member)
 			.build();
 	}
+
+	public static Post createTestPost(Member member, Post.Category category) {
+		return Post.builder()
+			.title(TITLE)
+			.content(CONTENT)
+			.category(category)
+			.member(member)
+			.build();
+	}
 }
