@@ -68,12 +68,12 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	@Transactional
-	public PostResponse updatePost(Long postId, PostRequest request, Long memberId) {
+	public Long updatePost(Long postId, PostRequest request, Long memberId) {
 		Post post = postRepository.joinMemberAndCommentFindById(postId)
 			.orElseThrow(() -> new PostNotFoundException(postId));
 		verifyPermissions(post.getMember(), memberId);
 		post.updatePost(request);
-		return postMapper.toPostResponse(post);
+		return post.getId();
 	}
 
 	@Override
