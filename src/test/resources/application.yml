@@ -27,3 +27,12 @@ spring:
   redis:
     host: ${REDIS_HOST}
     port: ${REDIS_PORT}
+
+logging:
+  level:
+    org:
+      hibernate:
+        engine:
+          transaction:
+            internal:
+              TransactionImpl: DEBUG
