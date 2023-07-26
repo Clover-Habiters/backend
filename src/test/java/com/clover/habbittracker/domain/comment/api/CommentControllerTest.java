@@ -1,8 +1,8 @@
 package com.clover.habbittracker.domain.comment.api;
 
-import static com.clover.habbittracker.global.util.ApiDocumentUtils.*;
-import static com.clover.habbittracker.global.util.MemberProvider.*;
-import static com.clover.habbittracker.global.util.PostProvider.*;
+import static com.clover.habbittracker.util.ApiDocumentUtils.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
+import static com.clover.habbittracker.util.PostProvider.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
@@ -54,7 +54,6 @@ public class CommentControllerTest {
 	private String accessJwt;
 
 	private Post savePost;
-
 
 	@BeforeEach
 	void setUp() {
@@ -119,7 +118,7 @@ public class CommentControllerTest {
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
-					.put("/posts/{postId}/comment/{commentId}",savePost.getId(), savedComment.getId())
+					.put("/posts/{postId}/comment/{commentId}", savePost.getId(), savedComment.getId())
 					.header("Authorization", "Bearer " + accessJwt)
 					.contentType(APPLICATION_JSON)
 					.content(request))

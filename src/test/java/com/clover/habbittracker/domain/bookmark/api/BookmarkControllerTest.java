@@ -1,8 +1,8 @@
 package com.clover.habbittracker.domain.bookmark.api;
 
-import static com.clover.habbittracker.global.util.ApiDocumentUtils.*;
-import static com.clover.habbittracker.global.util.MemberProvider.*;
-import static com.clover.habbittracker.global.util.PostProvider.*;
+import static com.clover.habbittracker.util.ApiDocumentUtils.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
+import static com.clover.habbittracker.util.PostProvider.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
@@ -71,7 +71,6 @@ class BookmarkControllerTest {
 		savedMember = memberRepository.save(member);
 
 		accessToken = jwtProvider.createAccessJwt(savedMember.getId());
-
 
 		savedPost = postRepository.save(createTestPost(savedMember));
 

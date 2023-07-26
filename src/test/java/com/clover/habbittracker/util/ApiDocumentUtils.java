@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.util;
+package com.clover.habbittracker.util;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 
@@ -8,6 +8,7 @@ import org.springframework.restdocs.operation.preprocess.OperationResponsePrepro
 public class ApiDocumentUtils {
 
 	private ApiDocumentUtils() {
+		/* NO-OP */
 	}
 
 	public static OperationRequestPreprocessor getDocumentRequest() {

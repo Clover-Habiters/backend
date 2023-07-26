@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.habit.service;
 
-import static com.clover.habbittracker.global.util.MemberProvider.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,20 +33,16 @@ import com.clover.habbittracker.domain.member.repository.MemberRepository;
 @Transactional
 public class HabitServiceTest {
 
+	private final LocalDateTime now = LocalDateTime.now();
 	@Autowired
 	private HabitService habitService;
-
 	@Autowired
 	private HabitRepository habitRepository;
-
 	@Autowired
 	private HabitCheckRepository habitCheckRepository;
 	@Autowired
 	private MemberRepository memberRepository;
-
 	private Member testMember;
-
-	private final LocalDateTime now = LocalDateTime.now();
 
 	@BeforeEach
 	void setUp() {
@@ -89,7 +85,6 @@ public class HabitServiceTest {
 		habitService.register(testMemberId, habitRequest);
 		String today = now.getYear() + "-0" + now.getMonthValue();
 
-
 		//when
 		List<MyHabitResponse> myList1 = habitService.getMyList(testMemberId, "2023-04"); // 2023년 4월로 조회.
 		List<MyHabitResponse> myList2 = habitService.getMyList(testMemberId, today);
@@ -100,7 +95,6 @@ public class HabitServiceTest {
 				.hasFieldOrProperty("id")
 				.hasFieldOrProperty("content")
 		);
-
 
 		myList2.forEach(myHabitResponse ->
 			assertThat(myHabitResponse)
@@ -137,7 +131,7 @@ public class HabitServiceTest {
 		Long saveHabitId = habitService.register(testMemberId, habitRequest);
 
 		//when
-		habitService.habitCheck(saveHabitId ,today);
+		habitService.habitCheck(saveHabitId, today);
 		Habit saveHabit = habitRepository.findById(saveHabitId).get();
 
 		//then
@@ -156,9 +150,9 @@ public class HabitServiceTest {
 		String today = "0" + now.getMonthValue() + "-" + now.getDayOfMonth();
 
 		//when
-		habitService.habitCheck(saveHabitId,today);
+		habitService.habitCheck(saveHabitId, today);
 		assertThrows(HabitCheckDuplicateException.class,
-			() -> habitService.habitCheck(saveHabitId,today)); // 같은 날 두번 연속 체크는 불가능.
+			() -> habitService.habitCheck(saveHabitId, today)); // 같은 날 두번 연속 체크는 불가능.
 	}
 
 	@Test
@@ -173,7 +167,7 @@ public class HabitServiceTest {
 
 		//when
 		assertThrows(HabitCheckExpiredException.class,
-			() -> habitService.habitCheck(saveHabitId,past));
+			() -> habitService.habitCheck(saveHabitId, past));
 	}
 
 	@Test
@@ -205,7 +199,7 @@ public class HabitServiceTest {
 
 		//when then
 		assertAll(
-			() -> assertThrows(HabitNotFoundException.class, () -> habitService.habitCheck(wrongHabitId , today)),
+			() -> assertThrows(HabitNotFoundException.class, () -> habitService.habitCheck(wrongHabitId, today)),
 			() -> assertThrows(HabitNotFoundException.class,
 				() -> habitService.updateMyHabit(wrongHabitId, habitRequest))
 		);

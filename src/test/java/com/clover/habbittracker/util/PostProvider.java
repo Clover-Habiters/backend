@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.util;
+package com.clover.habbittracker.util;
 
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.dto.PostRequest;
@@ -11,6 +11,10 @@ public class PostProvider {
 	private static final String REQUEST_TITLE = "requestTitle";
 	private static final String REQUEST_CONTENT = "requestContent";
 	private static final Post.Category CATEGORY = Post.Category.DAILY;
+
+	private PostProvider() {
+		/* NO-OP */
+	}
 
 	public static Post createTestPost(Member member) {
 		return Post.builder()

@@ -1,7 +1,7 @@
 package com.clover.habbittracker.domain.comment.service;
 
-import static com.clover.habbittracker.global.util.MemberProvider.*;
-import static com.clover.habbittracker.global.util.PostProvider.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
+import static com.clover.habbittracker.util.PostProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
