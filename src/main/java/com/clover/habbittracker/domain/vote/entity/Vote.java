@@ -3,6 +3,7 @@ package com.clover.habbittracker.domain.vote.entity;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.clover.habbittracker.global.base.entity.BaseEntity;
@@ -27,9 +28,9 @@ public class Vote extends BaseEntity {
 
 	private String title;
 
-	private String description;
-
 	@OneToMany(mappedBy = "vote")
 	private List<VoteItem> voteItemList;
+
+	private LocalDateTime deadline;
 
 }

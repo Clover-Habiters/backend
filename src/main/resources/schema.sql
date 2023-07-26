@@ -2,6 +2,8 @@
 -- create schema habiters-db;
 -- use habiters-db;
 
+DROP TABLE IF EXISTS vote_item;
+DROP TABLE IF EXISTS vote;
 DROP TABLE IF EXISTS bookmark_folder;
 DROP TABLE IF EXISTS bookmark;
 DROP TABLE IF EXISTS emoji;
@@ -122,4 +124,26 @@ create table bookmark_folder
 (
     bookmark_id bigint not null,
     posts_id    bigint null
+);
+
+create table vote
+(
+    id           bigint auto_increment primary key,
+    title        varchar(255) not null,
+    deadline     datetime(6)  not null,
+    created_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
+    updated_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
+    deleted      boolean      not null default false
+);
+
+create table vote_item
+(
+    id      bigint auto_increment primary key,
+    content varchar(255) not null,
+    count   int          not null default 0,
+    seq     int          not null default 1,
+    vote_id bigint       not null,
+
+    constraint vote_item_vote_id_fk
+        foreign key (vote_id) references vote (id)
 );

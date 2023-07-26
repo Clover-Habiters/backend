@@ -6,6 +6,7 @@ import static lombok.AccessLevel.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -25,9 +26,10 @@ public class VoteItem {
 
 	private Integer count;
 
-	private Integer order;
+	private Integer seq;
 
 	@ManyToOne
+	@JoinColumn(name = "vote_id")
 	private Vote vote;
 
 }
