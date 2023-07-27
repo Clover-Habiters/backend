@@ -44,7 +44,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 	}
 
 	@Override
-	public Optional<Post> joinCommentAndLikeFindById(Long postId) {
+	public Optional<Post> joinMemberAndCommentFindById(Long postId) {
 		Post result = jpaQueryFactory.selectFrom(post)
 			.leftJoin(post.member, member)
 			.fetchJoin()

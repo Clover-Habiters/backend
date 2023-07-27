@@ -81,14 +81,14 @@ public class PostController {
 	}
 
 	@PutMapping("/{postId}")
-	public ResponseEntity<ApiResponse<PostResponse>> updatePost(
+	public ResponseEntity<ApiResponse<Void>> updatePost(
 		@PathVariable Long postId,
 		@AuthenticationPrincipal Long memberId,
 		@RequestBody PostRequest request
 	) {
-		PostResponse postResponse = postService.updatePost(postId, request, memberId);
-		ApiResponse<PostResponse> response = ApiResponse.success(postResponse);
-		URI location = URI.create("/posts/" + postId.toString());
+		Long updateId = postService.updatePost(postId, request, memberId);
+		ApiResponse<Void> response = ApiResponse.success();
+		URI location = URI.create("/posts/" + updateId);
 		return ResponseEntity.ok().location(location).body(response);
 	}
 

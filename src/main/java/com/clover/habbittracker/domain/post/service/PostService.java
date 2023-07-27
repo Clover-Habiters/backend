@@ -20,7 +20,7 @@ public interface PostService {
 
 	Page<PostResponse> getPostBy(PostSearchCondition postSearchCondition, Pageable pageable);
 
-	PostResponse updatePost(Long postId, PostRequest request, Long memberId);
+	Long updatePost(Long postId, PostRequest request, Long memberId);
 
 	void deletePost(Long postId, Long memberId);
 }

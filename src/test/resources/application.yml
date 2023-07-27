@@ -15,7 +15,11 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
-    dialect: com.clover.habbittracker.global.config.db.MySQLConfig.MySQLCustomDialect
+
+    properties:
+      hibernate:
+        dialect: com.clover.habbittracker.global.config.db.MySQLConfig$MySQLCustomDialect
+        format_sql: true
   #    defer-datasource-initialization: true
   config:
     import: application-token.yml, application-security.yml
@@ -23,3 +27,12 @@ spring:
   redis:
     host: ${REDIS_HOST}
     port: ${REDIS_PORT}
+
+logging:
+  level:
+    org:
+      hibernate:
+        engine:
+          transaction:
+            internal:
+              TransactionImpl: DEBUG
