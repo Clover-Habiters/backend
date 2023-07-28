@@ -22,3 +22,6 @@ spring:
   redis:
     host: ${REDIS_HOST}
     port: ${REDIS_PORT}
+
+slack:
+  webhook: ${SLACK_WEBHOOK_URL}
