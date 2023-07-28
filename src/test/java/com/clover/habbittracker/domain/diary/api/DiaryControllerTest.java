@@ -1,7 +1,7 @@
 package com.clover.habbittracker.domain.diary.api;
 
-import static com.clover.habbittracker.global.util.ApiDocumentUtils.*;
-import static com.clover.habbittracker.global.util.MemberProvider.*;
+import static com.clover.habbittracker.util.ApiDocumentUtils.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
 import static org.hamcrest.core.Is.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -199,7 +199,7 @@ public class DiaryControllerTest {
 		Long id = saveDiary.getId();
 		//when then
 		mockMvc.perform(
-				RestDocumentationRequestBuilders.delete("/diaries/{diaryId}" , id)
+				RestDocumentationRequestBuilders.delete("/diaries/{diaryId}", id)
 					.header("Authorization", "Bearer " + accessJwt))
 			.andExpect(status().isNoContent())
 			.andDo(document("diary-delete",

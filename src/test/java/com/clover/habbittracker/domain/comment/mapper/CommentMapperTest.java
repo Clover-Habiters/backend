@@ -12,8 +12,8 @@ import com.clover.habbittracker.domain.comment.dto.CommentResponse;
 import com.clover.habbittracker.domain.comment.entity.Comment;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.entity.Post;
-import com.clover.habbittracker.global.util.MemberProvider;
-import com.clover.habbittracker.global.util.PostProvider;
+import com.clover.habbittracker.util.MemberProvider;
+import com.clover.habbittracker.util.PostProvider;
 
 public class CommentMapperTest {
 

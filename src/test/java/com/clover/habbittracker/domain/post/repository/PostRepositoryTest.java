@@ -1,13 +1,17 @@
 package com.clover.habbittracker.domain.post.repository;
 
-import static com.clover.habbittracker.global.util.MemberProvider.*;
-import static com.clover.habbittracker.global.util.PostProvider.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
+import static com.clover.habbittracker.util.PostProvider.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,30 +107,30 @@ public class PostRepositoryTest {
 		assertThat(dailyPostsSummary.get(0)).usingRecursiveComparison().isEqualTo(savePostDaily);
 	}
 
-	// TODO: 조회수 개선 이후 테스트 진행. 현재 정상적으로 테스트가 불가능.
-	// @Test
-	// @DisplayName("게시글의 조회수는 1씩 증가한다.")
-	// void updateViewTest() throws InterruptedException {
-	// 	//given
-	// 	int threadNum = 3;
-	// 	Post testPost = createTestPost(testMember);
-	// 	Post savedPost = postRepository.save(testPost);
-	//
-	// 	ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
-	// 	CountDownLatch latch = new CountDownLatch(threadNum);
-	//
-	// 	//when
-	// 	for (int i = 0; i < threadNum; i++) {
-	// 		executorService.execute(() -> {
-	// 			postRepository.updateViews(savedPost.getId());
-	// 			latch.countDown();
-	// 		});
-	// 	}
-	// 	latch.await();
-	//
-	// 	//then
-	// 	assertThat(savedPost.getViews()).isEqualTo(1);
-	// }
+	@Disabled // TODO: 조회수 개선 이후 테스트 진행. 현재 정상적으로 테스트가 불가능.
+	@Test
+	@DisplayName("게시글의 조회수는 1씩 증가한다.")
+	void updateViewTest() throws InterruptedException {
+		//given
+		int threadNum = 3;
+		Post testPost = createTestPost(testMember);
+		Post savedPost = postRepository.save(testPost);
+
+		ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
+		CountDownLatch latch = new CountDownLatch(threadNum);
+
+		//when
+		for (int i = 0; i < threadNum; i++) {
+			executorService.execute(() -> {
+				postRepository.updateViews(savedPost.getId());
+				latch.countDown();
+			});
+		}
+		latch.await();
+
+		//then
+		assertThat(savedPost.getViews()).isEqualTo(1);
+	}
 
 	@Test
 	void searchByPostTest() {

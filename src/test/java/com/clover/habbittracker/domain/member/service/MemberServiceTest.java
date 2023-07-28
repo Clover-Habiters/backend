@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.member.service;
 
-import static com.clover.habbittracker.global.util.MemberProvider.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +33,6 @@ class MemberServiceTest {
 	void setUp() {
 		saveId = memberRepository.save(createTestMember()).getId();
 	}
-
 
 	@Test
 	@DisplayName("사용자 ID로 사용자 프로필 정보를 얻어 올 수 있다.")

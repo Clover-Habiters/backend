@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.config;
+package com.clover.habbittracker.config;
 
 import java.io.BufferedReader;
 import java.io.IOException;

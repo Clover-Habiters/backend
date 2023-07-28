@@ -1,7 +1,7 @@
 package com.clover.habbittracker.domain.post.service;
 
-import static com.clover.habbittracker.global.util.MemberProvider.*;
-import static com.clover.habbittracker.global.util.PostProvider.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
+import static com.clover.habbittracker.util.PostProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,18 +34,14 @@ import com.clover.habbittracker.domain.post.repository.PostRepository;
 @Transactional
 public class PostServiceTest {
 
+	private final Pageable pageable = PageRequest.of(0, 15);
 	@Autowired
 	private PostRepository postRepository;
-
 	@Autowired
 	private PostService postService;
-
 	@Autowired
 	private MemberRepository memberRepository;
-
 	private Member testMember;
-
-	private final Pageable pageable = PageRequest.of(0, 15);
 
 	@BeforeEach
 	public void setUp() {

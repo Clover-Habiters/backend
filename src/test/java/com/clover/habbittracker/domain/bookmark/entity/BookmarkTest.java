@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.bookmark.entity;
 
-import static com.clover.habbittracker.global.util.MemberProvider.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.stream.Stream;
@@ -17,7 +17,7 @@ class BookmarkTest {
 
 	private static final String TITLE = "테스트 제목";
 	private static final String DESCRIPTION = "테스트 설명";
-	private static final String SIZE_500_STRING_DUMMY = "0" + "1234567890" .repeat(50);
+	private static final String SIZE_500_STRING_DUMMY = "0" + "1234567890".repeat(50);
 
 	private static Stream<Arguments> provideStringDummy() {
 		return Stream.of(

@@ -1,7 +1,7 @@
 package com.clover.habbittracker.domain.member.api;
 
-import static com.clover.habbittracker.global.util.ApiDocumentUtils.*;
-import static com.clover.habbittracker.global.util.MemberProvider.*;
+import static com.clover.habbittracker.util.ApiDocumentUtils.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.core.Is.*;
 import static org.springframework.http.MediaType.*;
@@ -78,6 +78,7 @@ public class MemberControllerTest {
 				)
 			));
 	}
+
 	@Test
 	@DisplayName("기존의 사용하고 있는 닉네임은 중복으로 생각하여 예외가 발생한다.")
 	void updateNickNameDuplicateTest() throws Exception {
@@ -101,6 +102,7 @@ public class MemberControllerTest {
 					fieldWithPath("msg").type(STRING).description("결과 메시지")
 				)));
 	}
+
 	@Test
 	@DisplayName("사용자는 자신의 프로필 닉네임만 변경할 수 있다.")
 	void updateMyProfileNickNameTest() throws Exception {
@@ -134,6 +136,7 @@ public class MemberControllerTest {
 				)
 			));
 	}
+
 	@Test
 	@DisplayName("사용자는 자신의 프로필 정보를 삭제 할 수 있다.")
 	void deleteProfileTest() throws Exception {

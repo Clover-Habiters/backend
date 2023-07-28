@@ -97,19 +97,22 @@ create table emoji
     domain       varchar(30) not null,
     type         varchar(30) not null,
     member_id    bigint      not null,
-    domain_id    bigint      null,
+    domain_id    bigint      not null,
     created_date datetime(6) not null default CURRENT_TIMESTAMP(6),
     updated_date datetime(6) not null default CURRENT_TIMESTAMP(6),
-    deleted      boolean     not null default false
+    deleted      boolean     not null default false,
+
+    unique index idx_emoji_unique (domain, domain_id, member_id),
+    index idx_emoji_domain (domain, domain_id),
+    index idx_emoji_member_id (member_id)
 );
 
 create table bookmark
 (
     id           bigint auto_increment primary key,
-    title        varchar(255) null,
-    description  varchar(500) null,
-    post_id      bigint       null,
-    member_id    bigint       null,
+    title        varchar(255) not null,
+    description  varchar(500) not null,
+    member_id    bigint       not null,
     created_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
     updated_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
     deleted      boolean      not null default false
@@ -117,6 +120,6 @@ create table bookmark
 
 create table bookmark_folder
 (
-    bookmark_id bigint null,
+    bookmark_id bigint not null,
     posts_id    bigint null
 );

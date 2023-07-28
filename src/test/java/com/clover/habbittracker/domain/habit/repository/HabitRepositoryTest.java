@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.habit.repository;
 
-import static com.clover.habbittracker.global.util.MemberProvider.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;

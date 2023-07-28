@@ -1,14 +1,19 @@
-package com.clover.habbittracker.global.util;
+package com.clover.habbittracker.util;
 
 import com.clover.habbittracker.domain.member.entity.Member;
 
 public class MemberProvider {
+
 	private static final Long ID = 1L;
 	private static final String EMAIL = "test@email.com";
 	private static final String PROFILE_IMG_URL = "testImgUrl";
 	private static final String NICK_NAME = "testNickName";
 	private static final String OAUTH_ID = "testOauthId";
 	private static final String PROVIDER = "testProvider";
+
+	private MemberProvider() {
+		/* NO-OP */
+	}
 
 	public static Member createTestMember() {
 		return Member.builder()

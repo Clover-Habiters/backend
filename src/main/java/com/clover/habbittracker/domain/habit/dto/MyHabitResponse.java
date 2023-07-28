@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.clover.habbittracker.domain.habit.entity.Habit;
 import com.clover.habbittracker.domain.habitcheck.dto.HabitCheckResponse;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class MyHabitResponse {
 	private Long id;
 	private String content;
 	private List<HabitCheckResponse> habitChecks;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private LocalDateTime createDate;
 
 	public static MyHabitResponse from(Habit habit, Map<String, LocalDateTime> dateMap) {

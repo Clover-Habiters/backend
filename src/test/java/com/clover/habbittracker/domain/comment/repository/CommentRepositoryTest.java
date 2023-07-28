@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.comment.repository;
 
-import static com.clover.habbittracker.global.util.PostProvider.*;
+import static com.clover.habbittracker.util.PostProvider.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
 import com.clover.habbittracker.global.config.db.JpaConfig;
-import com.clover.habbittracker.global.util.MemberProvider;
+import com.clover.habbittracker.util.MemberProvider;
 
 @DataJpaTest
 @Import(JpaConfig.class)

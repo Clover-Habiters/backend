@@ -1,7 +1,7 @@
 package com.clover.habbittracker.domain.habit.api;
 
-import static com.clover.habbittracker.global.util.ApiDocumentUtils.*;
-import static com.clover.habbittracker.global.util.MemberProvider.*;
+import static com.clover.habbittracker.util.ApiDocumentUtils.*;
+import static com.clover.habbittracker.util.MemberProvider.*;
 import static org.hamcrest.core.Is.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
