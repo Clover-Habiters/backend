@@ -7,12 +7,24 @@
 
 = habiters API 문서
 
-include::overview.adoc[]
+== Common
 
-include::Member-API.adoc[]
+[[Common-List]]
+=== link:common/overview.html[공통 내용, window= _blank]
 
-include::Habit-API.adoc[]
+=== link:common/Error.html[에러, window= _blank]
 
-include::Diray-API.adoc[]
+== APIs
 
-include::Error.adoc[]
+[[API-List]]
+=== link:api/Member-API.html[멤버 API, window= _blank]
+
+=== link:api/Habit-API.html[습관 API, window= _blank]
+
+=== link:api/Diary-API.html[회고록 API, window= _blank]
+
+=== link:api/Comment-API.html[댓글 API, window= _blank]
+
+=== link:api/Bookmark-API.html[북마크 API, window= _blank]
+
+=== link:api/Emoji-API.html[이모지 API, window= _blank]

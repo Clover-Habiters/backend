@@ -1,0 +1,102 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Comment-API]]
+== 댓글 API
+
+=== 공통
+
+==== 모든 요청은 *Authorization* 헤더가 필요합니다.
+
+include::{snippets}/habit-controller-test/create-habit-test/request-headers.adoc[]
+
+---
+
+=== 댓글 등록
+
+*endpoint* +
+_/posts/{postId}/comment_
+
+==== Request
+
+include::{snippets}/comment-controller-test/create-comment-test/path-parameters.adoc[]
+include::{snippets}/comment-controller-test/create-comment-test/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/comment-controller-test/create-comment-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/comment-controller-test/create-comment-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/comment-controller-test/create-comment-test/http-response.adoc[]
+
+=== 댓글 수정
+
+*endpoint* +
+_/posts/{postId}/{commentId}_
+
+==== Request
+
+include::{snippets}/comment-controller-test/update-comment-test/path-parameters.adoc[]
+include::{snippets}/comment-controller-test/update-comment-test/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/comment-controller-test/update-comment-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/comment-controller-test/update-comment-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/comment-controller-test/update-comment-test/http-response.adoc[]
+
+=== 답글 등록
+
+*endpoint* +
+_/posts/{postId}/{commentId}/reply_
+
+==== Request
+
+include::{snippets}/comment-controller-test/create-reply-test/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/comment-controller-test/create-reply-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/comment-controller-test/create-reply-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/comment-controller-test/create-reply-test/http-response.adoc[]
+
+=== 답글 조회
+
+*endpoint* +
+_/posts/{postId}/{commentId}/reply_
+
+==== Request
+
+include::{snippets}/comment-controller-test/get-reply-list-test/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/comment-controller-test/get-reply-list-test/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/comment-controller-test/get-reply-list-test/http-response.adoc[]
+
