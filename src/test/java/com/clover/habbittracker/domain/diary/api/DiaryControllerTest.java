@@ -1,11 +1,10 @@
 package com.clover.habbittracker.domain.diary.api;
 
-import static com.clover.habbittracker.global.restdocs.util.ApiDocumentUtils.*;
-import static com.clover.habbittracker.util.MemberProvider.*;
+import static com.clover.habbittracker.global.exception.ErrorType.*;
+import static com.clover.habbittracker.global.restdocs.config.RestDocsConfig.*;
 import static org.hamcrest.core.Is.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -18,48 +17,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.clover.habbittracker.base.RestDocsSupport;
 import com.clover.habbittracker.domain.diary.dto.DiaryRequest;
 import com.clover.habbittracker.domain.diary.entity.Diary;
 import com.clover.habbittracker.domain.diary.repository.DiaryRepository;
-import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.exception.ErrorType;
-import com.clover.habbittracker.global.security.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
-@Transactional
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.habiters.store")
-public class DiaryControllerTest {
+public class DiaryControllerTest extends RestDocsSupport {
 
-	@Autowired
-	private MockMvc mockMvc;
 	@Autowired
 	private DiaryRepository diaryRepository;
-	@Autowired
-	private MemberRepository memberRepository;
-	@Autowired
-	private JwtProvider jwtProvider;
-
-	private String accessJwt;
-
 	private Diary saveDiary;
 
 	@BeforeEach
 	void setUp() {
-		Member testMember = memberRepository.save(createTestMember());
-		accessJwt = jwtProvider.createAccessJwt(testMember.getId());
 		Diary diary = Diary.builder()
 			.endUpdateDate(LocalDateTime.now().plusHours(24))
-			.member(testMember)
+			.member(savedMember)
 			.content("미리 저장된 테스트 회고록입니다.")
 			.build();
 		saveDiary = diaryRepository.save(diary);
@@ -76,19 +52,19 @@ public class DiaryControllerTest {
 		//when then
 		mockMvc.perform(
 				post("/diaries")
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isCreated())
 			// restDocs 설정.
-			.andDo(document("diary-create",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				requestFields(
-					fieldWithPath("content").type(STRING).description("회고록 내용")
+					fieldWithPath("content").type(STRING)
+						.description("회고록 내용")
+						.attributes(field("constraints", "500자 이내"))
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
@@ -107,7 +83,7 @@ public class DiaryControllerTest {
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders.put("/diaries/{diaryId}", id)
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isOk())
@@ -115,9 +91,7 @@ public class DiaryControllerTest {
 			.andExpect(jsonPath("$.data.id", is(saveDiary.getId().intValue())))
 			.andExpect(jsonPath("$.data.content", is(diaryRequest.getContent())))
 			// restDocs 설정.
-			.andDo(document("diary-update",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -125,7 +99,9 @@ public class DiaryControllerTest {
 					parameterWithName("diaryId").description("수정할 회고 id")
 				),
 				requestFields(
-					fieldWithPath("content").type(STRING).description("수정할 회고 내용")
+					fieldWithPath("content").type(STRING)
+						.description("수정할 회고 내용")
+						.attributes(field("constraints", "500자 이내"))
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
@@ -143,11 +119,9 @@ public class DiaryControllerTest {
 		//when then
 		mockMvc.perform(
 				get("/diaries")
-					.header("Authorization", "Bearer " + accessJwt))
+					.header("Authorization", "Bearer " + accessToken))
 			.andExpect(status().isOk())
-			.andDo(document("all-diary-read",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -171,12 +145,10 @@ public class DiaryControllerTest {
 		//when then
 		mockMvc.perform(
 				get("/diaries")
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.param("date", date))
 			.andExpect(status().isOk())
-			.andDo(document("monthly-diary-read",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -200,11 +172,9 @@ public class DiaryControllerTest {
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders.delete("/diaries/{diaryId}", id)
-					.header("Authorization", "Bearer " + accessJwt))
+					.header("Authorization", "Bearer " + accessToken))
 			.andExpect(status().isNoContent())
-			.andDo(document("diary-delete",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				pathParameters(
 					parameterWithName("diaryId").description("삭제할 회고 아이디")
 				),
@@ -232,15 +202,13 @@ public class DiaryControllerTest {
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders.put("/diaries/{diaryId}", expiredDiaryId)
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.errorName", is(ErrorType.DIARY_EXPIRED.name())))
-			.andExpect(jsonPath("$.msg", is(ErrorType.DIARY_EXPIRED.getErrorMsg())))
-			.andDo(document("expired-diary",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andExpect(jsonPath("$.errorName", is(DIARY_EXPIRED.name())))
+			.andExpect(jsonPath("$.msg", is(DIARY_EXPIRED.getErrorMsg())))
+			.andDo(restDocs.document(
 				pathParameters(
 					parameterWithName("diaryId").description("수정할 회고 아이디")
 				),

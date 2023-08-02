@@ -12,7 +12,7 @@ public class ApiDocumentUtils {
 	}
 
 	public static OperationRequestPreprocessor getDocumentRequest() {
-		return preprocessRequest(modifyUris().scheme("https").host("habiters.api.com").removePort(), prettyPrint());
+		return preprocessRequest(modifyUris().scheme("https").host("api.habiters.store").removePort(), prettyPrint());
 	}
 
 	public static OperationResponsePreprocessor getDocumentResponse() {

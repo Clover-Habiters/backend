@@ -1,11 +1,10 @@
 package com.clover.habbittracker.domain.comment.api;
 
-import static com.clover.habbittracker.global.restdocs.util.ApiDocumentUtils.*;
+import static com.clover.habbittracker.global.restdocs.config.RestDocsConfig.*;
 import static com.clover.habbittracker.util.MemberProvider.*;
 import static com.clover.habbittracker.util.PostProvider.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -15,59 +14,34 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.clover.habbittracker.base.RestDocsSupport;
 import com.clover.habbittracker.domain.comment.dto.CommentRequest;
 import com.clover.habbittracker.domain.comment.entity.Comment;
 import com.clover.habbittracker.domain.comment.repository.CommentRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
-import com.clover.habbittracker.global.security.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
-@Transactional
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.habiters.store")
-public class CommentControllerTest {
+public class CommentControllerTest extends RestDocsSupport {
 
-	@Autowired
-	private MockMvc mockMvc;
 	@Autowired
 	private CommentRepository commentRepository;
 	@Autowired
 	private PostRepository postRepository;
-	@Autowired
-	private MemberRepository memberRepository;
-	@Autowired
-	private JwtProvider jwtProvider;
-
-	private Member commenter;
-
-	private String accessJwt;
-
 	private Post savePost;
 
 	@BeforeEach
 	void setUp() {
 		Member author = memberRepository.save(createTestMember());
 		savePost = postRepository.save(createTestPost(author));
-
-		commenter = memberRepository.save(createTestMember());
-		accessJwt = jwtProvider.createAccessJwt(commenter.getId());
-
 	}
 
 	@Test
 	@DisplayName("사용자는 게시글의 댓글을 등록 할 수 있다.")
-	void createDiaryTest() throws Exception {
+	void createCommentTest() throws Exception {
 		//given
 		CommentRequest commentRequest = new CommentRequest("testComment");
 		String request = new ObjectMapper().writeValueAsString(commentRequest);
@@ -76,14 +50,12 @@ public class CommentControllerTest {
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
 					.post("/posts/{postId}/comment", savePost.getId())
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isCreated())
 			// restDocs 설정.
-			.andDo(document("comment-create",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -91,7 +63,9 @@ public class CommentControllerTest {
 					parameterWithName("postId").description("게시글 id")
 				),
 				requestFields(
-					fieldWithPath("content").type(STRING).description("댓글 내용")
+					fieldWithPath("content").type(STRING)
+						.description("댓글 내용")
+						.attributes(field("constraints", "아직 미정"))
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
@@ -105,12 +79,12 @@ public class CommentControllerTest {
 
 	@Test
 	@DisplayName("사용자는 작성한 댓글을 수정 할 수 있다.")
-	void updateDiaryTest() throws Exception {
+	void updateCommentTest() throws Exception {
 		//given
 		CommentRequest commentRequest = new CommentRequest("updateComment");
 		String request = new ObjectMapper().writeValueAsString(commentRequest);
 		Comment comment = Comment.builder()
-			.member(commenter)
+			.member(savedMember)
 			.content("testComment")
 			.post(savePost)
 			.build();
@@ -119,13 +93,11 @@ public class CommentControllerTest {
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
 					.put("/posts/{postId}/comment/{commentId}", savePost.getId(), savedComment.getId())
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isOk())
-			.andDo(document("comment-update",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -134,7 +106,9 @@ public class CommentControllerTest {
 					parameterWithName("commentId").description("수정할 댓글 id")
 				),
 				requestFields(
-					fieldWithPath("content").type(STRING).description("수정할 댓글 내용")
+					fieldWithPath("content").type(STRING)
+						.description("수정할 댓글 내용")
+						.attributes(field("constraints", "아직 미정"))
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
@@ -148,12 +122,12 @@ public class CommentControllerTest {
 
 	@Test
 	@DisplayName("사용자는 댓글의 답글을 작성 할 수 있다.")
-	void getMyDiaryListTest() throws Exception {
+	void createReplyTest() throws Exception {
 		//given
 		CommentRequest commentRequest = new CommentRequest("updateComment");
 		String request = new ObjectMapper().writeValueAsString(commentRequest);
 		Comment comment = Comment.builder()
-			.member(commenter)
+			.member(savedMember)
 			.content("testComment")
 			.post(savePost)
 			.build();
@@ -163,13 +137,11 @@ public class CommentControllerTest {
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
 					.post("/posts/{postId}/comment/{commentId}/reply", savePost.getId(), savedComment.getId())
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isCreated())
-			.andDo(document("reply-create",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -185,12 +157,12 @@ public class CommentControllerTest {
 
 	@Test
 	@DisplayName("댓글의 달린 답글을 조회 할 수 있다.")
-	void getAMonthlyMyDiaryListTest() throws Exception {
+	void getReplyListTest() throws Exception {
 		//given
 		CommentRequest commentRequest = new CommentRequest("updateComment");
 		String request = new ObjectMapper().writeValueAsString(commentRequest);
 		Comment comment = Comment.builder()
-			.member(commenter)
+			.member(savedMember)
 			.content("testComment")
 			.post(savePost)
 			.build();
@@ -198,7 +170,7 @@ public class CommentControllerTest {
 
 		Comment reply = Comment.builder()
 			.content("testReply")
-			.member(commenter)
+			.member(savedMember)
 			.post(savePost)
 			.parentId(savedComment.getId())
 			.build();
@@ -208,13 +180,11 @@ public class CommentControllerTest {
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
 					.get("/posts/{postId}/comment/{commentId}/reply", savePost.getId(), savedComment.getId())
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isOk())
-			.andDo(document("reply-read",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),

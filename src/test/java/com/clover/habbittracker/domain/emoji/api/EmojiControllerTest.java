@@ -1,13 +1,12 @@
 package com.clover.habbittracker.domain.emoji.api;
 
 import static com.clover.habbittracker.domain.emoji.entity.Emoji.*;
-import static com.clover.habbittracker.global.restdocs.util.ApiDocumentUtils.*;
+import static com.clover.habbittracker.global.restdocs.util.DocumentLinkGenerator.*;
 import static com.clover.habbittracker.util.CommentProvider.*;
 import static com.clover.habbittracker.util.EmojiProvider.*;
 import static com.clover.habbittracker.util.PostProvider.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -21,7 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.clover.habbittracker.base.ControllerTest;
+import com.clover.habbittracker.base.RestDocsSupport;
 import com.clover.habbittracker.domain.comment.entity.Comment;
 import com.clover.habbittracker.domain.comment.repository.CommentRepository;
 import com.clover.habbittracker.domain.emoji.repository.EmojiRepository;
@@ -29,7 +28,7 @@ import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
 
 @DisplayName("Emoji API 테스트")
-class EmojiControllerTest extends ControllerTest {
+class EmojiControllerTest extends RestDocsSupport {
 
 	@Autowired
 	private PostRepository postRepository;
@@ -79,19 +78,16 @@ class EmojiControllerTest extends ControllerTest {
 			.andExpect(jsonPath("$.memberId").value(savedMember.getId()))
 			.andExpect(jsonPath("$.domain").value(domain.name()))
 			.andExpect(jsonPath("$.domainId").value(domainId))
-			.andDo(print())
-			.andDo(document("emoji save(Insert or Update)",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				pathParameters(
-					parameterWithName("domain").description("이모지를 남기려는 도메인(ex. 게시글, 댓글)"),
+					parameterWithName("domain").description(generateLinkCode(DocUrl.EMOJI_DOMAIN)),
 					parameterWithName("domainId").description("이모지를 남기려는 도메인의 아이디")
 				),
 				queryParameters(
-					parameterWithName("type").description("이모지 타입(ex. SMILE, SAD..)") // TODO: Enum 타입 문서화 추가
+					parameterWithName("type").description(generateLinkCode(DocUrl.EMOJI_TYPE))
 				),
 				responseFields(
 					fieldWithPath("emojiType").type(STRING).description("이모지 타입"),
@@ -121,19 +117,16 @@ class EmojiControllerTest extends ControllerTest {
 			// .andExpect(jsonPath("$.memberId").value(savedMember.getId()))
 			// .andExpect(jsonPath("$.domain").value(domain.name()))
 			// .andExpect(jsonPath("$.domainId").value(domainId.longValue()))
-			.andDo(print())
-			.andDo(document("emoji save(Insert or Update)",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				pathParameters(
-					parameterWithName("domain").description("이모지를 남기려는 도메인(ex. 게시글, 댓글)"),
+					parameterWithName("domain").description(generateLinkCode(DocUrl.EMOJI_DOMAIN)),
 					parameterWithName("domainId").description("이모지를 남기려는 도메인의 아이디")
 				),
 				queryParameters(
-					parameterWithName("type").description("이모지 타입(ex. SMILE, SAD..)")
+					parameterWithName("type").description(generateLinkCode(DocUrl.EMOJI_TYPE))
 				),
 				responseFields(
 					fieldWithPath("emojiType").type(STRING).description("이모지 타입"),
@@ -158,15 +151,12 @@ class EmojiControllerTest extends ControllerTest {
 					.contentType(APPLICATION_JSON)
 			)
 			.andExpect(status().isOk())
-			.andDo(print())
-			.andDo(document("emoji get all",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				pathParameters(
-					parameterWithName("domain").description("이모지를 찾고 싶은 도메인"),
+					parameterWithName("domain").description(generateLinkCode(DocUrl.EMOJI_DOMAIN)),
 					parameterWithName("domainId").description("이모지를 찾고 싶은 도메인의 아이디")
 				),
 				responseFields(
@@ -193,9 +183,7 @@ class EmojiControllerTest extends ControllerTest {
 			)
 			.andExpect(status().isNoContent())
 			.andDo(print())
-			.andDo(document("emoji delete",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
