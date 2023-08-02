@@ -1,7 +1,7 @@
 package com.clover.habbittracker.domain.emoji.api;
 
 import static com.clover.habbittracker.domain.emoji.entity.Emoji.*;
-import static com.clover.habbittracker.util.ApiDocumentUtils.*;
+import static com.clover.habbittracker.global.restdocs.util.ApiDocumentUtils.*;
 import static com.clover.habbittracker.util.CommentProvider.*;
 import static com.clover.habbittracker.util.EmojiProvider.*;
 import static com.clover.habbittracker.util.PostProvider.*;

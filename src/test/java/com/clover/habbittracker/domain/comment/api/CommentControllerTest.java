@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.comment.api;
 
-import static com.clover.habbittracker.util.ApiDocumentUtils.*;
+import static com.clover.habbittracker.global.restdocs.util.ApiDocumentUtils.*;
 import static com.clover.habbittracker.util.MemberProvider.*;
 import static com.clover.habbittracker.util.PostProvider.*;
 import static org.springframework.http.MediaType.*;

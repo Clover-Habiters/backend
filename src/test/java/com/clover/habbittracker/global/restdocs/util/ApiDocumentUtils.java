@@ -1,4 +1,4 @@
-package com.clover.habbittracker.util;
+package com.clover.habbittracker.global.restdocs.util;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 

@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.member.api;
 
-import static com.clover.habbittracker.util.ApiDocumentUtils.*;
+import static com.clover.habbittracker.global.restdocs.util.ApiDocumentUtils.*;
 import static com.clover.habbittracker.util.MemberProvider.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.core.Is.*;
