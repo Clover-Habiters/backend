@@ -17,9 +17,5 @@ public interface DocumentLinkGenerator {
 			this.pageId = pageId;
 			this.text = text;
 		}
-
-		public String getText() {
-			return text;
-		}
 	}
 }
