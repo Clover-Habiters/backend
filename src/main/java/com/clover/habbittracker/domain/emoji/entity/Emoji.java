@@ -7,6 +7,7 @@ import org.hibernate.annotations.Where;
 import org.springframework.core.convert.converter.Converter;
 
 import com.clover.habbittracker.global.base.entity.BaseEntity;
+import com.clover.habbittracker.global.base.entity.RestDocsEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -63,8 +64,29 @@ public class Emoji extends BaseEntity {
 		return this;
 	}
 
-	public enum Type {
-		SMILE, ANGRY, SAD, SURPRISED, HEART, NONE;
+	public enum Type implements RestDocsEnum {
+		SMILE("좋아요"),
+		ANGRY("화나요"),
+		SAD("슬퍼요"),
+		SURPRISED("놀라워요"),
+		HEART("하트"),
+		NONE("이모지삭제");
+
+		private final String description;
+
+		Type(String description) {
+			this.description = description;
+		}
+
+		@Override
+		public String getName() {
+			return this.name();
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 
 		@JsonCreator
 		public static Type fromJson(@JsonProperty("type") String name) {
@@ -85,8 +107,25 @@ public class Emoji extends BaseEntity {
 		}
 	}
 
-	public enum Domain {
-		COMMENT, POST;
+	public enum Domain implements RestDocsEnum {
+		COMMENT("댓글"),
+		POST("게시글");
+
+		private final String description;
+
+		Domain(String description) {
+			this.description = description;
+		}
+
+		@Override
+		public String getName() {
+			return this.name();
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 
 		@JsonCreator
 		public static Domain fromJson(@JsonProperty("domain") String name) {
