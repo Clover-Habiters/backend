@@ -17,7 +17,7 @@ import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.exception.PostNotFoundException;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
-import com.clover.habbittracker.global.exception.PermissionDeniedException;
+import com.clover.habbittracker.global.base.exception.PermissionDeniedException;
 
 import lombok.RequiredArgsConstructor;
 

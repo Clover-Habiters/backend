@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import org.springframework.validation.BindingResult;
 
-import com.clover.habbittracker.global.exception.ErrorType;
+import com.clover.habbittracker.global.base.exception.ErrorType;
 
 import lombok.Builder;
 import lombok.Getter;
