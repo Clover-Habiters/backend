@@ -1,0 +1,14 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+server:
+  shutdown: graceful # 서버 종료시 동작 정의
+  port: 8080 # 기본 포트 설정
+
+slack:
+  webhook: ${SLACK_WEBHOOK}
+
+front:
+  server: "https://habiters.vercel.app"
+

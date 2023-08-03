@@ -1,5 +1,6 @@
 package com.clover.habbittracker.global.config.web;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.HttpMethod;
@@ -13,6 +14,9 @@ import com.clover.habbittracker.domain.emoji.entity.Emoji;
 @EnableWebMvc
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+	@Value("${front.server}")
+	private String frontServerUrl;
 
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
@@ -29,12 +33,14 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-			.allowedOrigins("*")
+			.allowedOrigins(frontServerUrl, "http://localhost:3000")
 			.allowedMethods(
 				HttpMethod.GET.name(),
 				HttpMethod.POST.name(),
 				HttpMethod.DELETE.name(),
-				HttpMethod.PUT.name()
+				HttpMethod.PUT.name(),
+				HttpMethod.PATCH.name(),
+				HttpMethod.OPTIONS.name()
 			);
 	}
 }

@@ -1,4 +1,4 @@
-package com.clover.habbittracker.global.report;
+package com.clover.habbittracker.global.infra.alarm;
 
 import static java.util.Collections.*;
 
@@ -19,7 +19,7 @@ import net.gpedro.integrations.slack.SlackAttachment;
 import net.gpedro.integrations.slack.SlackField;
 import net.gpedro.integrations.slack.SlackMessage;
 
-import com.clover.habbittracker.global.report.dto.ReportInfo;
+import com.clover.habbittracker.global.infra.alarm.dto.AlarmInfo;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -27,28 +27,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Aspect
 @Component
-@Profile({"prod", "dev"})
-public class SlackReportSender {
+@Profile({"prod"})
+public class SlackAlarmSender {
 
 	private final SlackApi slackApi;
 	private final ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
-	public SlackReportSender(
+	public SlackAlarmSender(
 		@Value("${slack.webhook}") String webhook,
 		ThreadPoolTaskExecutor threadPoolTaskExecutor) {
 		this.slackApi = new SlackApi(webhook);
 		this.threadPoolTaskExecutor = threadPoolTaskExecutor;
 	}
 
-	@Around("@annotation(com.clover.habbittracker.global.report.annotation.Report) && args(request, e)")
+	@Around("@annotation(com.clover.habbittracker.global.infra.alarm.annotation.Alarm) && args(request, e)")
 	public void sendReport(ProceedingJoinPoint proceedingJoinPoint, HttpServletRequest request,
 		Exception e) throws Throwable {
 		proceedingJoinPoint.proceed();
-		ReportInfo requestInfo = new ReportInfo(request);
+		AlarmInfo requestInfo = new AlarmInfo(request);
 		threadPoolTaskExecutor.execute(() -> sendSlackMessage(requestInfo, e)); // 비동기
 	}
 
-	private void sendSlackMessage(ReportInfo request, Exception e) {
+	private void sendSlackMessage(AlarmInfo request, Exception e) {
 		SlackAttachment slackAttachment = new SlackAttachment();
 		slackAttachment.setFallback("Error");
 		slackAttachment.setColor("danger");

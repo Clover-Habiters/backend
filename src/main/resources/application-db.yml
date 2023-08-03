@@ -1,0 +1,89 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER_NAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: com.clover.habbittracker.global.config.db.MySQLConfig$MySQLCustomDialect
+
+  # redis
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+# P6spy 설정
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+--- # Prod
+spring:
+  config:
+    activate.on-profile: prod
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER_NAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: com.clover.habbittracker.global.config.db.MySQLConfig$MySQLCustomDialect
+
+  # redis
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+# P6spy 설정
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
+
+--- # test
+spring:
+  config:
+    activate.on-profile: test
+
+  datasource:
+    url: jdbc:mysql://localhost:3310/habiters-db
+    username: ${DB_USER_NAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: com.clover.habbittracker.global.config.db.MySQLConfig$MySQLCustomDialect
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+# P6spy 설정
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true

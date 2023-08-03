@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Aspect
 @Component
-@Profile("performance")
+@Profile("default")
 public class LoggingAspect {
 
 	@Pointcut("execution(* com.clover.habbittracker.domain..*(..))")
