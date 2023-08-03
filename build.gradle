@@ -93,16 +93,16 @@ jacocoTestCoverageVerification {
         rule {
             enabled = true
             excludes = [ // 제외할 패키지
-                         '*.global.security.oauth*',
-                         '*.global.util*',
-                         '*.global.dto*',
-                         '*.global.exception*'
+                         '*.global.util*', // util 패키지
+                         '*.global.config*', // config 패키지
+                         '*.global.base*', // base 패키지
+                         '*.global.infra*', // 추후 추가 바람
+                         '*.global.auth.oauth*', // 추후 추가 바람
             ]
 
         }
 
     }
-
 }
 
 tasks.named('test') {
