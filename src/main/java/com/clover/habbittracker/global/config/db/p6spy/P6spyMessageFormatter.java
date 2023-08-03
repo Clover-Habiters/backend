@@ -17,7 +17,7 @@ public class P6spyMessageFormatter implements MessageFormattingStrategy {
 	@Override
 	public String formatMessage(int connectionId, String now, long elapsed, String category,
 		String prepared, String sql, String url) {
-		
+
 		sql = formatSql(category, sql);
 		return category + " | " + "OperationTime : " + elapsed + "ms" + "\n" + stackTrace() + sql;
 	}
@@ -29,21 +29,31 @@ public class P6spyMessageFormatter implements MessageFormattingStrategy {
 
 		if (Category.STATEMENT.getName().equals(category)) {
 			String tmpsql = sql.trim().toLowerCase(Locale.ROOT);
-			if (tmpsql.startsWith("create") || tmpsql.startsWith("alter")) {
+			if (tmpsql.startsWith("create") || tmpsql.startsWith("alter") || tmpsql.startsWith("comment")) {
 				sql = FormatStyle.DDL.getFormatter().format(sql);
 			} else {
 				sql = FormatStyle.BASIC.getFormatter().format(sql);
 			}
-			sql = "\n" + sql + "\n";
+		}
+
+		sql += "\n";
+
+		String[] stackTrace = stackTrace();
+
+		if (stackTrace.length > 0) {
+			sql += Arrays.toString(stackTrace).replace(", ", "\n");
+			sql += "\n";
 		}
 
 		return sql;
 	}
 
-	private String stackTrace() {
-		return Arrays.toString(Arrays.stream(new Throwable().getStackTrace())
-			.filter(t -> t.toString().startsWith("com.clover.habbittracker"))
-			.toArray()).replace(", ", "\n");
+	private String[] stackTrace() {
+		return Arrays.stream(new Throwable().getStackTrace())
+			.map(StackTraceElement::toString)
+			.filter(string -> string.startsWith("com.clover.habbittracker")
+			                  && !string.startsWith("com.clover.habbittracker.global.config.db.p6spy")
+			                  && !string.startsWith("com.clover.habbittracker.HabbitTrackerApplication.main"))
+			.toArray(String[]::new);
 	}
-
 }
