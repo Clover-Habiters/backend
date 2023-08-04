@@ -15,7 +15,7 @@ import com.clover.habbittracker.global.restdocs.enums.EnumDocs;
 import com.clover.habbittracker.global.restdocs.enums.EnumResponse;
 
 @RestController
-@RequestMapping("/docs")
+@RequestMapping("/test/docs")
 public class CommonDocController {
 
 	@GetMapping("/enums")

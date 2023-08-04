@@ -22,10 +22,26 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 public class EnumDocumentation extends RestDocsSupport {
 
+	// 커스텀 템플릿 사용을 위한 함수
+	public static CustomResponseFieldsSnippet customResponseFields
+	(String type,
+		PayloadSubsectionExtractor<?> subsectionExtractor,
+		Map<String, Object> attributes, FieldDescriptor... descriptors) {
+		return new CustomResponseFieldsSnippet(type, subsectionExtractor, Arrays.asList(descriptors), attributes
+			, true);
+	}
+
+	// Map으로 넘어온 enumValue를 fieldWithPath로 변경하여 리턴
+	private static FieldDescriptor[] enumConvertFieldDescriptor(Map<String, String> enumValues) {
+		return enumValues.entrySet().stream()
+			.map(x -> fieldWithPath(x.getKey()).description(x.getValue()))
+			.toArray(FieldDescriptor[]::new);
+	}
+
 	@Test
 	public void enums() throws Exception {
 		ResultActions result = this.mockMvc.perform(
-			get("/docs/enums")
+			get("/test/docs/enums")
 				.contentType(MediaType.APPLICATION_JSON)
 		);
 
@@ -52,22 +68,6 @@ public class EnumDocumentation extends RestDocsSupport {
 					enumConvertFieldDescriptor((enumDocs.getCategory()))
 				)
 			));
-	}
-
-	// 커스텀 템플릿 사용을 위한 함수
-	public static CustomResponseFieldsSnippet customResponseFields
-	(String type,
-		PayloadSubsectionExtractor<?> subsectionExtractor,
-		Map<String, Object> attributes, FieldDescriptor... descriptors) {
-		return new CustomResponseFieldsSnippet(type, subsectionExtractor, Arrays.asList(descriptors), attributes
-			, true);
-	}
-
-	// Map으로 넘어온 enumValue를 fieldWithPath로 변경하여 리턴
-	private static FieldDescriptor[] enumConvertFieldDescriptor(Map<String, String> enumValues) {
-		return enumValues.entrySet().stream()
-			.map(x -> fieldWithPath(x.getKey()).description(x.getValue()))
-			.toArray(FieldDescriptor[]::new);
 	}
 
 	// mvc result 데이터 파싱
