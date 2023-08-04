@@ -48,12 +48,7 @@
 <br><br><br><br>
 ## API Spec 💽
 
-### 습관 API
-https://documenter.getpostman.com/view/25320340/2s93RWQXTo
-
-
-### 회고록 API
-https://documenter.getpostman.com/view/25320340/2s93RWQXTs
+### [Habiters API 문서](https://api.habiters.store/docs/index.html)
 
 <br><br><br><br>
 ## ERD 💾
