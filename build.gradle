@@ -121,6 +121,9 @@ asciidoctor {
     }
     dependsOn test
     inputs.dir snippetsDir
+    sources {
+        include("**/index.adoc", "**/api/*.adoc", "**/common/*.adoc", "**/enums/*.adoc")
+    }
     baseDirFollowsSourceFile()
 }
 

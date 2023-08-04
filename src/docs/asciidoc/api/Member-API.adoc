@@ -1,0 +1,66 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Member-API]]
+== 유저 API
+
+=== 공통
+
+==== 로그인을 제외한 모든 요청은 *Authorization* 헤더가 필요합니다.
+
+include::{snippets}/member-controller-test/get-my-profile-test/request-headers.adoc[]
+
+---
+
+=== 내 정보 조회
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/member-controller-test/get-my-profile-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/member-controller-test/get-my-profile-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/member-controller-test/get-my-profile-test/http-response.adoc[]
+
+=== 유저 정보 수정
+
+==== Request
+
+include::{snippets}/member-controller-test/update-my-profile-nick-name-test/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/member-controller-test/update-my-profile-nick-name-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/member-controller-test/update-my-profile-nick-name-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/member-controller-test/update-my-profile-nick-name-test/http-response.adoc[]
+
+=== 유저 삭제
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/member-controller-test/delete-profile-test/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/member-controller-test/delete-profile-test/http-response.adoc[]
+

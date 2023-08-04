@@ -1,0 +1,5 @@
+:doctype: book
+:icons: font
+
+[[emoji-type]]
+include::{snippets}/enum-documentation/enums/custom-response-fields-emojiType.adoc[]

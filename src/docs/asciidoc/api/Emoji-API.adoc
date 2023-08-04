@@ -1,0 +1,101 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:docinfo: shared-head
+
+[[Emoji-API]]
+== 이모지 API
+
+=== 공통
+
+==== 로그인을 제외한 모든 요청은 *Authorization* 헤더가 필요합니다.
+
+include::{snippets}/member-controller-test/get-my-profile-test/request-headers.adoc[]
+
+---
+
+=== 이모지 등록
+
+*endpoint* +
+_/{domain}/{domainId}/emojis_
+
+==== Request
+
+include::{snippets}/emoji-controller-test/save-emoji-in/path-parameters.adoc[]
+include::{snippets}/emoji-controller-test/save-emoji-in/query-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/emoji-controller-test/save-emoji-in/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/emoji-controller-test/save-emoji-in/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/emoji-controller-test/save-emoji-in/http-response.adoc[]
+
+=== 이모지 조회
+
+*endpoint* +
+_/{domain}/{domainId}/emojis_
+
+==== Request
+
+include::{snippets}/emoji-controller-test/get-all-emojis/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/emoji-controller-test/get-all-emojis/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/emoji-controller-test/get-all-emojis/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/emoji-controller-test/get-all-emojis/http-response.adoc[]
+
+=== 이모지 업데이트
+
+*endpoint* +
+_/{domain}/{domainId}/emojis_
+
+==== Request
+
+include::{snippets}/emoji-controller-test/save-for-update-emoji-in/path-parameters.adoc[]
+include::{snippets}/emoji-controller-test/save-for-update-emoji-in/query-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/emoji-controller-test/save-for-update-emoji-in/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/emoji-controller-test/save-for-update-emoji-in/http-response.adoc[]
+
+=== 이모지 삭제
+
+*endpoint* +
+_/{domain}/{domainId}/emojis_
+
+==== Request
+
+include::{snippets}/emoji-controller-test/delete-emoji/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/emoji-controller-test/delete-emoji/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/emoji-controller-test/delete-emoji/http-response.adoc[]
+

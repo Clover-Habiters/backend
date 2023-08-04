@@ -1,0 +1,130 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Habit-API]]
+== 습관 API
+
+=== 공통
+
+==== 모든 요청은 *Authorization* 헤더가 필요합니다.
+
+include::{snippets}/habit-controller-test/create-habit-test/request-headers.adoc[]
+
+---
+
+=== 습관 등록
+
+==== Request
+
+include::{snippets}/habit-controller-test/create-habit-test/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/habit-controller-test/create-habit-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/habit-controller-test/create-habit-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/habit-controller-test/create-habit-test/http-response.adoc[]
+
+=== 습관 리스트 조회
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/habit-controller-test/my-habit-list-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/habit-controller-test/my-habit-list-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/habit-controller-test/my-habit-list-test/http-response.adoc[]
+
+=== 월별 습관 리스트 조회
+
+==== Request
+
+include::{snippets}/habit-controller-test/monthly-my-habit-list-test/query-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/habit-controller-test/monthly-my-habit-list-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/habit-controller-test/monthly-my-habit-list-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/habit-controller-test/monthly-my-habit-list-test/http-response.adoc[]
+
+=== 습관 삭제
+
+*endpoint* +
+_/habit/{habitId}_
+
+==== Request
+
+include::{snippets}/habit-controller-test/delete-habit-test/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/habit-controller-test/delete-habit-test/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/habit-controller-test/delete-habit-test/http-response.adoc[]
+
+=== 습관 체크 등록
+
+*endpoint* +
+_/habit/{habitId}/check_
+
+==== Request
+
+include::{snippets}/habit-controller-test/habit-check-test/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/habit-controller-test/habit-check-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/habit-controller-test/habit-check-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/habit-controller-test/habit-check-test/http-response.adoc[]
+
+=== 습관 체크 취소
+
+*endpoint* +
+_/habit/{habitCheckId}/uncheck_
+
+==== Request
+
+include::{snippets}/habit-controller-test/habit-un-check-test/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/habit-controller-test/habit-un-check-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/habit-controller-test/habit-un-check-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/habit-controller-test/habit-un-check-test/http-response.adoc[]

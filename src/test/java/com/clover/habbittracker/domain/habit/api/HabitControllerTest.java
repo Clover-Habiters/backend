@@ -1,11 +1,10 @@
 package com.clover.habbittracker.domain.habit.api;
 
-import static com.clover.habbittracker.util.ApiDocumentUtils.*;
-import static com.clover.habbittracker.util.MemberProvider.*;
+import static com.clover.habbittracker.global.exception.ErrorType.*;
+import static com.clover.habbittracker.global.restdocs.config.RestDocsConfig.*;
 import static org.hamcrest.core.Is.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -19,52 +18,28 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.clover.habbittracker.base.RestDocsSupport;
 import com.clover.habbittracker.domain.habit.dto.HabitRequest;
 import com.clover.habbittracker.domain.habit.entity.Habit;
 import com.clover.habbittracker.domain.habit.repository.HabitRepository;
 import com.clover.habbittracker.domain.habitcheck.dto.HabitCheckRequest;
 import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
 import com.clover.habbittracker.domain.habitcheck.repository.HabitCheckRepository;
-import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.exception.ErrorType;
-import com.clover.habbittracker.global.security.jwt.JwtProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
-@Transactional
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.habiters.store")
-public class HabitControllerTest {
+public class HabitControllerTest extends RestDocsSupport {
 
-	private final ObjectMapper mapper = new ObjectMapper();
-	@Autowired
-	private MockMvc mockMvc;
-	@Autowired
-	private MemberRepository memberRepository;
 	@Autowired
 	private HabitRepository habitRepository;
 	@Autowired
-	private JwtProvider jwtProvider;
-	@Autowired
 	private HabitCheckRepository habitCheckRepository;
-	private String accessJwt;
 	private Habit testHabit;
 
 	@BeforeEach
 	void setUp() {
-		Member testMember = createTestMember();
-		Member saveMember = memberRepository.save(testMember);
-		Habit habit = Habit.builder().content("미리 저장된 습관입니다.").member(saveMember).build();
+		Habit habit = Habit.builder().content("미리 저장된 습관입니다.").member(savedMember).build();
 		testHabit = habitRepository.save(habit);
-		accessJwt = jwtProvider.createAccessJwt(saveMember.getId());
 	}
 
 	@Test
@@ -72,23 +47,23 @@ public class HabitControllerTest {
 	void createHabitTest() throws Exception {
 		//given
 		HabitRequest habitRequest = new HabitRequest("테스트 습관입니다.");
-		String request = mapper.writeValueAsString(habitRequest);
+		String request = objectMapper.writeValueAsString(habitRequest);
 
 		//when
 		mockMvc.perform(
 				post("/habits")
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isCreated())
-			.andDo(document("habit-created",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				requestFields(
-					fieldWithPath("content").type(STRING).description("등록할 습관 내용")
+					fieldWithPath("content").type(STRING)
+						.description("등록할 습관 내용")
+						.attributes(field("constraints", "10자 이내"))
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
@@ -102,21 +77,19 @@ public class HabitControllerTest {
 	void updateHabitTest() throws Exception {
 		//given
 		HabitRequest habitRequest = new HabitRequest("수정된 습관입니다.");
-		String request = mapper.writeValueAsString(habitRequest);
+		String request = objectMapper.writeValueAsString(habitRequest);
 
 		//when
 		mockMvc.perform(
 				RestDocumentationRequestBuilders.put("/habits/{habitId}", testHabit.getId())
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data.id").exists())
 			.andExpect(jsonPath("$.data.content").exists())
 			.andExpect(jsonPath("$.data.createDate").exists())
-			.andDo(document("habit-update",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -124,7 +97,7 @@ public class HabitControllerTest {
 					parameterWithName("habitId").description("수정할 습관 아이디")
 				),
 				requestFields(
-					fieldWithPath("content").description("수정할 습관 내용")
+					fieldWithPath("content").description("수정할 습관 내용").attributes(field("constraints", "10자 이내"))
 				),
 				responseFields(
 					fieldWithPath("code").type(STRING).description("결과 코드"),
@@ -142,11 +115,9 @@ public class HabitControllerTest {
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders.delete("/habits/{habitId}", testHabit.getId())
-					.header("Authorization", "Bearer " + accessJwt))
+					.header("Authorization", "Bearer " + accessToken))
 			.andExpect(status().isNoContent())
-			.andDo(document("habit-delete",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -166,17 +137,15 @@ public class HabitControllerTest {
 		//given
 		LocalDate now = LocalDate.now();
 		String today = "0" + now.getMonthValue() + "-" + now.getDayOfMonth();
-		String request = mapper.writeValueAsString(new HabitCheckRequest(today));
+		String request = objectMapper.writeValueAsString(new HabitCheckRequest(today));
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders.post("/habits/{habitId}/check", testHabit.getId())
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isCreated())
-			.andDo(document("habitCheck-create",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -201,11 +170,9 @@ public class HabitControllerTest {
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders.delete("/habits/{habitCheckId}/uncheck", toBeErased.getId())
-					.header("Authorization", "Bearer " + accessJwt))
+					.header("Authorization", "Bearer " + accessToken))
 			.andExpect(status().isNoContent())
-			.andDo(document("habitCheck-delete",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -228,15 +195,13 @@ public class HabitControllerTest {
 
 		mockMvc.perform(
 				get("/habits")
-					.header("Authorization", "Bearer " + accessJwt))
+					.header("Authorization", "Bearer " + accessToken))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data.[0].id").exists())
 			.andExpect(jsonPath("$.data.[0].content").exists())
 			.andExpect(jsonPath("$.data.[0].createDate").exists())
 			.andExpect(jsonPath("$.data.[0].habitChecks").isArray())
-			.andDo(document("habit-read",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -263,15 +228,13 @@ public class HabitControllerTest {
 		//when then
 		mockMvc.perform(
 				get("/habits")
-					.header("Authorization", "Bearer " + accessJwt).param("date", date))
+					.header("Authorization", "Bearer " + accessToken).param("date", date))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data.[0].id").exists())
 			.andExpect(jsonPath("$.data.[0].content").exists())
 			.andExpect(jsonPath("$.data.[0].createDate").exists())
 			.andExpect(jsonPath("$.data.[0].habitChecks").isArray())
-			.andDo(document("monthly-habit-read",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
@@ -295,20 +258,18 @@ public class HabitControllerTest {
 		//given
 		LocalDate now = LocalDate.now();
 		String today = "0" + now.getMonthValue() + "-" + now.getDayOfMonth();
-		String request = mapper.writeValueAsString(new HabitCheckRequest(today));
+		String request = objectMapper.writeValueAsString(new HabitCheckRequest(today));
 
 		long wrongId = 0L;
 		mockMvc.perform(
 				RestDocumentationRequestBuilders.post("/habits/{habitId}/check", wrongId)
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$.errorName", is(ErrorType.HABIT_NOT_FOUND.name())))
-			.andExpect(jsonPath("$.msg", is(ErrorType.HABIT_NOT_FOUND.getErrorMsg())))
-			.andDo(document("notfound-Habit",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andExpect(jsonPath("$.errorName", is(HABIT_NOT_FOUND.name())))
+			.andExpect(jsonPath("$.msg", is(HABIT_NOT_FOUND.getErrorMsg())))
+			.andDo(restDocs.document(
 				pathParameters(
 					parameterWithName("habitId").description("잘못된 습관 아이디")
 				),
@@ -327,25 +288,23 @@ public class HabitControllerTest {
 		//given
 		LocalDate now = LocalDate.now();
 		String today = "0" + now.getMonthValue() + "-" + now.getDayOfMonth();
-		String request = mapper.writeValueAsString(new HabitCheckRequest(today));
+		String request = objectMapper.writeValueAsString(new HabitCheckRequest(today));
 		//when then
 		mockMvc.perform(
 			post("/habits/{habitId}/check", testHabit.getId())
-				.header("Authorization", "Bearer " + accessJwt)
+				.header("Authorization", "Bearer " + accessToken)
 				.contentType(APPLICATION_JSON)
 				.content(request));
 
 		mockMvc.perform(
 				RestDocumentationRequestBuilders.post("/habits/{habitId}/check", testHabit.getId())
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isConflict())
-			.andExpect(jsonPath("$.errorName", is(ErrorType.HABIT_CHECK_DUPLICATE.name())))
-			.andExpect(jsonPath("$.msg", is(ErrorType.HABIT_CHECK_DUPLICATE.getErrorMsg())))
-			.andDo(document("Duplicate-HabitCheck",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andExpect(jsonPath("$.errorName", is(HABIT_CHECK_DUPLICATE.name())))
+			.andExpect(jsonPath("$.msg", is(HABIT_CHECK_DUPLICATE.getErrorMsg())))
+			.andDo(restDocs.document(
 				pathParameters(
 					parameterWithName("habitId").description("습관 아이디")
 				),
@@ -365,24 +324,22 @@ public class HabitControllerTest {
 		//given
 		LocalDate yesterday = LocalDate.now().minusDays(1);
 		String past = yesterday.getMonthValue() + "-" + yesterday.getDayOfMonth();
-		String request = mapper.writeValueAsString(new HabitCheckRequest(past));
+		String request = objectMapper.writeValueAsString(new HabitCheckRequest(past));
 
 		//when then
 		mockMvc.perform(
 			post("/habits/{habitId}/check", testHabit.getId())
-				.header("Authorization", "Bearer " + accessJwt));
+				.header("Authorization", "Bearer " + accessToken));
 
 		mockMvc.perform(
 				RestDocumentationRequestBuilders.post("/habits/{habitId}/check", testHabit.getId())
-					.header("Authorization", "Bearer " + accessJwt)
+					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
 			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.errorName", is(ErrorType.HABIT_CHECK_EXPIRED.name())))
-			.andExpect(jsonPath("$.msg", is(ErrorType.HABIT_CHECK_EXPIRED.getErrorMsg())))
-			.andDo(document("Expired-HabitCheck",
-				getDocumentRequest(),
-				getDocumentResponse(),
+			.andExpect(jsonPath("$.errorName", is(HABIT_CHECK_EXPIRED.name())))
+			.andExpect(jsonPath("$.msg", is(HABIT_CHECK_EXPIRED.getErrorMsg())))
+			.andDo(restDocs.document(
 				pathParameters(
 					parameterWithName("habitId").description("습관 아이디")
 				),

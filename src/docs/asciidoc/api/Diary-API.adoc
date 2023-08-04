@@ -1,0 +1,113 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Diray-API]]
+== 회고 API
+
+=== 공통
+
+==== 모든 요청은 *Authorization* 헤더가 필요합니다.
+
+include::{snippets}/diary-controller-test/create-diary-test/request-headers.adoc[]
+
+---
+
+=== 회고 등록
+
+==== Request
+
+include::{snippets}/diary-controller-test/create-diary-test/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/diary-controller-test/create-diary-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/diary-controller-test/create-diary-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/diary-controller-test/create-diary-test/http-response.adoc[]
+
+=== 회고 조회
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/diary-controller-test/get-my-diary-list-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/diary-controller-test/get-my-diary-list-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/diary-controller-test/get-my-diary-list-test/http-response.adoc[]
+
+=== 월별 회고 조회
+
+==== Request
+
+include::{snippets}/diary-controller-test/get-a-monthly-my-diary-list-test/query-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/diary-controller-test/get-a-monthly-my-diary-list-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/diary-controller-test/get-a-monthly-my-diary-list-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/diary-controller-test/get-a-monthly-my-diary-list-test/http-response.adoc[]
+
+=== 회고 수정
+
+*endpoint* +
+_/diaries/{diaryId}_
+
+==== Request
+
+include::{snippets}/diary-controller-test/update-diary-test/path-parameters.adoc[]
+
+include::{snippets}/diary-controller-test/update-diary-test/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/diary-controller-test/update-diary-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/diary-controller-test/update-diary-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/diary-controller-test/update-diary-test/http-response.adoc[]
+
+=== 회고 삭제
+
+*endpoint* +
+_/diaries/{diaryId}_
+
+==== Request
+
+include::{snippets}/diary-controller-test/delete-diary-test/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/diary-controller-test/delete-diary-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/diary-controller-test/delete-diary-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/diary-controller-test/delete-diary-test/http-response.adoc[]

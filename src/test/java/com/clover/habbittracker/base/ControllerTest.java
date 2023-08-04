@@ -3,6 +3,8 @@ package com.clover.habbittracker.base;
 import static com.clover.habbittracker.util.MemberProvider.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,12 +39,13 @@ public abstract class ControllerTest {
 	protected Member savedMember;
 
 	protected String accessToken;
+	protected final Logger logger = LoggerFactory.getLogger("controllerLog");
 
 	@BeforeEach
 	void setUpBase() {
 		Member member = createTestMember();
 		savedMember = memberRepository.save(member);
 		accessToken = jwtProvider.createAccessJwt(savedMember.getId());
-		System.out.println("Base Setting Complete");
+		logger.debug("Base Setting Complete");
 	}
 }

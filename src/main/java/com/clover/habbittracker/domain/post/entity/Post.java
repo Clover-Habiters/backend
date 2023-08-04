@@ -14,6 +14,7 @@ import com.clover.habbittracker.domain.emoji.entity.Emoji;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.dto.PostRequest;
 import com.clover.habbittracker.global.base.entity.BaseEntity;
+import com.clover.habbittracker.global.base.entity.RestDocsEnum;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -74,7 +75,29 @@ public class Post extends BaseEntity {
 		this.category = postRequest.category();
 	}
 
-	public enum Category {
-		ALL, NOTICE, STUDY, EXERCISE, HEALTH, DAILY, ETC
+	public enum Category implements RestDocsEnum {
+		ALL("전체"),
+		NOTICE("공지 사항"),
+		STUDY("공부"),
+		EXERCISE("운동"),
+		HEALTH("건강"),
+		DAILY("일상"),
+		ETC("기타");
+
+		private final String description;
+
+		Category(String description) {
+			this.description = description;
+		}
+
+		@Override
+		public String getName() {
+			return this.name();
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
+		}
 	}
 }

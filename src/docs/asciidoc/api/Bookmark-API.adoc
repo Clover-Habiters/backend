@@ -1,0 +1,132 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Bookmark-API]]
+== 북마크 API
+
+=== 공통
+
+==== 모든 요청은 *Authorization* 헤더가 필요합니다.
+
+include::{snippets}/diary-controller-test/create-diary-test/request-headers.adoc[]
+
+---
+
+=== 북마크 폴더 등록
+
+==== Request
+
+include::{snippets}/bookmark-controller-test/create-bookmark/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/bookmark-controller-test/create-bookmark/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/bookmark-controller-test/create-bookmark/http-response.adoc[]
+
+=== 북마크 게시글 추가
+
+*endpoint* +
+_/bookmark/{bookmarkId}/posts_
+
+==== Request
+
+include::{snippets}/bookmark-controller-test/add-post/path-parameters.adoc[]
+include::{snippets}/bookmark-controller-test/add-post/query-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/bookmark-controller-test/add-post/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/bookmark-controller-test/add-post/http-response.adoc[]
+
+=== 북마크 게시글 제거
+
+*endpoint* +
+_/bookmark/{bookmarkId}/posts_
+
+==== Request
+
+include::{snippets}/bookmark-controller-test/delete-post/path-parameters.adoc[]
+include::{snippets}/bookmark-controller-test/delete-post/query-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/bookmark-controller-test/delete-post/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/bookmark-controller-test/delete-post/http-response.adoc[]
+
+=== 북마크 단일 폴더 조회
+
+*endpoint* +
+_/bookmark/{bookmarkId}_
+
+==== Request
+
+include::{snippets}/bookmark-controller-test/get-bookmark/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/bookmark-controller-test/get-bookmark/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/bookmark-controller-test/get-bookmark/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/bookmark-controller-test/get-bookmark/http-response.adoc[]
+
+=== 북마크 전체 폴더 조회
+
+*endpoint* +
+_/bookmark_
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/bookmark-controller-test/get-all-bookmarks/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/bookmark-controller-test/get-all-bookmarks/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/bookmark-controller-test/get-all-bookmarks/http-response.adoc[]
+
+=== 북마크 폴더 삭제
+
+*endpoint* +
+_/bookmark/{bookmarkId}_
+
+==== Request
+
+include::{snippets}/bookmark-controller-test/delete-bookmark/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/bookmark-controller-test/delete-bookmark/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/bookmark-controller-test/delete-bookmark/http-response.adoc[]
