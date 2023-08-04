@@ -9,7 +9,9 @@ public class EnumDocs {
 	private Map<String, String> category;
 
 	private EnumDocs() {
-		this(null, null, null);
+		this.emojiDomain = new HashMap<>();
+		this.emojiType = new HashMap<>();
+		this.category = new HashMap<>();
 	}
 
 	private EnumDocs(Map<String, String> emojiDomain, Map<String, String> emojiType, Map<String, String> category) {

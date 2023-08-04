@@ -25,7 +25,7 @@ public class EnumDocumentation extends RestDocsSupport {
 	@Test
 	public void enums() throws Exception {
 		ResultActions result = this.mockMvc.perform(
-			get("/test/enums")
+			get("/docs/enums")
 				.contentType(MediaType.APPLICATION_JSON)
 		);
 
