@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import com.clover.habbittracker.global.auth.oauth.dto.SocialUser;
 import com.clover.habbittracker.global.auth.oauth.util.OauthUserProvider;
 
-public class SocialTest {
+class SocialTest {
 
 	@ParameterizedTest
 	@DisplayName("제공자 아이디에 맞는 socialUser 를 생성한다.")

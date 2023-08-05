@@ -16,17 +16,8 @@ import org.junit.jupiter.api.Test;
 import com.clover.habbittracker.base.RestDocsSupport;
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.exception.MemberDuplicateNickName;
-import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.auth.jwt.JwtProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest
-@Transactional
-@AutoConfigureMockMvc
-@AutoConfigureRestDocs(uriScheme = "https", uriHost = "api.habiters.store")
-public class MemberControllerTest {
-
-public class MemberControllerTest extends RestDocsSupport {
+class MemberControllerTest extends RestDocsSupport {
 
 	@Test
 	@DisplayName("사용자는 자신의 프로필 정보를 조회할수있다.")

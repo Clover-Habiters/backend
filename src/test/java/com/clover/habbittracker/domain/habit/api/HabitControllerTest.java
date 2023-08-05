@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.habit.api;
 
-import static com.clover.habbittracker.global.exception.ErrorType.*;
+import static com.clover.habbittracker.global.base.exception.ErrorType.*;
 import static com.clover.habbittracker.global.restdocs.config.RestDocsConfig.*;
 import static org.hamcrest.core.Is.*;
 import static org.springframework.http.MediaType.*;
@@ -27,13 +27,8 @@ import com.clover.habbittracker.domain.habit.repository.HabitRepository;
 import com.clover.habbittracker.domain.habitcheck.dto.HabitCheckRequest;
 import com.clover.habbittracker.domain.habitcheck.entity.HabitCheck;
 import com.clover.habbittracker.domain.habitcheck.repository.HabitCheckRepository;
-import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.base.exception.ErrorType;
-import com.clover.habbittracker.global.auth.jwt.JwtProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class HabitControllerTest extends RestDocsSupport {
+class HabitControllerTest extends RestDocsSupport {
 
 	@Autowired
 	private HabitRepository habitRepository;

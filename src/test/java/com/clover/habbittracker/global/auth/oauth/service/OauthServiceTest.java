@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
@@ -19,7 +20,8 @@ import com.clover.habbittracker.global.auth.oauth.dto.SocialUser;
 import io.jsonwebtoken.Claims;
 
 @SpringBootTest
-public class OauthServiceTest {
+@Transactional
+class OauthServiceTest {
 
 	@Autowired
 	private OauthService oauthService;

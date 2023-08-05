@@ -21,9 +21,9 @@ create table member
     oauth_id        varchar(255) null,
     profile_img_url varchar(255) null,
     provider        varchar(255) null,
-    created_date    datetime(6)  null,
-    updated_date    datetime(6)  null,
-    deleted         boolean      not null
+    created_date    datetime(6)  null     default CURRENT_TIMESTAMP(6),
+    updated_date    datetime(6)  null     default CURRENT_TIMESTAMP(6),
+    deleted         boolean      not null default false
 );
 
 create table diary
@@ -32,9 +32,9 @@ create table diary
     content         varchar(255) null,
     end_update_date datetime(6)  null,
     member_id       bigint       null,
-    created_date    datetime(6)  null,
-    updated_date    datetime(6)  null,
-    deleted         bit          not null,
+    created_date    datetime(6)  null     default CURRENT_TIMESTAMP(6),
+    updated_date    datetime(6)  null     default CURRENT_TIMESTAMP(6),
+    deleted         bit          not null default false,
     constraint FKbyluyva0mxnf5jitf297oxlxd
         foreign key (member_id) references member (id)
 );
@@ -44,9 +44,9 @@ create table habbit
     id           bigint auto_increment primary key,
     content      varchar(255) null,
     member_id    bigint       null,
-    created_date datetime(6)  null,
-    updated_date datetime(6)  null,
-    deleted      bit          not null,
+    created_date datetime(6)  null     default CURRENT_TIMESTAMP(6),
+    updated_date datetime(6)  null     default CURRENT_TIMESTAMP(6),
+    deleted      bit          not null default false,
     constraint FK2tlodega5v0fas0uv1ksxu8ci
         foreign key (member_id) references member (id)
 );
@@ -56,9 +56,9 @@ create table habit_check
     id           bigint auto_increment primary key,
     checked      bit         not null,
     habit_id     bigint      null,
-    created_date datetime(6) null,
-    updated_date datetime(6) null,
-    deleted      bit         not null,
+    created_date datetime(6) null     default CURRENT_TIMESTAMP(6),
+    updated_date datetime(6) null     default CURRENT_TIMESTAMP(6),
+    deleted      bit         not null default false,
     constraint FK6exrsx5hm05v3ur6c3ttiqopd
         foreign key (habit_id) references habbit (id)
 );
@@ -83,8 +83,8 @@ create table comment
 (
     id           bigint auto_increment primary key,
     content      varchar(255) not null,
-    member_id    bigint       null,
-    post_id      bigint       null,
+    member_id    bigint       not null,
+    post_id      bigint       not null,
     parent_id    bigint       null,
     created_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
     updated_date datetime(6)  not null default CURRENT_TIMESTAMP(6),

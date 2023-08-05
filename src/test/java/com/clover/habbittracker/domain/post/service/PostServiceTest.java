@@ -32,7 +32,7 @@ import com.clover.habbittracker.domain.post.repository.PostRepository;
 
 @SpringBootTest
 @Transactional
-public class PostServiceTest {
+class PostServiceTest {
 
 	private final Pageable pageable = PageRequest.of(0, 15);
 	@Autowired

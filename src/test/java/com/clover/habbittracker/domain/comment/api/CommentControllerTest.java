@@ -23,10 +23,9 @@ import com.clover.habbittracker.domain.comment.repository.CommentRepository;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
-import com.clover.habbittracker.global.auth.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class CommentControllerTest extends RestDocsSupport {
+class CommentControllerTest extends RestDocsSupport {
 
 	@Autowired
 	private CommentRepository commentRepository;
