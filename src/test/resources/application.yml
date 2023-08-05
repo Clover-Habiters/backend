@@ -1,38 +1,8 @@
 spring:
-  datasource:
-    ## 테스트 db는 h2 메모리로 실행.
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3310/habiters-db?serverTimezone=Asia/Seoul
-    username: ${DB_USER_NAME}
-    password: ${DB_PASSWORD}
-
-  sql:
-    init:
-      mode: always
-      schema-locations: classpath:schema.sql
-
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: none
-
-    properties:
-      hibernate:
-        dialect: com.clover.habbittracker.global.config.db.MySQLConfig$MySQLCustomDialect
-        format_sql: true
-  #    defer-datasource-initialization: true
-  config:
-    import: application-token.yml, application-security.yml
-
-  redis:
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
-
-logging:
-  level:
-    org:
-      hibernate:
-        engine:
-          transaction:
-            internal:
-              TransactionImpl: DEBUG
+  profiles:
+    active:
+      - test
+    include:
+      - common
+      - db
+      - auth

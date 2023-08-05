@@ -17,7 +17,7 @@ import com.clover.habbittracker.base.RestDocsSupport;
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.exception.MemberDuplicateNickName;
 
-public class MemberControllerTest extends RestDocsSupport {
+class MemberControllerTest extends RestDocsSupport {
 
 	@Test
 	@DisplayName("사용자는 자신의 프로필 정보를 조회할수있다.")

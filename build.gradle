@@ -22,15 +22,21 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot Starter
+    // WEB
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // Data
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    // Restdocs
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
     // DB - MySQL, H2
     implementation 'com.mysql:mysql-connector-j:8.0.32'
@@ -47,27 +53,23 @@ dependencies {
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
     implementation 'javax.xml.bind:jaxb-api:2.3.0' // ??
 
-    // Jwt
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
-
-    // Mapstruct  * Lombok 의 getter, setter, builder 를 이용하여 생성되므로 Lombok 먼저 의존성 주입 후 사용해야함.
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-
-    // Spring Restdocs
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // Embedded Redis
     testImplementation 'it.ozimov:embedded-redis:0.7.2'
 
-    // Slack
-    implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
+    // Jwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
-    // AWS - S3
+    // Object Storage - S3
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.429'
+
+    // Mapstruct  (Lombok 의 getter, setter, builder 를 이용하여 생성되므로 Lombok 먼저 의존성 주입 후 사용해야함)
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+    // P6spy
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
     // Slack
     implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
@@ -91,16 +93,16 @@ jacocoTestCoverageVerification {
         rule {
             enabled = true
             excludes = [ // 제외할 패키지
-                         '*.global.security.oauth*',
-                         '*.global.util*',
-                         '*.global.dto*',
-                         '*.global.exception*'
+                         '*.global.util*', // util 패키지
+                         '*.global.config*', // config 패키지
+                         '*.global.base*', // base 패키지
+                         '*.global.infra*', // 추후 추가 바람
+                         '*.global.auth.oauth*', // 추후 추가 바람
             ]
 
         }
 
     }
-
 }
 
 tasks.named('test') {

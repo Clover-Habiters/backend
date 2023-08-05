@@ -1,8 +1,0 @@
-spring:
-  config:
-    import: optional:file:.env[.properties]
-jwt:
-  secret: ${JWT_SECRET}
-#  expiredMs: 3600000
-  expiredMs: 604800000
-  refreshExpiredMs: 604800000

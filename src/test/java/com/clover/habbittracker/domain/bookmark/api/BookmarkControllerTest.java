@@ -21,6 +21,8 @@ import com.clover.habbittracker.domain.bookmark.entity.Bookmark;
 import com.clover.habbittracker.domain.bookmark.repository.BookmarkRepository;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
+import com.clover.habbittracker.global.auth.jwt.JwtProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 class BookmarkControllerTest extends RestDocsSupport {
 

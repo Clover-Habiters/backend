@@ -25,7 +25,7 @@ import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class CommentControllerTest extends RestDocsSupport {
+class CommentControllerTest extends RestDocsSupport {
 
 	@Autowired
 	private CommentRepository commentRepository;

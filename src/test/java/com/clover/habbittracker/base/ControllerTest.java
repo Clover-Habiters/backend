@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.global.security.jwt.JwtProvider;
+import com.clover.habbittracker.global.auth.jwt.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.transaction.Transactional;
