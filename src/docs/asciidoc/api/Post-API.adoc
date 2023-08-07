@@ -1,0 +1,54 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+:docinfo: shared-head
+
+[[Bookmark-API]]
+== 북마크 API
+
+=== 공통
+
+==== 모든 요청은 *Authorization* 헤더가 필요합니다.
+
+include::{snippets}/diary-controller-test/create-diary-test/request-headers.adoc[]
+
+---
+
+=== 게시글 등록
+
+==== Request
+
+include::{snippets}/post-controller-test/create-post-test/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/post-controller-test/create-post-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/post-controller-test/create-post-test/response-headers.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/post-controller-test/create-post-test/http-response.adoc[]
+
+=== 게시글 리스트 조회
+
+==== Request
+
+include::{snippets}/post-controller-test/get-post-list-test/
+
+===== Request HTTP Example
+
+include::{snippets}/post-controller-test/create-post-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/post-controller-test/create-post-test/response-headers.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/post-controller-test/create-post-test/http-response.adoc[]
