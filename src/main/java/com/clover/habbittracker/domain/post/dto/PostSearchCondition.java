@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import com.clover.habbittracker.domain.post.entity.Post;
+import com.clover.habbittracker.global.base.entity.RestDocsEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
@@ -20,8 +21,16 @@ public class PostSearchCondition {
 	private SearchType searchType;
 	private String keyword;
 
-	public enum SearchType {
-		ALL, TITLE, CONTENT;
+	public enum SearchType implements RestDocsEnum {
+		ALL("전체 검색"),
+		TITLE("제목 검색"),
+		CONTENT("본문 검색");
+
+		private final String description;
+
+		SearchType(String description) {
+			this.description = description;
+		}
 
 		@JsonCreator
 		public static SearchType of(String searchTypeName) {
@@ -31,9 +40,15 @@ public class PostSearchCondition {
 				.orElseThrow();
 		}
 
+		@Override
 		@JsonValue
 		public String getName() {
 			return this.name();
+		}
+
+		@Override
+		public String getDescription() {
+			return description;
 		}
 	}
 }

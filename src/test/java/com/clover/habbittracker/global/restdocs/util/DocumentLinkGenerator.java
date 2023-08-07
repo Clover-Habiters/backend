@@ -8,7 +8,8 @@ public interface DocumentLinkGenerator {
 	enum DocUrl {
 		EMOJI_DOMAIN("emoji-domain", "도메인 종류"),
 		EMOJI_TYPE("emoji-type", "이모지 타입"),
-		CATEGORY("category", "카테고리 종류");
+		CATEGORY("category", "카테고리 종류"),
+		SEARCHTYPE("search-type", "검색 타입");
 
 		private final String pageId;
 		private final String text;

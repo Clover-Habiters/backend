@@ -39,7 +39,7 @@ public class EnumDocumentation extends RestDocsSupport {
 	}
 
 	@Test
-	public void enums() throws Exception {
+	void enums() throws Exception {
 		ResultActions result = this.mockMvc.perform(
 			get("/test/docs/enums")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -56,7 +56,7 @@ public class EnumDocumentation extends RestDocsSupport {
 			.andDo(restDocs.document(
 				customResponseFields("custom-response",
 					beneathPath("data.emojiDomain").withSubsectionId("emojiDomain"),
-					attributes(key("title").value("memberStatus")),
+					attributes(key("title").value("emojiDomain")),
 					enumConvertFieldDescriptor((enumDocs.getEmojiDomain()))
 				),
 				customResponseFields("custom-response", beneathPath("data.emojiType").withSubsectionId("emojiType"),
@@ -66,6 +66,10 @@ public class EnumDocumentation extends RestDocsSupport {
 				customResponseFields("custom-response", beneathPath("data.category").withSubsectionId("category"),
 					attributes(key("title").value("category")),
 					enumConvertFieldDescriptor((enumDocs.getCategory()))
+				),
+				customResponseFields("custom-response", beneathPath("data.searchType").withSubsectionId("searchType"),
+					attributes(key("title").value("searchType")),
+					enumConvertFieldDescriptor((enumDocs.getSearchType()))
 				)
 			));
 	}
