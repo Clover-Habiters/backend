@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -98,16 +99,15 @@ class PostControllerTest extends RestDocsSupport {
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
 				responseFields(
-					fieldWithPath("code").type(STRING).description("결과 코드"),
-					fieldWithPath("message").type(STRING).description("결과 메세지"),
-					fieldWithPath("data[].id").type(NUMBER).description("게시글 id"),
-					fieldWithPath("data[].title").type(STRING).description("게시글 제목"),
-					fieldWithPath("data[].content").type(STRING).description("게시글 본문"),
-					fieldWithPath("data[].category").type(STRING).description(generateLinkCode(DocUrl.CATEGORY)),
-					fieldWithPath("data[].views").type(NUMBER).description("조회수"),
-					fieldWithPath("data[].numOfComments").type(NUMBER).description("댓글 수"),
-					fieldWithPath("data[].numOfEmojis").type(NUMBER).description("이모지 수"),
-					fieldWithPath("data[].createDate").type(STRING).description("생성 날짜")
+					beneathPath("data").withSubsectionId("data"),
+					fieldWithPath("id").type(NUMBER).description("게시글 id"),
+					fieldWithPath("title").type(STRING).description("게시글 제목"),
+					fieldWithPath("content").type(STRING).description("게시글 본문"),
+					fieldWithPath("category").type(STRING).description(generateLinkCode(DocUrl.CATEGORY)),
+					fieldWithPath("views").type(NUMBER).description("조회수"),
+					fieldWithPath("numOfComments").type(NUMBER).description("댓글 수"),
+					fieldWithPath("numOfEmojis").type(NUMBER).description("이모지 수"),
+					fieldWithPath("createDate").type(STRING).description("생성 날짜")
 				)
 			));
 	}
@@ -117,7 +117,7 @@ class PostControllerTest extends RestDocsSupport {
 	void getPostTest() throws Exception {
 
 		//when then
-		mockMvc.perform(get("/posts/{postId}", savedPost.getId())
+		mockMvc.perform(RestDocumentationRequestBuilders.get("/posts/{postId}", savedPost.getId())
 				.header("Authorization", "Bearer " + accessToken))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data.title").exists())
@@ -128,17 +128,19 @@ class PostControllerTest extends RestDocsSupport {
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
 				),
+				pathParameters(
+					parameterWithName("postId").description("상세 조회 할 게시글 아이디")
+				),
 				responseFields(
-					fieldWithPath("code").type(STRING).description("결과 코드"),
-					fieldWithPath("message").type(STRING).description("결과 메세지"),
-					fieldWithPath("data.title").type(STRING).description("게시글 제목"),
-					fieldWithPath("data.content").type(STRING).description("게시글 본문"),
-					fieldWithPath("data.category").type(STRING).description(generateLinkCode(DocUrl.CATEGORY)),
-					fieldWithPath("data.views").type(NUMBER).description("조회수"),
-					fieldWithPath("data.comments").type(ARRAY).description("댓글 수"),
-					fieldWithPath("data.emojis").type(ARRAY).description("이모지 수"),
-					fieldWithPath("data.createDate").type(STRING).description("생성 날짜"),
-					fieldWithPath("data.updateDate").type(STRING).description("수정 날짜")
+					beneathPath("data").withSubsectionId("data"),
+					fieldWithPath("title").type(STRING).description("게시글 제목"),
+					fieldWithPath("content").type(STRING).description("게시글 본문"),
+					fieldWithPath("category").type(STRING).description(generateLinkCode(DocUrl.CATEGORY)),
+					fieldWithPath("views").type(NUMBER).description("조회수"),
+					fieldWithPath("comments").type(ARRAY).description("댓글 수"),
+					fieldWithPath("emojis").type(ARRAY).description("이모지 수"),
+					fieldWithPath("createDate").type(STRING).description("생성 날짜"),
+					fieldWithPath("updateDate").type(STRING).description("수정 날짜")
 				)
 			));
 	}
@@ -176,7 +178,7 @@ class PostControllerTest extends RestDocsSupport {
 					fieldWithPath("searchType").description(generateLinkCode(DocUrl.SEARCHTYPE)),
 					fieldWithPath("keyword").description("검색 내용")
 				),
-				responseFields(
+				relaxedResponseFields(
 					beneathPath("data").withSubsectionId("data"),
 					fieldWithPath("content[].id").type(NUMBER).description("게시글 id"),
 					fieldWithPath("content[].title").type(STRING).description("게시글 제목"),
@@ -186,26 +188,8 @@ class PostControllerTest extends RestDocsSupport {
 					fieldWithPath("content[].numOfComments").type(NUMBER).description("댓글 수"),
 					fieldWithPath("content[].numOfEmojis").type(NUMBER).description("이모지 수"),
 					fieldWithPath("content[].createDate").type(STRING).description("생성 날짜"),
-					//TODO: Pageable 수정 예정
-					fieldWithPath("pageable.sort.empty").type(BOOLEAN).description("pageable"),
-					fieldWithPath("pageable.sort.sorted").type(BOOLEAN).description("pageable"),
-					fieldWithPath("pageable.sort.unsorted").type(BOOLEAN).description("pageable"),
-					fieldWithPath("pageable.offset").type(NUMBER).description("pageable"),
-					fieldWithPath("pageable.pageNumber").type(NUMBER).description("pageable"),
-					fieldWithPath("pageable.pageSize").type(NUMBER).description("pageable"),
-					fieldWithPath("pageable.paged").type(BOOLEAN).description("pageable"),
-					fieldWithPath("pageable.unpaged").type(BOOLEAN).description("pageable"),
-					fieldWithPath("last").type(BOOLEAN).description("pageable"),
-					fieldWithPath("totalPages").type(NUMBER).description("pageable"),
-					fieldWithPath("totalElements").type(NUMBER).description("pageable"),
-					fieldWithPath("number").type(NUMBER).description("pageable"),
-					fieldWithPath("sort.empty").type(BOOLEAN).description("pageable"),
-					fieldWithPath("sort.sorted").type(BOOLEAN).description("pageable"),
-					fieldWithPath("sort.unsorted").type(BOOLEAN).description("pageable"),
-					fieldWithPath("first").type(BOOLEAN).description("pageable"),
-					fieldWithPath("size").type(NUMBER).description("pageable"),
-					fieldWithPath("numberOfElements").type(NUMBER).description("pageable"),
-					fieldWithPath("empty").type(BOOLEAN).description("pageable")
+					fieldWithPath("pageable").type(OBJECT).description(generateLinkCode(DocUrl.PAGEABLE))
+
 				)
 			));
 
@@ -219,7 +203,7 @@ class PostControllerTest extends RestDocsSupport {
 		String request = objectMapper.writeValueAsString(postRequest);
 
 		//when then
-		mockMvc.perform(put("/posts/{postId}", savedPost.getId())
+		mockMvc.perform(RestDocumentationRequestBuilders.put("/posts/{postId}", savedPost.getId())
 				.header("Authorization", "Bearer " + accessToken)
 				.contentType(APPLICATION_JSON)
 				.content(request))
@@ -228,6 +212,9 @@ class PostControllerTest extends RestDocsSupport {
 			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				pathParameters(
+					parameterWithName("postId").description("상세 조회 할 게시글 아이디")
 				),
 				requestFields(
 					fieldWithPath("title").description("수정 할 게시글 제목").attributes(field("constraints", "아직 미정")),
@@ -244,12 +231,15 @@ class PostControllerTest extends RestDocsSupport {
 	@DisplayName("게시글 작성자는 게시글을 삭제 할 수 있다.")
 	void deletePostTest() throws Exception {
 		//when then
-		mockMvc.perform(delete("/posts/{postId}", savedPost.getId())
+		mockMvc.perform(RestDocumentationRequestBuilders.delete("/posts/{postId}", savedPost.getId())
 				.header("Authorization", "Bearer " + accessToken))
 			.andExpect(status().isNoContent())
 			.andDo(restDocs.document(
 				requestHeaders(
 					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				pathParameters(
+					parameterWithName("postId").description("상세 조회 할 게시글 아이디")
 				)
 			));
 	}
