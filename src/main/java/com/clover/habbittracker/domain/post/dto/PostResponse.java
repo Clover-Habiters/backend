@@ -15,7 +15,7 @@ public record PostResponse(
 	Long views,
 	Integer numOfComments,
 	Integer numOfEmojis,
-	@JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	@JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	LocalDateTime createDate
 ) {
 }
