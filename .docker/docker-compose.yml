@@ -4,36 +4,9 @@ networks:
     driver: bridge
 
 services:
-  web:
-    container_name: habiters-app
-    image: hantaehee/habiters
-    depends_on:
-      - db
-    ports:
-      - "8080:8080"
-    environment:
-      JWT_SECRET: ${JWT_SECRET}
-      DB_USER_NAME: ${DB_USER_NAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_URL: ${DB_URL}
-      KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}
-      KAKAO_URI: ${KAKAO_URI}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      GOOGLE_URI: ${GOOGLE_URI}
-      NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
-      NAVER_CLIENT_SECRET: ${NAVER_CLIENT_SECRET}
-      NAVER_URI: ${NAVER_URI}
-      NCP_API_ACCESS_KEY: ${NCP_API_ACCESS_KEY}
-      NCP_SECRET_KEY: ${NCP_SECRET_KEY}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PORT: ${REDIS_PORT}
-      SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL}
-    networks:
-      - habiters-network
   db:
     container_name: habiters-db
-    image: mysql:8.0
+    image: mysql:8.0.31
     restart: always
     environment:
       MYSQL_DATABASE: habiters-db
@@ -54,5 +27,61 @@ services:
       - "6379:6379"
     volumes:
       - ./data/redis:/data
+    networks:
+      - habiters-network
 
+  green:
+    container_name: green
+    image: hantaehee/habiters
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      DB_USER_NAME: ${DB_USER_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_URL: ${DB_URL}
+      KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}
+      KAKAO_URI: ${KAKAO_URI}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_URI: ${GOOGLE_URI}
+      NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
+      NAVER_CLIENT_SECRET: ${NAVER_CLIENT_SECRET}
+      NAVER_URI: ${NAVER_URI}
+      JWT_SECRET: ${JWT_SECRET}
+      NCP_API_ACCESS_KEY: ${NCP_API_ACCESS_KEY}
+      NCP_SECRET_KEY: ${NCP_SECRET_KEY}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL}
+    networks:
+      - habiters-network
 
+  blue:
+    container_name: blue
+    image: hantaehee/habiters
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      DB_USER_NAME: ${DB_USER_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_URL: ${DB_URL}
+      KAKAO_CLIENT_ID: ${KAKAO_CLIENT_ID}
+      KAKAO_URI: ${KAKAO_URI}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_URI: ${GOOGLE_URI}
+      NAVER_CLIENT_ID: ${NAVER_CLIENT_ID}
+      NAVER_CLIENT_SECRET: ${NAVER_CLIENT_SECRET}
+      NAVER_URI: ${NAVER_URI}
+      NCP_API_ACCESS_KEY: ${NCP_API_ACCESS_KEY}
+      NCP_SECRET_KEY: ${NCP_SECRET_KEY}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      JWT_SECRET: ${JWT_SECRET}
+      SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL}
+    networks:
+      - habiters-network
