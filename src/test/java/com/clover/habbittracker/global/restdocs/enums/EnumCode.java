@@ -3,20 +3,20 @@ package com.clover.habbittracker.global.restdocs.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EnumDocs {
+public class EnumCode {
 	private Map<String, String> emojiDomain;
 	private Map<String, String> emojiType;
 	private Map<String, String> category;
 	private Map<String, String> searchType;
 
-	private EnumDocs() {
+	private EnumCode() {
 		this.emojiDomain = new HashMap<>();
 		this.emojiType = new HashMap<>();
 		this.category = new HashMap<>();
 		this.searchType = new HashMap<>();
 	}
 
-	private EnumDocs(Map<String, String> emojiDomain, Map<String, String> emojiType, Map<String, String> category,
+	private EnumCode(Map<String, String> emojiDomain, Map<String, String> emojiType, Map<String, String> category,
 		Map<String, String> searchType) {
 		this.emojiDomain = emojiDomain;
 		this.emojiType = emojiType;
@@ -73,13 +73,13 @@ public class EnumDocs {
 			return this;
 		}
 
-		public EnumDocs build() {
-			EnumDocs enumDocs = new EnumDocs();
-			enumDocs.emojiDomain = this.emojiDomain;
-			enumDocs.emojiType = this.emojiType;
-			enumDocs.category = this.category;
-			enumDocs.searchType = this.searchType;
-			return enumDocs;
+		public EnumCode build() {
+			EnumCode enumCode = new EnumCode();
+			enumCode.emojiDomain = this.emojiDomain;
+			enumCode.emojiType = this.emojiType;
+			enumCode.category = this.category;
+			enumCode.searchType = this.searchType;
+			return enumCode;
 		}
 	}
 
