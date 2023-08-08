@@ -6,8 +6,8 @@
 :sectlinks:
 :docinfo: shared-head
 
-[[Bookmark-API]]
-== 북마크 API
+[[Post-API]]
+== 게시글 API
 
 === 공통
 
@@ -39,16 +39,97 @@ include::{snippets}/post-controller-test/create-post-test/http-response.adoc[]
 
 ==== Request
 
-include::{snippets}/post-controller-test/get-post-list-test/
-
 ===== Request HTTP Example
 
-include::{snippets}/post-controller-test/create-post-test/http-request.adoc[]
+include::{snippets}/post-controller-test/get-post-list-test/http-request.adoc[]
 
 ==== Response
 
-include::{snippets}/post-controller-test/create-post-test/response-headers.adoc[]
+include::{snippets}/post-controller-test/get-post-list-test/response-fields-data.adoc[]
 
 ===== Response HTTP Example
 
-include::{snippets}/post-controller-test/create-post-test/http-response.adoc[]
+include::{snippets}/post-controller-test/get-post-list-test/http-response.adoc[]
+
+=== 게시글 상세 조회
+
+*endpoint* +
+_/posts/{postId}/comment_
+
+include::{snippets}/post-controller-test/get-post-test/path-parameters.adoc[]
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/post-controller-test/get-post-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/post-controller-test/get-post-test/response-fields-data.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/post-controller-test/get-post-test/http-response.adoc[]
+
+=== 게시글 검색
+
+==== Request
+
+include::{snippets}/post-controller-test/search-post-test/query-parameters.adoc[]
+
+include::{snippets}/post-controller-test/search-post-test/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/post-controller-test/search-post-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/post-controller-test/search-post-test/response-fields-data.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/post-controller-test/search-post-test/http-response.adoc[]
+
+=== 게시글 수정
+
+*endpoint* +
+_/posts/{postId}/comment_
+
+include::{snippets}/post-controller-test/update-post-test/path-parameters.adoc[]
+
+==== Request
+
+include::{snippets}/post-controller-test/update-post-test/request-fields.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/post-controller-test/update-post-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/post-controller-test/update-post-test/response-headers.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/post-controller-test/update-post-test/http-response.adoc[]
+
+=== 게시글 삭제
+
+*endpoint* +
+_/posts/{postId}/comment_
+
+include::{snippets}/post-controller-test/update-post-test/path-parameters.adoc[]
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/post-controller-test/delete-post-test/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/post-controller-test/delete-post-test/http-response.adoc[]

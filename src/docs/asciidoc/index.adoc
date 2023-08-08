@@ -23,6 +23,8 @@
 
 === link:api/Diary-API.html[회고록 API, window= _blank]
 
+=== link:api/Post-API.html[게시글 API, window= _blank]
+
 === link:api/Comment-API.html[댓글 API, window= _blank]
 
 === link:api/Bookmark-API.html[북마크 API, window= _blank]
