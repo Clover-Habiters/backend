@@ -2,7 +2,7 @@
 <!-- 60초마다 설정 파일의 변경을 확인 하여 변경시 갱신 -->
 <configuration scan="true" scanPeriod="60 seconds">
     <!-- 로그 파일이 저장될 경로 -->
-    <property name="LOG_PATH" value="log"/>
+    <property name="LOG_PATH" value=".log"/>
     <!-- 로그 파일 이름 -->
     <property name="LOG_FILE_NAME" value="habiters"/>
     <!-- 로그 출력 패턴 -->

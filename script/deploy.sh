@@ -1,6 +1,8 @@
 #!/bin/bash
 
-if [ $(docker ps | grep -c "db") -eq 0 ]; then
+IS_DB_RUNNING=$(docker ps | grep -c "db") # db가 실행중인지
+
+if [ "$IS_DB_RUNNING" -eq 0 ]; then # 실행중이 아니라면
   echo "### Starting database ###"
   docker-compose up -d db
 else
@@ -8,21 +10,19 @@ else
 fi
 
 echo
-echo
 
-if [ $(docker ps | grep -c "redis") -eq 0 ]; then
+IS_REDIS_RUNNING=$(docker ps | grep -c "redis") # redis가 실행중인지
+
+if [ "$IS_REDIS_RUNNING" -eq 0 ]; then # 실행중이 아니라면
   echo "### Starting redis ###"
   docker-compose up -d redis
 else
   echo "redis is already running"
 fi
 
-APP_NAME=web
+IS_GREEN_RUNNING=$(docker ps | grep green) # green이 실행중인지
 
-IS_GREEN=$(docker ps | grep green) # 현재 실행중인 App이 blue인지 확인
-DEFAULT_CONF=" /etc/nginx/nginx.conf"
-
-if [ -z $IS_GREEN  ];then # blue라면
+if [ "$IS_GREEN_RUNNING" -eq 0 ];then # green이 실행중이 아니라면 -> green으로 실행
 
   echo "### BLUE => GREEN ###"
 
@@ -49,7 +49,8 @@ if [ -z $IS_GREEN  ];then # blue라면
 
   echo "5. blue container down"
   docker-compose stop blue
-else
+
+else # green이 실행중이라면 -> blue로 실행
   echo "### GREEN => BLUE ###"
 
   echo "1. get blue image"
