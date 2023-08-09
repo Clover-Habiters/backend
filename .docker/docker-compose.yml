@@ -6,7 +6,7 @@ networks:
 services:
   db:
     container_name: habiters-db
-    image: mysql:8.0.31
+    image: mysql:8.0.33
     restart: always
     environment:
       MYSQL_DATABASE: habiters-db
