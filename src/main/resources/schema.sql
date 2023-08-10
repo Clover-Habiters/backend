@@ -75,8 +75,8 @@ create table post
     updated_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
     deleted      boolean      not null default false,
 
-    FULLTEXT INDEX post_title (title),
-    FULLTEXT INDEX post_content (content)
+    FULLTEXT INDEX post_title (title) WITH PARSER ngram,
+    FULLTEXT INDEX post_content (content) WITH PARSER ngram
 );
 
 create table comment

@@ -2,4 +2,4 @@
 :icons: font
 
 [[emoji-type]]
-include::{snippets}/enum-documentation/enums/custom-response-fields-emojiType.adoc[]
+include::{snippets}/common-documentation/enums/custom-response-fields-emojiType.adoc[]

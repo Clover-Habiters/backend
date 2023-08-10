@@ -1,0 +1,5 @@
+:doctype: book
+:icons: font
+
+[[pageable]]
+include::{snippets}/common-documentation/pageable/response-fields.adoc[]

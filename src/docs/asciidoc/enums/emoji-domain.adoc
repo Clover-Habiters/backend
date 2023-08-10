@@ -2,4 +2,4 @@
 :icons: font
 
 [[emoji-domain]]
-include::{snippets}/enum-documentation/enums/custom-response-fields-emojiDomain.adoc[]
+include::{snippets}/common-documentation/enums/custom-response-fields-emojiDomain.adoc[]

@@ -1,5 +1,5 @@
 [[overview]]
-== Overview
+== 공통 사항
 
 [[overview-http-status-codes]]
 === HTTP status codes
@@ -25,3 +25,6 @@
 | `500 Internal Server Error`
 | 서버 에러
 |===
+
+[[common-code]]
+include::{snippets}/common-documentation/common-response/response-fields.adoc[]
