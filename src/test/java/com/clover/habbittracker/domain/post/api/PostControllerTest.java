@@ -28,10 +28,10 @@ import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
 import com.clover.habbittracker.util.CustomTransaction;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
-
-@Transactional(value = Transactional.TxType.REQUIRED)
+@Transactional(propagation = Propagation.REQUIRED)
 class PostControllerTest extends RestDocsSupport {
 
 	@Autowired
@@ -133,6 +133,7 @@ class PostControllerTest extends RestDocsSupport {
 				),
 				responseFields(
 					beneathPath("data").withSubsectionId("data"),
+					fieldWithPath("memberId").type(NUMBER).description("작성자 ID"),
 					fieldWithPath("title").type(STRING).description("게시글 제목"),
 					fieldWithPath("content").type(STRING).description("게시글 본문"),
 					fieldWithPath("category").type(STRING).description(generateLinkCode(DocUrl.CATEGORY)),
