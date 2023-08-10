@@ -10,6 +10,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.clover.habbittracker.util.CustomTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +28,10 @@ import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.global.config.db.JpaConfig;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 
 @DataJpaTest
 @Import(JpaConfig.class)
@@ -39,6 +44,8 @@ public class PostRepositoryTest {
 	@Autowired
 	private MemberRepository memberRepository;
 
+	@Autowired
+	private PlatformTransactionManager transactionManager;
 	private Member testMember;
 
 	private Pageable pageable;
@@ -115,7 +122,6 @@ public class PostRepositoryTest {
 		int threadNum = 3;
 		Post testPost = createTestPost(testMember);
 		Post savedPost = postRepository.save(testPost);
-
 		ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
 		CountDownLatch latch = new CountDownLatch(threadNum);
 
@@ -129,25 +135,25 @@ public class PostRepositoryTest {
 		latch.await();
 
 		//then
-		assertThat(savedPost.getViews()).isEqualTo(1);
+		assertThat(savedPost.getViews()).isEqualTo(threadNum);
 	}
 
 	@Test
+	@DisplayName("[성공] 게시글 본문 조회 테스트")
+	@Sql(scripts = "/searchTest_after.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 	void searchByPostTest() {
 		//given
-		Post build = Post.builder()
-			.title("title")
-			.content("content")
-			.category(Post.Category.DAILY)
-			.member(testMember)
-			.build();
-		Post save = postRepository.save(build);
+		TransactionDefinition definition = new CustomTransaction();
+		TransactionStatus status = transactionManager.getTransaction(definition);
+		Post post = createTestPost(testMember);
+		Post save = postRepository.save(post);
+		transactionManager.commit(status);
 		PostSearchCondition searchCondition = new PostSearchCondition(save.getCategory(),
-			PostSearchCondition.SearchType.CONTENT, save.getContent());
+				PostSearchCondition.SearchType.CONTENT, save.getContent());
 		//when
 		Page<Post> posts = postRepository.searchPostBy(searchCondition, pageable);
 
 		//then
-		assertThat(posts.getTotalElements()).isEqualTo(1);
+		assertThat(posts.getContent().size()).isEqualTo(1);
 	}
 }

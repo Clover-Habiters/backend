@@ -1,13 +1,14 @@
 package com.clover.habbittracker.domain.post.service;
 
-import static com.clover.habbittracker.util.MemberProvider.*;
-import static com.clover.habbittracker.util.PostProvider.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
-import java.util.Optional;
-
+import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.member.repository.MemberRepository;
+import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
+import com.clover.habbittracker.domain.post.dto.PostRequest;
+import com.clover.habbittracker.domain.post.dto.PostResponse;
+import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
+import com.clover.habbittracker.domain.post.entity.Post;
+import com.clover.habbittracker.domain.post.repository.PostRepository;
+import com.clover.habbittracker.util.CustomTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,17 +19,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.transaction.BeforeTransaction;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
-import com.clover.habbittracker.domain.post.dto.PostRequest;
-import com.clover.habbittracker.domain.post.dto.PostResponse;
-import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
-import com.clover.habbittracker.domain.post.entity.Post;
-import com.clover.habbittracker.domain.post.repository.PostRepository;
+import java.util.List;
+import java.util.Optional;
+
+import static com.clover.habbittracker.util.MemberProvider.createTestMember;
+import static com.clover.habbittracker.util.PostProvider.createPostRequest;
+import static com.clover.habbittracker.util.PostProvider.createTestPost;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 @Transactional
@@ -41,6 +44,8 @@ class PostServiceTest {
 	private PostService postService;
 	@Autowired
 	private MemberRepository memberRepository;
+	@Autowired
+	private PlatformTransactionManager transactionManager;
 	private Member testMember;
 
 	@BeforeEach
@@ -119,11 +124,14 @@ class PostServiceTest {
 	class searchBy {
 
 		private Post savedPost;
+		private final TransactionDefinition transactionDefinition = new CustomTransaction();
 
-		@BeforeTransaction
+		@BeforeEach
 		void setUp() {
+			TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
 			Post post = createTestPost(testMember);
 			savedPost = postRepository.save(post);
+			transactionManager.commit(transactionStatus);
 		}
 
 		@Test
