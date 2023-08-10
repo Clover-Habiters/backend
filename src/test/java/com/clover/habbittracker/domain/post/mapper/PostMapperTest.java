@@ -84,6 +84,7 @@ public class PostMapperTest {
 
 		//then
 		assertAll(() -> {
+			assertThat(testPost.getMember().getId()).isEqualTo(postDetailResponse.memberId());
 			assertThat(testPost.getTitle()).isEqualTo(postDetailResponse.title());
 			assertThat(testPost.getContent()).isEqualTo(postDetailResponse.content());
 			assertThat(testPost.getCategory()).isEqualTo(postDetailResponse.category());

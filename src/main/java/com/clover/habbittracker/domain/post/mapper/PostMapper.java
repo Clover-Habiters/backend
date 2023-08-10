@@ -30,6 +30,7 @@ public interface PostMapper {
 	PostResponse toPostResponse(Post post);
 
 	@Mappings({
+		@Mapping(source = "post.member.id", target = "memberId"),
 		@Mapping(source = "post.createdAt", target = "createDate"),
 		@Mapping(source = "post.updatedAt", target = "updateDate")
 	})

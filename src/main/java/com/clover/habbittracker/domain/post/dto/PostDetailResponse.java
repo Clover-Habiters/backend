@@ -11,6 +11,7 @@ import com.clover.habbittracker.domain.post.entity.Post;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public record PostDetailResponse(
+	Long memberId,
 	String title,
 	String content,
 	Post.Category category,
