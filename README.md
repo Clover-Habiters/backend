@@ -46,15 +46,24 @@
 <img src="https://img.shields.io/badge/IntelliJ IDEA-000000?style=for-the-badge&logo=intellijIdea&logoColor=white"/> <img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white"/> <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white"/> <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white"/>
 
 <br><br><br><br>
+
+## Architecture 🏰
+<br><br>
+
+![image](https://github.com/Clover-Habiters/backend/assets/99165624/c1fa8ad2-546e-46e9-b6c1-c912d0ee5873)
+
+<br><br>
 ## API Spec 💽
 
 ### [Habiters API 문서](https://api.habiters.store/docs/index.html)
 
-<br><br><br><br>
+<br/>
+
 ## ERD 💾
 <img src="https://user-images.githubusercontent.com/104195103/229722435-59525a2f-e45f-4bbb-b712-e2489e2012c6.png" width="600" height="600">
 
-<br><br><br><br>
+<br/>
+
 ## 프로젝트 실행 방법 ⚙
 프로젝트 실행 전 아래 항목을 확인해주세요
 
