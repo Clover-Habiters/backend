@@ -48,10 +48,11 @@
 <br><br><br><br>
 
 ## Architecture 🏰
+<br><br>
 
-![image](https://github.com/Clover-Habiters/backend/assets/99165624/e53cc181-0452-4b8a-8d11-a10fdada588c)
+![image](https://github.com/Clover-Habiters/backend/assets/99165624/3913e928-4748-44c4-8b84-adc20c3d8a05)
 
-<br><br><br><br>
+<br><br>
 ## API Spec 💽
 
 ### [Habiters API 문서](https://api.habiters.store/docs/index.html)
