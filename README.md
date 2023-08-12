@@ -49,7 +49,7 @@
 
 ## Architecture 🏰
 
-![스크린샷 2023-08-11 오후 6 02 48](https://github.com/Clover-Habiters/backend/assets/99165624/65204eeb-ba3e-4eff-a5a5-e5b966f3401b)
+![image](https://github.com/Clover-Habiters/backend/assets/99165624/e53cc181-0452-4b8a-8d11-a10fdada588c)
 
 <br><br><br><br>
 ## API Spec 💽
