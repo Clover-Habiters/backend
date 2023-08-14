@@ -30,3 +30,5 @@
 === link:api/Bookmark-API.html[북마크 API, window= _blank]
 
 === link:api/Emoji-API.html[이모지 API, window= _blank]
+
+=== link:api/Image-API.html[이미지 API, window= _blank]
