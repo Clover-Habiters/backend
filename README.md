@@ -64,6 +64,9 @@
 ## API Spec 💽
 
 ### [Habiters API 문서](https://api.habiters.store/docs/index.html)
+<br/>
+
+![image](https://github.com/Clover-Habiters/backend/assets/99165624/4c31c232-e689-41dc-9470-1faa45b0c93a)
 
 <br/>
 
