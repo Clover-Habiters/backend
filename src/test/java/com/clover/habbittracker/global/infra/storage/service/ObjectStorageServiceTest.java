@@ -1,11 +1,12 @@
-package com.clover.habbittracker.global.infra;
+package com.clover.habbittracker.global.infra.storage.service;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
 import java.net.URL;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.clover.habbittracker.global.infra.storage.ObjectStorageService;
 
 public class ObjectStorageServiceTest {
 	private ObjectStorageService objectStorageService;
@@ -35,21 +35,21 @@ public class ObjectStorageServiceTest {
 	public void naverCloudProfileImgSaveTest() throws IOException {
 		//given
 		MultipartFile mockFile = new MockMultipartFile("test.jpg", "test.jpg", "image/jpeg", new byte[0]);
-		String expectedBucketName = "user-profile-image";
+		String expectedBucketName = "post-images";
 		String mockUrl = "http://simple.url";
 
 		//when
 		when(mockStorage.putObject(any(PutObjectRequest.class))).thenReturn(null);
 		when(mockStorage.getUrl(anyString(), anyString())).thenReturn(new URL(mockUrl));
-		String result = objectStorageService.profileImgSave(mockFile);
+		String result = objectStorageService.imgSave(mockFile);
 
 		//then
-		Assertions.assertThat(result).isEqualTo(mockUrl);
+		assertThat(result).isEqualTo(mockUrl);
 		verify(mockStorage).getUrl(eq(expectedBucketName), anyString());
 	}
 
 	@Test
-	@DisplayName("multipartForm 데이터가 없다면 예외처리는 따로 하지않고, null을 반환한다.")
+	@DisplayName("multipartForm 데이터가 없다면 IllegalArgumentException 예외로 처리한다.")
 	public void failedProfileImgSaveTest() throws IOException {
 		//given
 		String mockUrl = "http://simple.url";
@@ -57,9 +57,8 @@ public class ObjectStorageServiceTest {
 		//when
 		when(mockStorage.putObject(any(PutObjectRequest.class))).thenReturn(null);
 		when(mockStorage.getUrl(anyString(), anyString())).thenReturn(new URL(mockUrl));
-		String result = objectStorageService.profileImgSave(null);
 
 		//then
-		Assertions.assertThat(result).isEqualTo(null);
+		assertThrows(IllegalArgumentException.class, () -> objectStorageService.imgSave(null));
 	}
 }
