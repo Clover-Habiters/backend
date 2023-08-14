@@ -1,0 +1,13 @@
+===== Request Parts
+
+|===
+|파일명|필수값|설명
+{{#fields}}
+	|{{#tableCellContent}}`+{{path}}+`{{/tableCellContent}}
+	|{{#tableCellContent}}
+		{{^optional}}true{{/optional}}
+		{{#optional}}false{{/optional}}
+	{{/tableCellContent}}
+	|{{#tableCellContent}}{{description}}{{/tableCellContent}}
+{{/fields}}
+|===
