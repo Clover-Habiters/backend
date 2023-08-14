@@ -68,6 +68,7 @@ create table post
     id           bigint auto_increment primary key,
     title        varchar(255) not null,
     content      varchar(255) not null,
+    thumbnail    varchar(255) null,
     category     varchar(255) not null,
     views        bigint       not null default 0,
     member_id    bigint       null,
