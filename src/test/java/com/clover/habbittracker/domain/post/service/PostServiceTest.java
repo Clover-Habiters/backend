@@ -1,14 +1,13 @@
 package com.clover.habbittracker.domain.post.service;
 
-import com.clover.habbittracker.domain.member.entity.Member;
-import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
-import com.clover.habbittracker.domain.post.dto.PostRequest;
-import com.clover.habbittracker.domain.post.dto.PostResponse;
-import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
-import com.clover.habbittracker.domain.post.entity.Post;
-import com.clover.habbittracker.domain.post.repository.PostRepository;
-import com.clover.habbittracker.util.CustomTransaction;
+import static com.clover.habbittracker.util.MemberProvider.*;
+import static com.clover.habbittracker.util.PostProvider.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,14 +23,15 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
-import static com.clover.habbittracker.util.MemberProvider.createTestMember;
-import static com.clover.habbittracker.util.PostProvider.createPostRequest;
-import static com.clover.habbittracker.util.PostProvider.createTestPost;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import com.clover.habbittracker.domain.member.entity.Member;
+import com.clover.habbittracker.domain.member.repository.MemberRepository;
+import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
+import com.clover.habbittracker.domain.post.dto.PostRequest;
+import com.clover.habbittracker.domain.post.dto.PostResponse;
+import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
+import com.clover.habbittracker.domain.post.entity.Post;
+import com.clover.habbittracker.domain.post.repository.PostRepository;
+import com.clover.habbittracker.util.CustomTransaction;
 
 @SpringBootTest
 @Transactional
@@ -85,6 +85,7 @@ class PostServiceTest {
 			assertThat(updatedPost).isPresent();
 			assertThat(updatedPost.get().getTitle()).isEqualTo(updateRequest.title());
 			assertThat(updatedPost.get().getContent()).isEqualTo(updateRequest.content());
+			assertThat(updatedPost.get().getThumbnail()).isEqualTo(updateRequest.thumbnail());
 			assertThat(updatedPost.get().getCategory()).isEqualTo(updateRequest.category());
 		});
 	}
@@ -144,6 +145,7 @@ class PostServiceTest {
 				assertThat(categoryFilterPost.size()).isEqualTo(1);
 				assertThat(categoryFilterPost.get(0).title()).isEqualTo(savedPost.getTitle());
 				assertThat(categoryFilterPost.get(0).content()).isEqualTo(savedPost.getContent());
+				assertThat(categoryFilterPost.get(0).thumbnail()).isEqualTo(savedPost.getThumbnail());
 				assertThat(categoryFilterPost.get(0).category()).isEqualTo(savedPost.getCategory());
 			});
 
@@ -166,6 +168,7 @@ class PostServiceTest {
 				assertThat(postList.size()).isEqualTo(1);
 				assertThat(postList.get(0).title()).isEqualTo(savedPost.getTitle());
 				assertThat(postList.get(0).content()).isEqualTo(savedPost.getContent());
+				assertThat(postList.get(0).thumbnail()).isEqualTo(savedPost.getThumbnail());
 				assertThat(postList.get(0).category()).isEqualTo(savedPost.getCategory());
 			});
 		}
@@ -187,6 +190,7 @@ class PostServiceTest {
 				assertThat(postList.size()).isEqualTo(1);
 				assertThat(postList.get(0).title()).isEqualTo(savedPost.getTitle());
 				assertThat(postList.get(0).content()).isEqualTo(savedPost.getContent());
+				assertThat(postList.get(0).thumbnail()).isEqualTo(savedPost.getThumbnail());
 				assertThat(postList.get(0).category()).isEqualTo(savedPost.getCategory());
 			});
 		}
