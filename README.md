@@ -50,12 +50,23 @@
 ## Architecture 🏰
 <br><br>
 
-![image](https://github.com/Clover-Habiters/backend/assets/99165624/3913e928-4748-44c4-8b84-adc20c3d8a05)
+![image](https://github.com/Clover-Habiters/backend/assets/99165624/c1fa8ad2-546e-46e9-b6c1-c912d0ee5873)
 
 <br><br>
+
+## CI/CD 🔁
+<br><br>
+
+![image](https://github.com/Clover-Habiters/backend/assets/99165624/159c8032-5460-4b1f-a0a6-3161ad0ae1e8)
+
+<br><br>
+
 ## API Spec 💽
 
 ### [Habiters API 문서](https://api.habiters.store/docs/index.html)
+<br/>
+
+![image](https://github.com/Clover-Habiters/backend/assets/99165624/4c31c232-e689-41dc-9470-1faa45b0c93a)
 
 <br/>
 
