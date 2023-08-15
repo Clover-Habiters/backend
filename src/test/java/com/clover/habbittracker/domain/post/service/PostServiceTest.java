@@ -85,7 +85,7 @@ class PostServiceTest {
 			assertThat(updatedPost).isPresent();
 			assertThat(updatedPost.get().getTitle()).isEqualTo(updateRequest.title());
 			assertThat(updatedPost.get().getContent()).isEqualTo(updateRequest.content());
-			assertThat(updatedPost.get().getThumbnail()).isEqualTo(updateRequest.thumbnail());
+			assertThat(updatedPost.get().getThumbnailUrl()).isEqualTo(updateRequest.thumbnailUrl());
 			assertThat(updatedPost.get().getCategory()).isEqualTo(updateRequest.category());
 		});
 	}
@@ -145,7 +145,7 @@ class PostServiceTest {
 				assertThat(categoryFilterPost.size()).isEqualTo(1);
 				assertThat(categoryFilterPost.get(0).title()).isEqualTo(savedPost.getTitle());
 				assertThat(categoryFilterPost.get(0).content()).isEqualTo(savedPost.getContent());
-				assertThat(categoryFilterPost.get(0).thumbnail()).isEqualTo(savedPost.getThumbnail());
+				assertThat(categoryFilterPost.get(0).thumbnailUrl()).isEqualTo(savedPost.getThumbnailUrl());
 				assertThat(categoryFilterPost.get(0).category()).isEqualTo(savedPost.getCategory());
 			});
 
@@ -168,7 +168,7 @@ class PostServiceTest {
 				assertThat(postList.size()).isEqualTo(1);
 				assertThat(postList.get(0).title()).isEqualTo(savedPost.getTitle());
 				assertThat(postList.get(0).content()).isEqualTo(savedPost.getContent());
-				assertThat(postList.get(0).thumbnail()).isEqualTo(savedPost.getThumbnail());
+				assertThat(postList.get(0).thumbnailUrl()).isEqualTo(savedPost.getThumbnailUrl());
 				assertThat(postList.get(0).category()).isEqualTo(savedPost.getCategory());
 			});
 		}
@@ -190,7 +190,7 @@ class PostServiceTest {
 				assertThat(postList.size()).isEqualTo(1);
 				assertThat(postList.get(0).title()).isEqualTo(savedPost.getTitle());
 				assertThat(postList.get(0).content()).isEqualTo(savedPost.getContent());
-				assertThat(postList.get(0).thumbnail()).isEqualTo(savedPost.getThumbnail());
+				assertThat(postList.get(0).thumbnailUrl()).isEqualTo(savedPost.getThumbnailUrl());
 				assertThat(postList.get(0).category()).isEqualTo(savedPost.getCategory());
 			});
 		}

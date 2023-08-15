@@ -72,7 +72,7 @@ class PostControllerTest extends RestDocsSupport {
 				requestFields(
 					fieldWithPath("title").description("게시글 제목").attributes(field("constraints", "아직 미정")),
 					fieldWithPath("content").description("게시글 본문").attributes(field("constraints", "아직 미정")),
-					fieldWithPath("thumbnail").description("썸네일 이미지 url").optional(),
+					fieldWithPath("thumbnailUrl").description("썸네일 이미지 url").optional(),
 					fieldWithPath("category").description(generateLinkCode(DocUrl.CATEGORY))
 				),
 				responseHeaders(
@@ -104,7 +104,7 @@ class PostControllerTest extends RestDocsSupport {
 					fieldWithPath("id").type(NUMBER).description("게시글 id"),
 					fieldWithPath("title").type(STRING).description("게시글 제목"),
 					fieldWithPath("content").type(STRING).description("게시글 본문"),
-					fieldWithPath("thumbnail").description("게시글 썸네일 url"),
+					fieldWithPath("thumbnailUrl").description("게시글 썸네일 url"),
 					fieldWithPath("category").type(STRING).description(generateLinkCode(DocUrl.CATEGORY)),
 					fieldWithPath("views").type(NUMBER).description("조회수"),
 					fieldWithPath("numOfComments").type(NUMBER).description("댓글 수"),
@@ -186,7 +186,7 @@ class PostControllerTest extends RestDocsSupport {
 					fieldWithPath("content[].id").type(NUMBER).description("게시글 id"),
 					fieldWithPath("content[].title").type(STRING).description("게시글 제목"),
 					fieldWithPath("content[].content").type(STRING).description("게시글 본문"),
-					fieldWithPath("content[].thumbnail").description("게시글 썸네일 url"),
+					fieldWithPath("content[].thumbnailUrl").description("게시글 썸네일 url"),
 					fieldWithPath("content[].category").type(STRING).description(generateLinkCode(DocUrl.CATEGORY)),
 					fieldWithPath("content[].views").type(NUMBER).description("조회수"),
 					fieldWithPath("content[].numOfComments").type(NUMBER).description("댓글 수"),
@@ -203,7 +203,7 @@ class PostControllerTest extends RestDocsSupport {
 	@DisplayName("게시글 작성자는 게시글을 수정 할 수 있다.")
 	void updatePostTest() throws Exception {
 		//given
-		PostRequest postRequest = new PostRequest("updateTitle", "updateContent", "/thumbnail", Post.Category.STUDY);
+		PostRequest postRequest = new PostRequest("updateTitle", "updateContent", "/thumbnailUrl", Post.Category.STUDY);
 		String request = objectMapper.writeValueAsString(postRequest);
 
 		//when then
@@ -223,7 +223,7 @@ class PostControllerTest extends RestDocsSupport {
 				requestFields(
 					fieldWithPath("title").description("수정 할 게시글 제목").attributes(field("constraints", "아직 미정")),
 					fieldWithPath("content").description("수정 할 게시글 본문").attributes(field("constraints", "아직 미정")),
-					fieldWithPath("thumbnail").description("수정 할 썸네일 이미지 url").optional(),
+					fieldWithPath("thumbnailUrl").description("수정 할 썸네일 이미지 url").optional(),
 					fieldWithPath("category").description(generateLinkCode(DocUrl.CATEGORY))
 				),
 				responseHeaders(
