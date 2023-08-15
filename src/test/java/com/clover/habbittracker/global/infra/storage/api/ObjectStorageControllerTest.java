@@ -26,7 +26,7 @@ public class ObjectStorageControllerTest extends RestDocsSupport {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		when(objectStorageService.imgSave(any(MultipartFile.class))).thenReturn("/sucess/url");
+		when(objectStorageService.imgSave(any(MultipartFile.class))).thenReturn("/success/url");
 	}
 
 	@Test
