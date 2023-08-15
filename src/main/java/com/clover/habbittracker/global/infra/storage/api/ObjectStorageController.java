@@ -14,7 +14,7 @@ import com.clover.habbittracker.global.infra.storage.service.ObjectStorageServic
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/image")
+@RequestMapping("/images")
 @RequiredArgsConstructor
 public class ObjectStorageController {
 	private final ObjectStorageService objectStorageService;

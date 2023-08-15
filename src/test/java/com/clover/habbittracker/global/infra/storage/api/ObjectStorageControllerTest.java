@@ -26,14 +26,14 @@ public class ObjectStorageControllerTest extends RestDocsSupport {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		when(objectStorageService.imgSave(any(MultipartFile.class))).thenReturn("/sucess/url");
+		when(objectStorageService.imgSave(any(MultipartFile.class))).thenReturn("/success/url");
 	}
 
 	@Test
 	@DisplayName("사진을 요청하여 저장할 수 있다.")
 	void imageUploadTest() throws Exception {
 		MockMultipartFile file = new MockMultipartFile("file", "test.jpg", "image/jpeg", new byte[0]);
-		mockMvc.perform(multipart("/image/upload")
+		mockMvc.perform(multipart("/images/upload")
 				.file(file))
 			.andExpect(status().isOk())
 			.andDo(restDocs.document(
