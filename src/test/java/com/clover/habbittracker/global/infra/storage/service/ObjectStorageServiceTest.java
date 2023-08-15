@@ -20,14 +20,15 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 
 public class ObjectStorageServiceTest {
 	private ObjectStorageService objectStorageService;
-
 	@Mock
 	private AmazonS3 mockStorage;
+
+	private final String BUCKET_NAME = "testBucket";
 
 	@BeforeEach
 	public void setup() {
 		MockitoAnnotations.openMocks(this);
-		objectStorageService = new ObjectStorageService(mockStorage);
+		objectStorageService = new ObjectStorageService(mockStorage, BUCKET_NAME);
 	}
 
 	@Test
@@ -35,7 +36,6 @@ public class ObjectStorageServiceTest {
 	public void naverCloudProfileImgSaveTest() throws IOException {
 		//given
 		MultipartFile mockFile = new MockMultipartFile("test.jpg", "test.jpg", "image/jpeg", new byte[0]);
-		String expectedBucketName = "post-images";
 		String mockUrl = "http://simple.url";
 
 		//when
@@ -45,7 +45,7 @@ public class ObjectStorageServiceTest {
 
 		//then
 		assertThat(result).isEqualTo(mockUrl);
-		verify(mockStorage).getUrl(eq(expectedBucketName), anyString());
+		verify(mockStorage).getUrl(eq(BUCKET_NAME), anyString());
 	}
 
 	@Test
