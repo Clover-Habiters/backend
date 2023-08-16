@@ -11,6 +11,7 @@ public record PostResponse(
 	Long id,
 	String title,
 	String content,
+	String thumbnailUrl,
 	Post.Category category,
 	Long views,
 	Integer numOfComments,

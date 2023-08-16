@@ -56,15 +56,17 @@ public class Post extends BaseEntity {
 	private String content;
 	private Category category;
 	private Long views;
+	private String thumbnailUrl;
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private Member member;
 
 	@Builder
-	public Post(String title, String content, Category category, Member member) {
+	public Post(String title, String content, Category category, String thumbnailUrl, Member member) {
 		this.title = title;
 		this.content = content;
 		this.category = category;
+		this.thumbnailUrl = thumbnailUrl;
 		this.member = member;
 		this.views = 0L;
 	}
@@ -72,6 +74,7 @@ public class Post extends BaseEntity {
 	public void updatePost(PostRequest postRequest) {
 		this.title = postRequest.title();
 		this.content = postRequest.content();
+		this.thumbnailUrl = postRequest.thumbnailUrl();
 		this.category = postRequest.category();
 	}
 

@@ -10,6 +10,7 @@ public class PostProvider {
 	private static final String DEFAULT_CONTENT = "testContent";
 	private static final String REQUEST_TITLE = "requestTitle";
 	private static final String REQUEST_CONTENT = "requestContent";
+	private static final String DEFAULT_THUMBNAIL = "/thumbnailUrl";
 	private static final Post.Category DEFAULT_CATEGORY = Post.Category.DAILY;
 
 	private PostProvider() {
@@ -33,6 +34,7 @@ public class PostProvider {
 			.member(member)
 			.build();
 	}
+
 	public static Post createTestPost(Member member, String title) {
 		return Post.builder()
 			.title(title)
@@ -41,6 +43,7 @@ public class PostProvider {
 			.member(member)
 			.build();
 	}
+
 	public static Post createTestPost(Member member, String title, String content) {
 		return Post.builder()
 			.title(title)
@@ -51,6 +54,6 @@ public class PostProvider {
 	}
 
 	public static PostRequest createPostRequest() {
-		return new PostRequest(REQUEST_TITLE, REQUEST_CONTENT, DEFAULT_CATEGORY);
+		return new PostRequest(REQUEST_TITLE, REQUEST_CONTENT, DEFAULT_THUMBNAIL, DEFAULT_CATEGORY);
 	}
 }

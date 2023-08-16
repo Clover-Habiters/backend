@@ -65,15 +65,16 @@ create table habit_check
 
 create table post
 (
-    id           bigint auto_increment primary key,
-    title        varchar(255) not null,
-    content      varchar(255) not null,
-    category     varchar(255) not null,
-    views        bigint       not null default 0,
-    member_id    bigint       null,
-    created_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
-    updated_date datetime(6)  not null default CURRENT_TIMESTAMP(6),
-    deleted      boolean      not null default false,
+    id            bigint auto_increment primary key,
+    title         varchar(255) not null,
+    content       varchar(255) not null,
+    thumbnail_url varchar(255) null,
+    category      varchar(255) not null,
+    views         bigint       not null default 0,
+    member_id     bigint       null,
+    created_date  datetime(6)  not null default CURRENT_TIMESTAMP(6),
+    updated_date  datetime(6)  not null default CURRENT_TIMESTAMP(6),
+    deleted       boolean      not null default false,
 
     FULLTEXT INDEX post_title (title) WITH PARSER ngram,
     FULLTEXT INDEX post_content (content) WITH PARSER ngram

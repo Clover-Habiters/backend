@@ -1,0 +1,29 @@
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Image-API]]
+== 이미지 API
+
+---
+
+=== 이미지 등록
+
+==== Request
+
+include::{snippets}/object-storage-controller-test/image-upload-test/request-parts.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/object-storage-controller-test/image-upload-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/object-storage-controller-test/image-upload-test/response-fields.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/object-storage-controller-test/image-upload-test/http-response.adoc[]
