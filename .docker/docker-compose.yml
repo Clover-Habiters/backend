@@ -37,6 +37,8 @@ services:
       - db
     ports:
       - "8080:8080"
+    volumes:
+      - ./.log:/.log
     environment:
       DB_USER_NAME: ${DB_USER_NAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -66,6 +68,8 @@ services:
       - db
     ports:
       - "8081:8080"
+    volumes:
+      - ./.log:/.log
     environment:
       DB_USER_NAME: ${DB_USER_NAME}
       DB_PASSWORD: ${DB_PASSWORD}
