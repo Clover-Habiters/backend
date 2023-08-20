@@ -24,7 +24,7 @@ public class DiaryResponse {
 		return DiaryResponse.builder()
 			.id(diary.getId())
 			.content(diary.getContent())
-			.createDate(diary.getCreatedAt())
+			.createDate(diary.getCreateDate())
 			.endUpdateDate(diary.getEndUpdateDate())
 			.build();
 	}

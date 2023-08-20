@@ -25,15 +25,10 @@ public interface PostMapper {
 	@Mappings({
 		@Mapping(source = "post.comments", target = "numOfComments", qualifiedByName = "commentsToSize"),
 		@Mapping(source = "post.emojis", target = "numOfEmojis", qualifiedByName = "emojisToSize"),
-		@Mapping(source = "post.createdAt", target = "createDate")
 	})
 	PostResponse toPostResponse(Post post);
 
-	@Mappings({
-		@Mapping(source = "post.member.id", target = "memberId"),
-		@Mapping(source = "post.createdAt", target = "createDate"),
-		@Mapping(source = "post.updatedAt", target = "updateDate")
-	})
+	@Mapping(source = "post.member.id", target = "memberId")
 	PostDetailResponse toPostDetail(Post post);
 
 	@Named("commentsToSize")

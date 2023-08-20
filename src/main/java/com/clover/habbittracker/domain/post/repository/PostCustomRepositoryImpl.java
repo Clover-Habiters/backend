@@ -39,7 +39,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 			.where(eqCategory(category))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
-			.orderBy(post.createdAt.desc())
+			.orderBy(post.createDate.desc())
 			.fetch();
 	}
 
@@ -74,7 +74,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 			)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
-			.orderBy(post.createdAt.desc())
+			.orderBy(post.createDate.desc())
 			.distinct()
 			.fetch();
 

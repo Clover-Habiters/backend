@@ -24,7 +24,7 @@ public class HabitCheckResponse {
 		return habitChecks.stream()
 			.map(habitCheck -> new HabitCheckResponse(
 				habitCheck.getId(),
-				habitCheck.getUpdatedAt()
+				habitCheck.getUpdateDate()
 			)).toList();
 	}
 }
