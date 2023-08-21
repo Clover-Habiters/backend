@@ -68,12 +68,12 @@ class CommentControllerTest extends RestDocsSupport {
 						.attributes(field("constraints", "아직 미정"))
 				),
 				responseFields(
-					fieldWithPath("code").type(STRING).description("결과 코드"),
-					fieldWithPath("message").type(STRING).description("결과 메시지"),
-					fieldWithPath("data.id").type(NUMBER).description("생성된 댓글 아이디"),
-					fieldWithPath("data.content").type(STRING).description("생성된 댓글 내용"),
-					fieldWithPath("data.createDate").type(STRING).description("댓글 생성 날짜"),
-					fieldWithPath("data.updateDate").type(STRING).description("댓글 최근 수정 날짜")
+					beneathPath("data").withSubsectionId("data"),
+					fieldWithPath("id").type(NUMBER).description("생성된 댓글 아이디"),
+					fieldWithPath("content").type(STRING).description("생성된 댓글 내용"),
+					fieldWithPath("emojis[]").type(ARRAY).description("댓글에 대한 이모지"),
+					fieldWithPath("createDate").type(STRING).description("댓글 생성 날짜"),
+					fieldWithPath("updateDate").type(STRING).description("댓글 최근 수정 날짜")
 				)));
 	}
 
@@ -111,12 +111,12 @@ class CommentControllerTest extends RestDocsSupport {
 						.attributes(field("constraints", "아직 미정"))
 				),
 				responseFields(
-					fieldWithPath("code").type(STRING).description("결과 코드"),
-					fieldWithPath("message").type(STRING).description("결과 메시지"),
-					fieldWithPath("data.id").type(NUMBER).description("생성된 댓글 아이디"),
-					fieldWithPath("data.content").type(STRING).description("생성된 댓글 내용"),
-					fieldWithPath("data.createDate").type(STRING).description("댓글 생성 날짜"),
-					fieldWithPath("data.updateDate").type(STRING).description("댓글 최근 수정 날짜")
+					beneathPath("data").withSubsectionId("data"),
+					fieldWithPath("id").type(NUMBER).description("생성된 댓글 아이디"),
+					fieldWithPath("content").type(STRING).description("생성된 댓글 내용"),
+					fieldWithPath("emojis[]").type(ARRAY).description("댓글의 이모지"),
+					fieldWithPath("createDate").type(STRING).description("댓글 생성 날짜"),
+					fieldWithPath("updateDate").type(STRING).description("댓글 최근 수정 날짜")
 				)));
 	}
 
@@ -193,12 +193,12 @@ class CommentControllerTest extends RestDocsSupport {
 					parameterWithName("commentId").description("답글을 조회 할 댓글 id")
 				),
 				responseFields(
-					fieldWithPath("code").type(STRING).description("결과 코드"),
-					fieldWithPath("message").type(STRING).description("결과 메시지"),
-					fieldWithPath("data[].id").type(NUMBER).description("회고록 아이디"),
-					fieldWithPath("data[].content").type(STRING).description("회고록 내용"),
-					fieldWithPath("data[].createDate").type(STRING).description("회고 등록 날짜"),
-					fieldWithPath("data[].updateDate").type(STRING).description("회고 수정 마감 날짜")
+					beneathPath("data").withSubsectionId("data"),
+					fieldWithPath("id").type(NUMBER).description("답글 아이디"),
+					fieldWithPath("content").type(STRING).description("답글 내용"),
+					fieldWithPath("emojis[]").type(ARRAY).description("댓글에 대한 이모지"),
+					fieldWithPath("createDate").type(STRING).description("답글 등록 날짜"),
+					fieldWithPath("updateDate").type(STRING).description("답글 수정 날짜")
 				)));
 	}
 

@@ -24,11 +24,7 @@ public interface CommentMapper {
 		@Mapping(source = "request.content", target = "content"),
 		@Mapping(source = "member", target = "member")
 	})
-	Comment toReply(CommentRequest request, Member member, Post post, Long commentId);
+	Comment toReply(CommentRequest request, Member member, Post post, Long parentId);
 
-	@Mappings({
-		@Mapping(source = "comment.createdAt", target = "createDate"),
-		@Mapping(source = "comment.updatedAt", target = "updateDate")
-	})
 	CommentResponse toCommentResponse(Comment comment);
 }

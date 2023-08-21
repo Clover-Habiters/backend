@@ -59,7 +59,7 @@ public class HabitServiceImpl implements HabitService {
 	@Transactional
 	public HabitResponse updateMyHabit(Long habitId, HabitRequest request) {
 		Habit habit = habitRepository.findById(habitId)
-			.orElseThrow(()-> new HabitNotFoundException(habitId));
+			.orElseThrow(() -> new HabitNotFoundException(habitId));
 		habit.setContent(request.getContent());
 		return HabitResponse.from(habit);
 	}
@@ -68,7 +68,7 @@ public class HabitServiceImpl implements HabitService {
 	@Transactional
 	public void habitCheck(Long habitId, String date) {
 		Habit habit = habitRepository.findById(habitId)
-			.orElseThrow(()-> new HabitNotFoundException(habitId));
+			.orElseThrow(() -> new HabitNotFoundException(habitId));
 		LocalDate requestDate = DateUtil.getLocalDate(date);
 		if (!isToday(requestDate)) {
 			throw new HabitCheckExpiredException(habitId);
@@ -76,13 +76,13 @@ public class HabitServiceImpl implements HabitService {
 
 		habitCheckRepository.findByHabitOrderByUpdatedAtDesc(habit)
 			.ifPresent(lastHabitCheck -> {
-				if (isToday(lastHabitCheck.getUpdatedAt().toLocalDate())) {
-					System.out.println(lastHabitCheck.getUpdatedAt());
+				if (isToday(lastHabitCheck.getUpdateDate().toLocalDate())) {
+					System.out.println(lastHabitCheck.getUpdateDate());
 					throw new HabitCheckDuplicateException(habitId);
 				}
 			});
 		habitCheckRepository.save(HabitCheck.builder().checked(true).habit(habit).build());
-		habit.setUpdatedAt(LocalDateTime.now());
+		habit.setUpdateDate(LocalDateTime.now());
 	}
 
 	@Override

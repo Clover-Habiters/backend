@@ -108,9 +108,9 @@ class DiaryRepositoryTest {
 				.hasFieldOrProperty("id")
 				.hasFieldOrProperty("content");
 			if (previousDate != null) {
-				assertThat(diary.getCreatedAt()).isBeforeOrEqualTo(previousDate);
+				assertThat(diary.getCreateDate()).isBeforeOrEqualTo(previousDate);
 			}
-			previousDate = diary.getCreatedAt();
+			previousDate = diary.getCreateDate();
 		}
 	}
 

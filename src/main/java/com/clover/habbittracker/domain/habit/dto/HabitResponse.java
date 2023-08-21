@@ -22,7 +22,7 @@ public class HabitResponse {
 		return HabitResponse.builder()
 			.id(habit.getId())
 			.content(habit.getContent())
-			.createDate(habit.getCreatedAt())
+			.createDate(habit.getCreateDate())
 			.build();
 	}
 }

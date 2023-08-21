@@ -14,8 +14,8 @@ public interface HabitCheckRepository extends JpaRepository<HabitCheck, Long> {
 	@Query("""
 		SELECT hc
 		FROM HabitCheck hc
-		WHERE hc.updatedAt = (
-		 	SELECT MAX(subHc.updatedAt)
+		WHERE hc.updateDate = (
+		 	SELECT MAX(subHc.updateDate)
 		  	FROM HabitCheck subHc
 		  	WHERE subHc.habit = :habit
 		)

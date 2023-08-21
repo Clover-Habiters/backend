@@ -21,15 +21,15 @@ public abstract class BaseEntity {
 
 	@CreatedDate
 	@Column(name = "created_date", updatable = false)
-	private LocalDateTime createdAt;
+	private LocalDateTime createDate;
 
 	@LastModifiedDate
 	@Column(name = "updated_date")
-	private LocalDateTime updatedAt;
+	private LocalDateTime updateDate;
 
 	private boolean deleted;
 
-	public void setUpdatedAt(LocalDateTime updatedAt) {
-		this.updatedAt = updatedAt;
+	public void setUpdateDate(LocalDateTime updatedDate) {
+		this.updateDate = updatedDate;
 	}
 }

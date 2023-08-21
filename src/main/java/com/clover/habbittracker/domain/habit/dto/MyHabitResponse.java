@@ -24,10 +24,10 @@ public class MyHabitResponse {
 		return MyHabitResponse.builder()
 			.id(habit.getId())
 			.content(habit.getContent())
-			.createDate(habit.getCreatedAt())
+			.createDate(habit.getCreateDate())
 			.habitChecks(HabitCheckResponse.from(habit.getHabitChecks().stream()
-				.filter(habitCheck -> habitCheck.getCreatedAt().isBefore(dateMap.get("end")))
-				.filter(habitCheck -> habitCheck.getCreatedAt().isAfter(dateMap.get("start")))
+				.filter(habitCheck -> habitCheck.getCreateDate().isBefore(dateMap.get("end")))
+				.filter(habitCheck -> habitCheck.getCreateDate().isAfter(dateMap.get("start")))
 				.toList()))
 			.build();
 	}
