@@ -43,6 +43,12 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
+	public List<CommentResponse> getCommentsOf(Long postId) {
+		List<Comment> commentList = commentRepository.findByPostId(postId);
+		return commentList.stream().map(commentMapper::toCommentResponse).toList();
+	}
+
+	@Override
 	@Transactional
 	public CommentResponse updateComment(Long memberId, Long commentId, Long postId, CommentRequest request) {
 		Comment comment = commentRepository.findByIdAndPostId(commentId, postId)

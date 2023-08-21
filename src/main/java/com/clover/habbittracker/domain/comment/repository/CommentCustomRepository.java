@@ -10,4 +10,6 @@ public interface CommentCustomRepository {
 	Optional<Comment> findByIdAndPostId(Long commentId, Long postId);
 
 	List<Comment> findChildCommentById(Long commentId);
+
+	List<Comment> findByPostId(Long postId);
 }
