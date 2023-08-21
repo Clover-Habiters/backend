@@ -10,7 +10,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.clover.habbittracker.util.CustomTransaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -22,16 +21,17 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.global.config.db.JpaConfig;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
+import com.clover.habbittracker.util.CustomTransaction;
 
 @DataJpaTest
 @Import(JpaConfig.class)
@@ -90,7 +90,7 @@ public class PostRepositoryTest {
 		Post savePost = postRepository.save(testPost);
 
 		//when
-		Optional<Post> findPost = postRepository.joinMemberAndCommentFindById(savePost.getId());
+		Optional<Post> findPost = postRepository.joinMemberAndEmojisFindById(savePost.getId());
 
 		//then
 		assertThat(findPost).isPresent();
@@ -149,7 +149,7 @@ public class PostRepositoryTest {
 		Post save = postRepository.save(post);
 		transactionManager.commit(status);
 		PostSearchCondition searchCondition = new PostSearchCondition(save.getCategory(),
-				PostSearchCondition.SearchType.CONTENT, save.getContent());
+			PostSearchCondition.SearchType.CONTENT, save.getContent());
 		//when
 		Page<Post> posts = postRepository.searchPostBy(searchCondition, pageable);
 

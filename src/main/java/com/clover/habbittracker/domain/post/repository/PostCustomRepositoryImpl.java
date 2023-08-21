@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.post.repository;
 
-import static com.clover.habbittracker.domain.comment.entity.QComment.*;
+import static com.clover.habbittracker.domain.emoji.entity.QEmoji.*;
 import static com.clover.habbittracker.domain.member.entity.QMember.*;
 import static com.clover.habbittracker.domain.post.dto.PostSearchCondition.SearchType.*;
 import static com.clover.habbittracker.domain.post.entity.QPost.*;
@@ -35,7 +35,8 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 	public List<Post> findAllPostsSummary(Pageable pageable, Post.Category category) {
 
 		return jpaQueryFactory.selectFrom(post)
-			.leftJoin(post.member, member).fetchJoin()
+			.leftJoin(post.member, member)
+			.fetchJoin()
 			.where(eqCategory(category))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
@@ -44,11 +45,11 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 	}
 
 	@Override
-	public Optional<Post> joinMemberAndCommentFindById(Long postId) {
+	public Optional<Post> joinMemberAndEmojisFindById(Long postId) {
 		Post result = jpaQueryFactory.selectFrom(post)
 			.leftJoin(post.member, member)
 			.fetchJoin()
-			.leftJoin(post.comments, comment)
+			.leftJoin(post.emojis, emoji)
 			.fetchJoin()
 			.where(eqId(postId))
 			.fetchOne();

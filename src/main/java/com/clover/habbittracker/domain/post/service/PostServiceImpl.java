@@ -45,7 +45,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public PostDetailResponse getPostBy(Long postId) {
-		Post post = postRepository.joinMemberAndCommentFindById(postId)
+		Post post = postRepository.joinMemberAndEmojisFindById(postId)
 			.orElseThrow(() -> new PostNotFoundException(postId));
 		postRepository.updateViews(post.getId());
 		return postMapper.toPostDetail(post);
@@ -69,7 +69,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public Long updatePost(Long postId, PostRequest request, Long memberId) {
-		Post post = postRepository.joinMemberAndCommentFindById(postId)
+		Post post = postRepository.joinMemberAndEmojisFindById(postId)
 			.orElseThrow(() -> new PostNotFoundException(postId));
 		verifyPermissions(post.getMember(), memberId);
 		post.updatePost(request);
@@ -79,7 +79,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public void deletePost(Long postId, Long memberId) {
-		Post post = postRepository.joinMemberAndCommentFindById(postId)
+		Post post = postRepository.joinMemberAndEmojisFindById(postId)
 			.orElseThrow(() -> new PostNotFoundException(postId));
 		verifyPermissions(post.getMember(), memberId);
 		postRepository.deleteById(postId);

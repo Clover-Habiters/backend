@@ -13,7 +13,7 @@ import com.clover.habbittracker.domain.post.entity.Post;
 public interface PostCustomRepository {
 	List<Post> findAllPostsSummary(Pageable pageable, Post.Category category);
 
-	Optional<Post> joinMemberAndCommentFindById(@Param("postId") Long postId);
+	Optional<Post> joinMemberAndEmojisFindById(@Param("postId") Long postId);
 
 	Long updateViews(Long postId);
 
