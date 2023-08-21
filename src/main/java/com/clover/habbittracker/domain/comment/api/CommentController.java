@@ -23,12 +23,12 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/posts")
+@RequestMapping("/posts/{postId}/comments")
 public class CommentController {
 
 	private final CommentService commentService;
 
-	@PostMapping("/{postId}/comment")
+	@PostMapping
 	@ResponseStatus(CREATED)
 	public ApiResponse<CommentResponse> createComment(
 		@AuthenticationPrincipal Long memberId,
@@ -39,7 +39,15 @@ public class CommentController {
 		return ApiResponse.success(comment);
 	}
 
-	@PutMapping("/{postId}/comment/{commentId}")
+	@GetMapping
+	public ApiResponse<List<CommentResponse>> getCommentList(
+		@PathVariable Long postId
+	) {
+		List<CommentResponse> commentList = commentService.getCommentsOf(postId);
+		return ApiResponse.success(commentList);
+	}
+
+	@PutMapping("/{commentId}")
 	public ApiResponse<CommentResponse> updateComment(
 		@AuthenticationPrincipal Long memberId,
 		@PathVariable Long commentId,
@@ -50,7 +58,7 @@ public class CommentController {
 		return ApiResponse.success(updateComment);
 	}
 
-	@GetMapping("/{postId}/comment/{commentId}/reply")
+	@GetMapping("/{commentId}/reply")
 	public ApiResponse<List<CommentResponse>> getReplyList(
 		@PathVariable Long postId,
 		@PathVariable Long commentId
@@ -59,7 +67,7 @@ public class CommentController {
 		return ApiResponse.success(replyList);
 	}
 
-	@PostMapping("/{postId}/comment/{commentId}/reply")
+	@PostMapping("/{commentId}/reply")
 	@ResponseStatus(CREATED)
 	public ApiResponse<Void> createReply(
 		@AuthenticationPrincipal Long memberId,
