@@ -20,11 +20,13 @@ public interface CommentMapper {
 		@Mapping(source = "member", target = "member")
 	})
 	Comment toComment(CommentRequest request, Member member, Post post);
+
 	@Mappings({
 		@Mapping(source = "request.content", target = "content"),
 		@Mapping(source = "member", target = "member")
 	})
 	Comment toReply(CommentRequest request, Member member, Post post, Long parentId);
 
+	@Mapping(source = "comment.member.id", target = "authorId")
 	CommentResponse toCommentResponse(Comment comment);
 }

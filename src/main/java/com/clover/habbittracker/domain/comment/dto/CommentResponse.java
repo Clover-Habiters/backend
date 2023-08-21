@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public record CommentResponse(
 	Long id,
 	String content,
-
+	Long authorId,
 	List<EmojiResponse> emojis,
 	@JsonFormat(shape = Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	LocalDateTime createDate,
