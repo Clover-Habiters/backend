@@ -49,7 +49,7 @@ class CommentControllerTest extends RestDocsSupport {
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
-					.post("/posts/{postId}/comment", savePost.getId())
+					.post("/posts/{postId}/comments", savePost.getId())
 					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
@@ -71,7 +71,42 @@ class CommentControllerTest extends RestDocsSupport {
 					beneathPath("data").withSubsectionId("data"),
 					fieldWithPath("id").type(NUMBER).description("생성된 댓글 아이디"),
 					fieldWithPath("content").type(STRING).description("생성된 댓글 내용"),
+					fieldWithPath("authorId").type(NUMBER).description("댓글 작성자"),
 					fieldWithPath("emojis[]").type(ARRAY).description("댓글에 대한 이모지"),
+					fieldWithPath("createDate").type(STRING).description("댓글 생성 날짜"),
+					fieldWithPath("updateDate").type(STRING).description("댓글 최근 수정 날짜")
+				)));
+	}
+
+	@Test
+	@DisplayName("사용자는 게시글의 댓글을 조회 할 수 있다.")
+	void getCommentListTest() throws Exception {
+		//given
+		Comment comment = Comment.builder()
+			.member(savedMember)
+			.content("testComment")
+			.post(savePost)
+			.build();
+		Comment savedComment = commentRepository.save(comment);
+
+		//when then
+		mockMvc.perform(RestDocumentationRequestBuilders
+				.get("/posts/{postId}/comments", savePost.getId())
+				.header("Authorization", "Bearer " + accessToken))
+			.andExpect(status().isOk())
+			.andDo(restDocs.document(
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				pathParameters(
+					parameterWithName("postId").description("게시글 id")
+				),
+				responseFields(
+					beneathPath("data").withSubsectionId("data"),
+					fieldWithPath("id").type(NUMBER).description("댓글 아이디"),
+					fieldWithPath("content").type(STRING).description("댓글 내용"),
+					fieldWithPath("authorId").type(NUMBER).description("댓글 작성자"),
+					fieldWithPath("emojis[]").type(ARRAY).description("댓글의 이모지"),
 					fieldWithPath("createDate").type(STRING).description("댓글 생성 날짜"),
 					fieldWithPath("updateDate").type(STRING).description("댓글 최근 수정 날짜")
 				)));
@@ -92,7 +127,7 @@ class CommentControllerTest extends RestDocsSupport {
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
-					.put("/posts/{postId}/comment/{commentId}", savePost.getId(), savedComment.getId())
+					.put("/posts/{postId}/comments/{commentId}", savePost.getId(), savedComment.getId())
 					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
@@ -112,8 +147,9 @@ class CommentControllerTest extends RestDocsSupport {
 				),
 				responseFields(
 					beneathPath("data").withSubsectionId("data"),
-					fieldWithPath("id").type(NUMBER).description("생성된 댓글 아이디"),
-					fieldWithPath("content").type(STRING).description("생성된 댓글 내용"),
+					fieldWithPath("id").type(NUMBER).description("수정한 댓글 아이디"),
+					fieldWithPath("content").type(STRING).description("수정된 댓글 내용"),
+					fieldWithPath("authorId").type(NUMBER).description("댓글 작성자"),
 					fieldWithPath("emojis[]").type(ARRAY).description("댓글의 이모지"),
 					fieldWithPath("createDate").type(STRING).description("댓글 생성 날짜"),
 					fieldWithPath("updateDate").type(STRING).description("댓글 최근 수정 날짜")
@@ -124,7 +160,7 @@ class CommentControllerTest extends RestDocsSupport {
 	@DisplayName("사용자는 댓글의 답글을 작성 할 수 있다.")
 	void createReplyTest() throws Exception {
 		//given
-		CommentRequest commentRequest = new CommentRequest("updateComment");
+		CommentRequest commentRequest = new CommentRequest("testReply");
 		String request = new ObjectMapper().writeValueAsString(commentRequest);
 		Comment comment = Comment.builder()
 			.member(savedMember)
@@ -136,7 +172,7 @@ class CommentControllerTest extends RestDocsSupport {
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
-					.post("/posts/{postId}/comment/{commentId}/reply", savePost.getId(), savedComment.getId())
+					.post("/posts/{postId}/comments/{commentId}/reply", savePost.getId(), savedComment.getId())
 					.header("Authorization", "Bearer " + accessToken)
 					.contentType(APPLICATION_JSON)
 					.content(request))
@@ -179,10 +215,8 @@ class CommentControllerTest extends RestDocsSupport {
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
-					.get("/posts/{postId}/comment/{commentId}/reply", savePost.getId(), savedComment.getId())
-					.header("Authorization", "Bearer " + accessToken)
-					.contentType(APPLICATION_JSON)
-					.content(request))
+					.get("/posts/{postId}/comments/{commentId}/reply", savePost.getId(), savedComment.getId())
+					.header("Authorization", "Bearer " + accessToken))
 			.andExpect(status().isOk())
 			.andDo(restDocs.document(
 				requestHeaders(
@@ -196,6 +230,7 @@ class CommentControllerTest extends RestDocsSupport {
 					beneathPath("data").withSubsectionId("data"),
 					fieldWithPath("id").type(NUMBER).description("답글 아이디"),
 					fieldWithPath("content").type(STRING).description("답글 내용"),
+					fieldWithPath("authorId").type(NUMBER).description("답글 작성자"),
 					fieldWithPath("emojis[]").type(ARRAY).description("댓글에 대한 이모지"),
 					fieldWithPath("createDate").type(STRING).description("답글 등록 날짜"),
 					fieldWithPath("updateDate").type(STRING).description("답글 수정 날짜")
