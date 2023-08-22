@@ -39,7 +39,6 @@ public class Comment extends BaseEntity {
 
 	@OneToMany
 	@JoinColumn(name = "domainId")
-	@BatchSize(size = 100)
 	private final List<Emoji> emojis = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
