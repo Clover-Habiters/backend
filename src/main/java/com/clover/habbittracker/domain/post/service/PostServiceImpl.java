@@ -3,6 +3,7 @@ package com.clover.habbittracker.domain.post.service;
 import java.util.List;
 import java.util.Objects;
 
+import com.clover.habbittracker.domain.post.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
-import com.clover.habbittracker.domain.post.dto.PostRequest;
-import com.clover.habbittracker.domain.post.dto.PostResponse;
-import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.exception.PostNotFoundException;
 import com.clover.habbittracker.domain.post.mapper.PostMapper;
@@ -54,16 +51,12 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public Page<PostResponse> getPostBy(PostSearchCondition postSearchCondition, Pageable pageable) {
-
-		Page<Post> searchedPost = postRepository.searchPostBy(postSearchCondition, pageable);
-
-		return searchedPost.map(postMapper::toPostResponse);
+		return postRepository.searchPostBy(postSearchCondition, pageable);
 	}
 
 	@Override
 	public List<PostResponse> getPostAllBy(Post.Category category, Pageable pageable) {
-		List<Post> postsSummary = postRepository.findAllPostsSummary(pageable, category);
-		return postsSummary.stream().map(postMapper::toPostResponse).toList();
+		return postRepository.findAllPostsSummary(pageable, category);
 	}
 
 	@Override
