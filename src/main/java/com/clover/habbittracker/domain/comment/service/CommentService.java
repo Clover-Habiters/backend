@@ -17,4 +17,5 @@ public interface CommentService {
 
 	void createReply(Long memberId, Long commentId, Long postId, CommentRequest request);
 
+	void deleteComment(Long memberId, Long commentId, Long postId);
 }
