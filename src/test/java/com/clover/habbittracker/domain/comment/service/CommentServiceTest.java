@@ -1,5 +1,6 @@
 package com.clover.habbittracker.domain.comment.service;
 
+import static com.clover.habbittracker.util.CommentProvider.*;
 import static com.clover.habbittracker.util.MemberProvider.*;
 import static com.clover.habbittracker.util.PostProvider.*;
 import static org.assertj.core.api.Assertions.*;
@@ -25,6 +26,7 @@ import com.clover.habbittracker.domain.member.repository.MemberRepository;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.exception.PostNotFoundException;
 import com.clover.habbittracker.domain.post.repository.PostRepository;
+import com.clover.habbittracker.global.base.exception.PermissionDeniedException;
 
 @SpringBootTest
 @Transactional
@@ -73,6 +75,39 @@ public class CommentServiceTest {
 	}
 
 	@Test
+	@DisplayName("게시글의 댓글을 조회 할 수 있다")
+	void getCommentsTest() {
+		//given
+		Comment testComment = createTestComment(testMember, testPost);
+		Comment savedComment = commentRepository.save(testComment);
+
+		//when
+		List<CommentResponse> comments = commentService.getCommentsOf(testPost.getId());
+
+		//then
+		CommentResponse response = comments.get(0);
+		assertThat(response.id()).isEqualTo(savedComment.getId());
+		assertThat(response.content()).isEqualTo(savedComment.getContent());
+		assertThat(response.authorId()).isEqualTo(savedComment.getMember().getId());
+	}
+
+	@Test
+	@DisplayName("게시글의 댓글을 조회 할 때, 대댓글은 조회 하지 않는다.")
+	void getCommentsWithOutReplyTest() {
+		//given
+		Comment testComment = createTestComment(testMember, testPost);
+		Comment savedComment = commentRepository.save(testComment);
+		Comment testReply = createTestReply(testMember, testPost, savedComment);
+		Comment savedReply = commentRepository.save(testReply);
+
+		//when
+		List<CommentResponse> comments = commentService.getCommentsOf(testPost.getId());
+
+		//then
+		assertThat(comments.size()).isEqualTo(1);
+	}
+
+	@Test
 	@DisplayName("회원은 게시글의 댓글을 수정 할 수 있다.")
 	void updateCommentTest() {
 		//given
@@ -93,6 +128,21 @@ public class CommentServiceTest {
 		assertThat(updateComment).isPresent();
 		assertThat(updateComment.get().getId()).isEqualTo(response.id());
 		assertThat(updateComment.get().getContent()).isEqualTo(response.content());
+	}
+
+	@Test
+	@DisplayName("댓글 작성자는 댓글을 삭제 할 수 있다.")
+	void deleteCommentTest() {
+		//given
+		Comment testComment = createTestComment(testMember, testPost);
+		Comment savedComment = commentRepository.save(testComment);
+
+		//when
+		commentService.deleteComment(testMember.getId(), savedComment.getId(), testPost.getId());
+
+		//then
+		Optional<Comment> deletedComment = commentRepository.findById(savedComment.getId());
+		assertThat(deletedComment).isEmpty();
 	}
 
 	@Test
@@ -150,8 +200,8 @@ public class CommentServiceTest {
 	}
 
 	@Test
-	@DisplayName("잘못된 회원 ID 로 요청할 경우 예외가 발생한다")
-	void failedCommentServiceTest() {
+	@DisplayName("잘못된 ID 로 요청할 경우 예외가 발생한다")
+	void failedWrongIdCommentTest() {
 		//given
 		Long wrongMemberId = -1L;
 		Long wrongCommentId = -1L;
@@ -176,6 +226,26 @@ public class CommentServiceTest {
 			// 잘못된 CommentId
 			() -> assertThrows(IllegalArgumentException.class,
 				() -> commentService.updateComment(wrongMemberId, wrongCommentId, postId, request))
+
+		);
+
+	}
+
+	@Test
+	@DisplayName("작상자가 아닌 회원이 수정,삭제 요청할 경우 예외가 발생한다")
+	void failedPermissionCommentTest() {
+		//given
+		Long notAuthorMemberId = -1L;
+		CommentRequest request = new CommentRequest("testContent");
+		Comment testComment = createTestComment(testMember, testPost);
+		Comment savedComment = commentRepository.save(testComment);
+
+		//when & then
+		assertAll(
+			() -> assertThrows(PermissionDeniedException.class,
+				() -> commentService.deleteComment(notAuthorMemberId, savedComment.getId(), postId)),
+			() -> assertThrows(PermissionDeniedException.class,
+				() -> commentService.updateComment(notAuthorMemberId, savedComment.getId(), postId, request))
 
 		);
 

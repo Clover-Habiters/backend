@@ -1,6 +1,7 @@
 package com.clover.habbittracker.domain.comment.api;
 
 import static com.clover.habbittracker.global.restdocs.config.RestDocsConfig.*;
+import static com.clover.habbittracker.util.CommentProvider.*;
 import static com.clover.habbittracker.util.MemberProvider.*;
 import static com.clover.habbittracker.util.PostProvider.*;
 import static org.springframework.http.MediaType.*;
@@ -82,11 +83,7 @@ class CommentControllerTest extends RestDocsSupport {
 	@DisplayName("사용자는 게시글의 댓글을 조회 할 수 있다.")
 	void getCommentListTest() throws Exception {
 		//given
-		Comment comment = Comment.builder()
-			.member(savedMember)
-			.content("testComment")
-			.post(savePost)
-			.build();
+		Comment comment = createTestComment(savedMember, savePost);
 		Comment savedComment = commentRepository.save(comment);
 
 		//when then
@@ -113,17 +110,35 @@ class CommentControllerTest extends RestDocsSupport {
 	}
 
 	@Test
+	@DisplayName("사용자는 게시글의 댓글을 삭제 할 수 있다.")
+	void deleteCommentTest() throws Exception {
+		//given
+		Comment comment = createTestComment(savedMember, savePost);
+		Comment savedComment = commentRepository.save(comment);
+
+		//when then
+		mockMvc.perform(RestDocumentationRequestBuilders
+				.delete("/posts/{postId}/comments/{commentId}", savePost.getId(), savedComment.getId())
+				.header("Authorization", "Bearer " + accessToken))
+			.andExpect(status().isNoContent())
+			.andDo(restDocs.document(
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				pathParameters(
+					parameterWithName("postId").description("게시글 id"),
+					parameterWithName("commentId").description("삭제할 댓글 id")
+				)));
+	}
+
+	@Test
 	@DisplayName("사용자는 작성한 댓글을 수정 할 수 있다.")
 	void updateCommentTest() throws Exception {
 		//given
+		Comment comment = createTestComment(savedMember, savePost);
+		Comment savedComment = commentRepository.save(comment);
 		CommentRequest commentRequest = new CommentRequest("updateComment");
 		String request = new ObjectMapper().writeValueAsString(commentRequest);
-		Comment comment = Comment.builder()
-			.member(savedMember)
-			.content("testComment")
-			.post(savePost)
-			.build();
-		Comment savedComment = commentRepository.save(comment);
 		//when then
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
@@ -160,14 +175,10 @@ class CommentControllerTest extends RestDocsSupport {
 	@DisplayName("사용자는 댓글의 답글을 작성 할 수 있다.")
 	void createReplyTest() throws Exception {
 		//given
+		Comment comment = createTestComment(savedMember, savePost);
+		Comment savedComment = commentRepository.save(comment);
 		CommentRequest commentRequest = new CommentRequest("testReply");
 		String request = new ObjectMapper().writeValueAsString(commentRequest);
-		Comment comment = Comment.builder()
-			.member(savedMember)
-			.content("testComment")
-			.post(savePost)
-			.build();
-		Comment savedComment = commentRepository.save(comment);
 
 		//when then
 		mockMvc.perform(
@@ -195,21 +206,9 @@ class CommentControllerTest extends RestDocsSupport {
 	@DisplayName("댓글의 달린 답글을 조회 할 수 있다.")
 	void getReplyListTest() throws Exception {
 		//given
-		CommentRequest commentRequest = new CommentRequest("updateComment");
-		String request = new ObjectMapper().writeValueAsString(commentRequest);
-		Comment comment = Comment.builder()
-			.member(savedMember)
-			.content("testComment")
-			.post(savePost)
-			.build();
+		Comment comment = createTestComment(savedMember, savePost);
 		Comment savedComment = commentRepository.save(comment);
-
-		Comment reply = Comment.builder()
-			.content("testReply")
-			.member(savedMember)
-			.post(savePost)
-			.parentId(savedComment.getId())
-			.build();
+		Comment reply = createTestReply(savedMember, savePost, savedComment);
 		commentRepository.save(reply);
 
 		//when then
