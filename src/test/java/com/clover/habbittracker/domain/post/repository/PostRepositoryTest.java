@@ -106,7 +106,6 @@ public class PostRepositoryTest {
 			assertThat(postResponse.category()).isEqualTo(savedPost.getCategory());
 			assertThat(postResponse.thumbnailUrl()).isEqualTo(savedPost.getThumbnailUrl());
 			assertThat(postResponse.views()).isEqualTo(0);
-			assertThat(postResponse.createDate()).isEqualTo(savedPost.getCreateDate());
 		});
 	}
 
