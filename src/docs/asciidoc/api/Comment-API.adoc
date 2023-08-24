@@ -81,6 +81,25 @@ include::{snippets}/comment-controller-test/update-comment-test/response-fields-
 
 include::{snippets}/comment-controller-test/update-comment-test/http-response.adoc[]
 
+=== 댓글 삭제
+
+*endpoint* +
+_/posts/{postId}/comments/{commentId}_
+
+==== Request
+
+include::{snippets}/comment-controller-test/delete-comment-test/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/comment-controller-test/delete-comment-test/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/comment-controller-test/delete-comment-test/http-response.adoc[]
+
 === 답글 등록
 
 *endpoint* +
