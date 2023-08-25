@@ -1,6 +1,6 @@
 package com.clover.habbittracker.domain.post.repository;
 
-import static com.clover.habbittracker.domain.comment.entity.QComment.*;
+import static com.clover.habbittracker.domain.emoji.entity.QEmoji.*;
 import static com.clover.habbittracker.domain.member.entity.QMember.*;
 import static com.clover.habbittracker.domain.post.dto.PostSearchCondition.SearchType.*;
 import static com.clover.habbittracker.domain.post.entity.QPost.*;
@@ -13,7 +13,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.clover.habbittracker.domain.post.dto.PostResponse;
 import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
+import com.clover.habbittracker.domain.post.dto.QPostResponse;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -32,11 +34,12 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	@Override
-	public List<Post> findAllPostsSummary(Pageable pageable, Post.Category category) {
+	public List<PostResponse> findAllPostsSummary(Pageable pageable, Post.Category category) {
 
-		return jpaQueryFactory.selectFrom(post)
-			.leftJoin(post.member, member).fetchJoin()
-			.where(eqCategory(category))
+		return jpaQueryFactory
+			.select(QPostResponse())
+			.from(post)
+			.where(eqFilter(category))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.orderBy(post.createDate.desc())
@@ -44,11 +47,11 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 	}
 
 	@Override
-	public Optional<Post> joinMemberAndCommentFindById(Long postId) {
+	public Optional<Post> joinMemberAndEmojisFindById(Long postId) {
 		Post result = jpaQueryFactory.selectFrom(post)
 			.leftJoin(post.member, member)
 			.fetchJoin()
-			.leftJoin(post.comments, comment)
+			.leftJoin(post.emojis, emoji)
 			.fetchJoin()
 			.where(eqId(postId))
 			.fetchOne();
@@ -64,10 +67,11 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 	}
 
 	@Override
-	public Page<Post> searchPostBy(PostSearchCondition postSearchCondition, Pageable pageable) {
+	public Page<PostResponse> searchPostBy(PostSearchCondition postSearchCondition, Pageable pageable) {
 
-		List<Post> content = jpaQueryFactory.selectFrom(post)
-			.leftJoin(post.member, member).fetchJoin()
+		List<PostResponse> content = jpaQueryFactory
+			.select(QPostResponse())
+			.from(post)
 			.where(
 				eqFilter(postSearchCondition.getCategory()),
 				matchKeyword(postSearchCondition.getSearchType(), postSearchCondition.getKeyword())
@@ -90,13 +94,6 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 		return null;
 	}
 
-	private BooleanExpression eqCategory(Post.Category category) {
-		if (category != null) {
-			return post.category.eq(category);
-		}
-		return null;
-	}
-
 	private BooleanExpression eqFilter(Post.Category category) {
 		if (category == null || Post.Category.ALL.equals(category)) {
 			return null;
@@ -108,6 +105,19 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 		return jpaQueryFactory.select(post.count())
 			.from(post)
 			.fetch().size();
+	}
+
+	private QPostResponse QPostResponse() {
+		return new QPostResponse(
+			post.id,
+			post.title,
+			post.content,
+			post.thumbnailUrl,
+			post.category,
+			post.views,
+			post.comments.size(),
+			post.emojis.size(),
+			post.createDate);
 	}
 
 	private BooleanExpression matchKeyword(PostSearchCondition.SearchType searchType, String keyword) {

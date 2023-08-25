@@ -43,6 +43,20 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
+	public List<CommentResponse> getCommentsOf(Long postId) {
+		List<Comment> commentList = commentRepository.findByPostId(postId);
+		return commentList.stream().map(commentMapper::toCommentResponse).toList();
+	}
+
+	@Override
+	public void deleteComment(Long memberId, Long commentId, Long postId) {
+		Comment comment = commentRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException("NotFoundComment"));
+		verifyPermissions(comment.getMember(), memberId);
+		commentRepository.delete(comment);
+	}
+
+	@Override
 	@Transactional
 	public CommentResponse updateComment(Long memberId, Long commentId, Long postId, CommentRequest request) {
 		Comment comment = commentRepository.findByIdAndPostId(commentId, postId)

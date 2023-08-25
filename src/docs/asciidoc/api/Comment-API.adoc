@@ -19,7 +19,7 @@ include::{snippets}/habit-controller-test/create-habit-test/request-headers.adoc
 === 댓글 등록
 
 *endpoint* +
-_/posts/{postId}/comment_
+_/posts/{postId}/comments_
 
 ==== Request
 
@@ -32,16 +32,37 @@ include::{snippets}/comment-controller-test/create-comment-test/http-request.ado
 
 ==== Response
 
-include::{snippets}/comment-controller-test/create-comment-test/response-fields.adoc[]
+include::{snippets}/comment-controller-test/create-comment-test/response-fields-data.adoc[]
 
 ===== Response HTTP Example
 
 include::{snippets}/comment-controller-test/create-comment-test/http-response.adoc[]
 
+=== 댓글 조회
+
+*endpoint* +
+_/posts/{postId}/comments_
+
+==== Request
+
+include::{snippets}/comment-controller-test/get-comment-list-test/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/comment-controller-test/get-comment-list-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/comment-controller-test/get-comment-list-test/response-fields-data.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/comment-controller-test/get-comment-list-test/http-response.adoc[]
+
 === 댓글 수정
 
 *endpoint* +
-_/posts/{postId}/{commentId}_
+_/posts/{postId}/comments/{commentId}_
 
 ==== Request
 
@@ -54,16 +75,35 @@ include::{snippets}/comment-controller-test/update-comment-test/http-request.ado
 
 ==== Response
 
-include::{snippets}/comment-controller-test/update-comment-test/response-fields.adoc[]
+include::{snippets}/comment-controller-test/update-comment-test/response-fields-data.adoc[]
 
 ===== Response HTTP Example
 
 include::{snippets}/comment-controller-test/update-comment-test/http-response.adoc[]
 
+=== 댓글 삭제
+
+*endpoint* +
+_/posts/{postId}/comments/{commentId}_
+
+==== Request
+
+include::{snippets}/comment-controller-test/delete-comment-test/path-parameters.adoc[]
+
+===== Request HTTP Example
+
+include::{snippets}/comment-controller-test/delete-comment-test/http-request.adoc[]
+
+==== Response
+
+===== Response HTTP Example
+
+include::{snippets}/comment-controller-test/delete-comment-test/http-response.adoc[]
+
 === 답글 등록
 
 *endpoint* +
-_/posts/{postId}/{commentId}/reply_
+_/posts/{postId}/comments/{commentId}/reply_
 
 ==== Request
 
@@ -84,7 +124,7 @@ include::{snippets}/comment-controller-test/create-reply-test/http-response.adoc
 === 답글 조회
 
 *endpoint* +
-_/posts/{postId}/{commentId}/reply_
+_/posts/{postId}/comments/{commentId}/reply_
 
 ==== Request
 

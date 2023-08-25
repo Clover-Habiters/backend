@@ -43,11 +43,9 @@ public class Post extends BaseEntity {
 		cascade = CascadeType.REMOVE,
 		orphanRemoval = true,
 		fetch = FetchType.LAZY)
-	@BatchSize(size = 50)
 	private final List<Comment> comments = new ArrayList<>();
 	@OneToMany
 	@JoinColumn(name = "domainId")
-	@BatchSize(size = 50)
 	private final List<Emoji> emojis = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

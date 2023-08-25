@@ -11,6 +11,7 @@ spring:
     properties:
       hibernate:
         dialect: com.clover.habbittracker.global.config.db.MySQLConfig$MySQLCustomDialect
+        default_batch_fetch_size: 100
 
   # redis
   data:

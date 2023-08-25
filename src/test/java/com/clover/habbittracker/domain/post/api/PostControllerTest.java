@@ -140,7 +140,6 @@ class PostControllerTest extends RestDocsSupport {
 					fieldWithPath("content").type(STRING).description("게시글 본문"),
 					fieldWithPath("category").type(STRING).description(generateLinkCode(DocUrl.CATEGORY)),
 					fieldWithPath("views").type(NUMBER).description("조회수"),
-					fieldWithPath("comments").type(ARRAY).description("댓글 수"),
 					fieldWithPath("emojis").type(ARRAY).description("이모지 수"),
 					fieldWithPath("createDate").type(STRING).description("생성 날짜"),
 					fieldWithPath("updateDate").type(STRING).description("수정 날짜")

@@ -17,7 +17,6 @@ import com.clover.habbittracker.domain.comment.mapper.CommentMapperImpl;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
 import com.clover.habbittracker.domain.post.dto.PostRequest;
-import com.clover.habbittracker.domain.post.dto.PostResponse;
 import com.clover.habbittracker.domain.post.entity.Post;
 
 public class PostMapperTest {
@@ -50,26 +49,6 @@ public class PostMapperTest {
 	}
 
 	@Test
-	@DisplayName("Post 를 PostResponse 로 매핑 시킬 수 있다.")
-	void toPostResponseTest() {
-
-		//given & when
-		PostResponse postResponse = postMapper.toPostResponse(testPost);
-
-		//then
-		assertAll(() -> {
-			assertThat(testPost.getId()).isEqualTo(postResponse.id());
-			assertThat(testPost.getTitle()).isEqualTo(postResponse.title());
-			assertThat(testPost.getContent()).isEqualTo(postResponse.content());
-			assertThat(testPost.getCategory()).isEqualTo(postResponse.category());
-			assertThat(testPost.getViews()).isEqualTo(postResponse.views());
-			assertThat(testPost.getEmojis().size()).isEqualTo(postResponse.numOfEmojis());
-			assertThat(testPost.getComments().size()).isEqualTo(postResponse.numOfComments());
-		});
-
-	}
-
-	@Test
 	@DisplayName("Post 를 PostDetailResponse 로 매핑 시킬 수 있다.")
 	void toPostDetailResponseTest() {
 		//given
@@ -90,7 +69,6 @@ public class PostMapperTest {
 			assertThat(testPost.getCategory()).isEqualTo(postDetailResponse.category());
 			assertThat(testPost.getViews()).isEqualTo(postDetailResponse.views());
 			assertThat(testPost.getEmojis()).isEqualTo(postDetailResponse.emojis());
-			assertThat(comments).isEqualTo(postDetailResponse.comments());
 		});
 	}
 }

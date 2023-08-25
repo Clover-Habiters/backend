@@ -10,15 +10,17 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.clover.habbittracker.domain.comment.entity.Comment;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class CommentCustomRepositoryImpl implements CommentCustomRepository{
+public class CommentCustomRepositoryImpl implements CommentCustomRepository {
 
 	private final JPAQueryFactory jpaQueryFactory;
+
 	@Override
 	public Optional<Comment> findByIdAndPostId(Long commentId, Long postId) {
 
@@ -32,6 +34,24 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository{
 			.fetchOne();
 
 		return Optional.ofNullable(result);
+	}
+
+	@Override
+	public List<Comment> findByPostId(Long postId) {
+		return jpaQueryFactory
+			.selectFrom(comment)
+			.leftJoin(comment.member, member)
+			.fetchJoin()
+			.where(eqPost(postId).and(NotReply()))
+			.fetch();
+	}
+
+	private BooleanExpression NotReply() {
+		return comment.parentId.isNull();
+	}
+
+	private BooleanExpression eqPost(Long postId) {
+		return comment.post.id.eq(postId);
 	}
 
 	@Override

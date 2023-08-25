@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.*;
 import java.util.List;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,12 +24,12 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/posts")
+@RequestMapping("/posts/{postId}/comments")
 public class CommentController {
 
 	private final CommentService commentService;
 
-	@PostMapping("/{postId}/comment")
+	@PostMapping
 	@ResponseStatus(CREATED)
 	public ApiResponse<CommentResponse> createComment(
 		@AuthenticationPrincipal Long memberId,
@@ -39,7 +40,26 @@ public class CommentController {
 		return ApiResponse.success(comment);
 	}
 
-	@PutMapping("/{postId}/comment/{commentId}")
+	@GetMapping
+	public ApiResponse<List<CommentResponse>> getCommentList(
+		@PathVariable Long postId
+	) {
+		List<CommentResponse> commentList = commentService.getCommentsOf(postId);
+		return ApiResponse.success(commentList);
+	}
+
+	@DeleteMapping("/{commentId}")
+	@ResponseStatus(NO_CONTENT)
+	public ApiResponse<Void> deleteComment(
+		@AuthenticationPrincipal Long memberId,
+		@PathVariable Long postId,
+		@PathVariable Long commentId
+	) {
+		commentService.deleteComment(memberId, commentId, postId);
+		return ApiResponse.success();
+	}
+
+	@PutMapping("/{commentId}")
 	public ApiResponse<CommentResponse> updateComment(
 		@AuthenticationPrincipal Long memberId,
 		@PathVariable Long commentId,
@@ -50,7 +70,7 @@ public class CommentController {
 		return ApiResponse.success(updateComment);
 	}
 
-	@GetMapping("/{postId}/comment/{commentId}/reply")
+	@GetMapping("/{commentId}/reply")
 	public ApiResponse<List<CommentResponse>> getReplyList(
 		@PathVariable Long postId,
 		@PathVariable Long commentId
@@ -59,7 +79,7 @@ public class CommentController {
 		return ApiResponse.success(replyList);
 	}
 
-	@PostMapping("/{postId}/comment/{commentId}/reply")
+	@PostMapping("/{commentId}/reply")
 	@ResponseStatus(CREATED)
 	public ApiResponse<Void> createReply(
 		@AuthenticationPrincipal Long memberId,

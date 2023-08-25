@@ -3,6 +3,7 @@ package com.clover.habbittracker.domain.post.service;
 import java.util.List;
 import java.util.Objects;
 
+import com.clover.habbittracker.domain.post.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -11,10 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.domain.member.exception.MemberNotFoundException;
 import com.clover.habbittracker.domain.member.repository.MemberRepository;
-import com.clover.habbittracker.domain.post.dto.PostDetailResponse;
-import com.clover.habbittracker.domain.post.dto.PostRequest;
-import com.clover.habbittracker.domain.post.dto.PostResponse;
-import com.clover.habbittracker.domain.post.dto.PostSearchCondition;
 import com.clover.habbittracker.domain.post.entity.Post;
 import com.clover.habbittracker.domain.post.exception.PostNotFoundException;
 import com.clover.habbittracker.domain.post.mapper.PostMapper;
@@ -45,7 +42,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public PostDetailResponse getPostBy(Long postId) {
-		Post post = postRepository.joinMemberAndCommentFindById(postId)
+		Post post = postRepository.joinMemberAndEmojisFindById(postId)
 			.orElseThrow(() -> new PostNotFoundException(postId));
 		postRepository.updateViews(post.getId());
 		return postMapper.toPostDetail(post);
@@ -54,22 +51,18 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public Page<PostResponse> getPostBy(PostSearchCondition postSearchCondition, Pageable pageable) {
-
-		Page<Post> searchedPost = postRepository.searchPostBy(postSearchCondition, pageable);
-
-		return searchedPost.map(postMapper::toPostResponse);
+		return postRepository.searchPostBy(postSearchCondition, pageable);
 	}
 
 	@Override
 	public List<PostResponse> getPostAllBy(Post.Category category, Pageable pageable) {
-		List<Post> postsSummary = postRepository.findAllPostsSummary(pageable, category);
-		return postsSummary.stream().map(postMapper::toPostResponse).toList();
+		return postRepository.findAllPostsSummary(pageable, category);
 	}
 
 	@Override
 	@Transactional
 	public Long updatePost(Long postId, PostRequest request, Long memberId) {
-		Post post = postRepository.joinMemberAndCommentFindById(postId)
+		Post post = postRepository.joinMemberAndEmojisFindById(postId)
 			.orElseThrow(() -> new PostNotFoundException(postId));
 		verifyPermissions(post.getMember(), memberId);
 		post.updatePost(request);
@@ -79,7 +72,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	@Transactional
 	public void deletePost(Long postId, Long memberId) {
-		Post post = postRepository.joinMemberAndCommentFindById(postId)
+		Post post = postRepository.joinMemberAndEmojisFindById(postId)
 			.orElseThrow(() -> new PostNotFoundException(postId));
 		verifyPermissions(post.getMember(), memberId);
 		postRepository.deleteById(postId);
