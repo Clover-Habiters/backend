@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.clover.habbittracker.domain.member.dto.MemberReportResponse;
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
 import com.clover.habbittracker.domain.member.service.MemberService;
+import com.clover.habbittracker.global.base.dto.ApiResponse;
 import com.clover.habbittracker.global.base.dto.BaseResponse;
 
 import jakarta.validation.Valid;
@@ -47,6 +49,14 @@ public class MemberController {
 		memberService.deleteProfile(memberId);
 		BaseResponse<Void> response = BaseResponse.of(null, MEMBER_DELETE);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+	}
+
+	@GetMapping("/me/report")
+	ApiResponse<MemberReportResponse> getMyReport(
+		@AuthenticationPrincipal Long memberId
+	) {
+		MemberReportResponse response = memberService.getMyReport(memberId);
+		return ApiResponse.success(response);
 	}
 
 }
