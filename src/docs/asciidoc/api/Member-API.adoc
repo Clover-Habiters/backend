@@ -32,6 +32,22 @@ include::{snippets}/member-controller-test/get-my-profile-test/response-fields.a
 
 include::{snippets}/member-controller-test/get-my-profile-test/http-response.adoc[]
 
+=== 커뮤니티 이용 내역 조회
+
+==== Request
+
+===== Request HTTP Example
+
+include::{snippets}/member-controller-test/get-my-report-test/http-request.adoc[]
+
+==== Response
+
+include::{snippets}/member-controller-test/get-my-report-test/response-fields-data.adoc[]
+
+===== Response HTTP Example
+
+include::{snippets}/member-controller-test/get-my-report-test/http-response.adoc[]
+
 === 유저 정보 수정
 
 ==== Request
