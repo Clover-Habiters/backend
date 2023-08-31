@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.clover.habbittracker.domain.member.dto.MemberReportResponse;
+import com.clover.habbittracker.domain.member.dto.QMemberReportResponse;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -38,5 +40,20 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 		return Optional.ofNullable(result);
 	}
 
+	@Override
+	public MemberReportResponse findReportById(Long memberId) {
+		return jpaQueryFactory
+			.select(QMemberReportResponse())
+			.from(member)
+			.where(member.id.eq(memberId))
+			.fetchOne();
+	}
 
+	private QMemberReportResponse QMemberReportResponse() {
+		return new QMemberReportResponse(
+			member.posts.size(),
+			member.comments.size(),
+			member.bookmarks.size()
+		);
+	}
 }
