@@ -111,4 +111,25 @@ class MemberControllerTest extends RestDocsSupport {
 				)
 			));
 	}
+
+	@Test
+	@DisplayName("사용자는 자신의 요악된 정보를 조회 할 수 있다.")
+	void getMyReportTest() throws Exception {
+
+		//when then
+		mockMvc.perform(get("/users/me/report")
+				.header("Authorization", "Bearer " + accessToken))
+			.andExpect(status().isOk())
+			.andDo(restDocs.document(
+				requestHeaders(
+					headerWithName("Authorization").description("JWT Access 토큰")
+				),
+				responseFields(
+					beneathPath("data").withSubsectionId("data"),
+					fieldWithPath("numOfPost").description("회원이 작성한 글"),
+					fieldWithPath("numOfComment").description("회원이 작성한 댓글"),
+					fieldWithPath("numOfBookmark").description("회원이 등록한 북마크")
+				)
+			));
+	}
 }

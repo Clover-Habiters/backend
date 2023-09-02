@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import com.clover.habbittracker.domain.member.dto.MemberReportResponse;
 import com.clover.habbittracker.domain.member.entity.Member;
 import com.clover.habbittracker.global.config.db.JpaConfig;
 
@@ -20,17 +21,13 @@ import com.clover.habbittracker.global.config.db.JpaConfig;
 @Import(JpaConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class MemberRepositoryTest {
-
-	private final MemberRepository memberRepository;
-
 	@Autowired
-	public MemberRepositoryTest(MemberRepository memberRepository) {
-		this.memberRepository = memberRepository;
-	}
+	private MemberRepository memberRepository;
+	private Member savedMember;
 
 	@BeforeEach
 	void setMemberData() {
-		memberRepository.save(createTestMember());
+		savedMember = memberRepository.save(createTestMember());
 	}
 
 	@Test
@@ -75,5 +72,18 @@ class MemberRepositoryTest {
 		Optional<Member> deleteMember = memberRepository.findById(getId());
 		//then
 		assertThat(deleteMember).isEmpty();
+	}
+
+	@Test
+	@DisplayName("사용자는 ID 로 자신의 저장된 데이터를 조회 할 수 있다.")
+	void findMemberReport() {
+
+		//when
+		MemberReportResponse response = memberRepository.findReportById(savedMember.getId());
+		//then
+		assertThat(response.numOfPost()).isEqualTo(savedMember.getPosts().size());
+		assertThat(response.numOfComment()).isEqualTo(savedMember.getComments().size());
+		assertThat(response.numOfBookmark()).isEqualTo(savedMember.getBookmarks().size());
+
 	}
 }

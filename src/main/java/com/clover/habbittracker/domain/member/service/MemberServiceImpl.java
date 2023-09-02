@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.clover.habbittracker.domain.member.dto.MemberReportResponse;
 import com.clover.habbittracker.domain.member.dto.MemberRequest;
 import com.clover.habbittracker.domain.member.dto.MemberResponse;
 import com.clover.habbittracker.domain.member.entity.Member;
@@ -42,7 +43,6 @@ public class MemberServiceImpl implements MemberService {
 		memberRepository.deleteById(memberId);
 	}
 
-
 	private Member update(Member member, MemberRequest request) {
 		Optional<Member> byNickName = memberRepository.findByNickName(request.getNickName());
 		if (byNickName.isEmpty()) {
@@ -51,5 +51,10 @@ public class MemberServiceImpl implements MemberService {
 		} else {
 			throw new MemberDuplicateNickName(byNickName.get().getNickName());
 		}
+	}
+
+	@Override
+	public MemberReportResponse getMyReport(Long memberId) {
+		return memberRepository.findReportById(memberId);
 	}
 }
