@@ -110,6 +110,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 	private QPostResponse QPostResponse() {
 		return new QPostResponse(
 			post.id,
+			post.member.id,
 			post.title,
 			post.content,
 			post.thumbnailUrl,

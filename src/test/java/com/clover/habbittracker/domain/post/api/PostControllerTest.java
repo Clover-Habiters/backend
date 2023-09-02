@@ -102,6 +102,7 @@ class PostControllerTest extends RestDocsSupport {
 				responseFields(
 					beneathPath("data").withSubsectionId("data"),
 					fieldWithPath("id").type(NUMBER).description("게시글 id"),
+					fieldWithPath("authorId").type(NUMBER).description("작성자 id"),
 					fieldWithPath("title").type(STRING).description("게시글 제목"),
 					fieldWithPath("content").type(STRING).description("게시글 본문"),
 					fieldWithPath("thumbnailUrl").description("게시글 썸네일 url"),
@@ -159,7 +160,6 @@ class PostControllerTest extends RestDocsSupport {
 		PostSearchCondition postSearchCondition =
 			new PostSearchCondition(Post.Category.DAILY, PostSearchCondition.SearchType.TITLE, searchPost.getTitle());
 		String request = objectMapper.writeValueAsString(postSearchCondition);
-
 		//when then
 		mockMvc.perform(get("/posts/search")
 				.header("Authorization", "Bearer " + accessToken)
