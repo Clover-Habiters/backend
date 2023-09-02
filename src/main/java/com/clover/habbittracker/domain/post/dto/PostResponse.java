@@ -10,6 +10,7 @@ import com.querydsl.core.annotations.QueryProjection;
 
 public record PostResponse(
 	Long id,
+	Long authorId,
 	String title,
 	String content,
 	String thumbnailUrl,
